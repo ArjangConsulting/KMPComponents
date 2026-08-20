@@ -1,141 +1,89 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types: [completed]
-    branches: [main]
+  workflow_call:
+    inputs:
+      tag:
+        description: Bare SemVer tag to build and publish
+        required: true
+        type: string
+    secrets:
+      MAVEN_CENTRAL_USERNAME:
+        required: true
+      MAVEN_CENTRAL_PASSWORD:
+        required: true
+      SIGNING_IN_MEMORY_KEY:
+        required: true
+      SIGNING_IN_MEMORY_KEY_PASSWORD:
+        required: true
   workflow_dispatch:
     inputs:
-      force_version:
-        description: Exact version to publish, for example 0.1.0
-        required: false
+      tag:
+        description: Bare SemVer tag to build and publish
+        required: true
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: release
+  group: release-${{ inputs.tag }}
   cancel-in-progress: false
 
 jobs:
-  release:
-    name: Publish Maven Central and GitHub Release
+  publish:
     runs-on: macos-26
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' && vars.MAVEN_PUBLISHING_ENABLED == 'true')
+    environment: secrets
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
-          fetch-depth: 0
-
-      - name: Compute next version
-        id: version
-        env:
-          FORCE_VERSION: ${{ github.event.inputs.force_version }}
-        run: |
-          set -euo pipefail
-
-          latest_version="$(git tag --list | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | sed 's/^v//' | sort -t. -k1,1n -k2,2n -k3,3n | tail -n1 || true)"
-          latest_tag=""
-          if [ -n "$latest_version" ]; then
-            if git rev-parse --verify --quiet "refs/tags/${latest_version}"; then
-              latest_tag="$latest_version"
-            else
-              latest_tag="v${latest_version}"
-            fi
-          fi
-
-          if [ -n "${FORCE_VERSION:-}" ]; then
-            next="${FORCE_VERSION#v}"
-          elif [ -z "$latest_tag" ]; then
-            next="0.1.0"
-          else
-            version="${latest_tag#v}"
-            major="${version%%.*}"
-            rest="${version#*.}"
-            minor="${rest%%.*}"
-            patch="${rest#*.}"
-            range="${latest_tag}..HEAD"
-
-            if [ -z "$(git log "$range" --format='%H')" ]; then
-              echo "No commits since $latest_tag; nothing to release."
-              echo "release=false" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-
-            breaking=false
-            feat=false
-            if git log "$range" --format='%s' | grep -Eq '^[a-zA-Z]+(\([^)]+\))?!:'; then breaking=true; fi
-            if git log "$range" --format='%B' | grep -Eq 'BREAKING[ -]CHANGE'; then breaking=true; fi
-            if git log "$range" --format='%s' | grep -Eq '^feat(\([^)]+\))?!?:'; then feat=true; fi
-
-            bump="patch"
-            if [ "$major" -eq 0 ]; then
-              if [ "$breaking" = true ] || [ "$feat" = true ]; then bump="minor"; fi
-            elif [ "$breaking" = true ]; then
-              bump="major"
-            elif [ "$feat" = true ]; then
-              bump="minor"
-            fi
-
-            case "$bump" in
-              major) major=$((major + 1)); minor=0; patch=0 ;;
-              minor) minor=$((minor + 1)); patch=0 ;;
-              patch) patch=$((patch + 1)) ;;
-            esac
-            next="${major}.${minor}.${patch}"
-          fi
-
-          if git rev-parse --verify --quiet "refs/tags/${next}" || git rev-parse --verify --quiet "refs/tags/v${next}"; then
-            echo "Version ${next} already has a tag; nothing to publish."
-            echo "release=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          echo "Publishing ${next}"
-          echo "tag=$next" >> "$GITHUB_OUTPUT"
-          echo "release=true" >> "$GITHUB_OUTPUT"
-
-      - name: Set up Java
-        if: steps.version.outputs.release == 'true'
-        uses: actions/setup-java@v5
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
+      - uses: gradle/actions/setup-gradle@v6
 
-      - name: Set up Gradle
-        if: steps.version.outputs.release == 'true'
-        uses: gradle/actions/setup-gradle@v6
+      - name: Verify tag matches manifest version
+        env:
+          TAG_INPUT: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$TAG_INPUT" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag $TAG_INPUT must be bare SemVer."
+            exit 1
+          fi
+          manifest_version="$(sed -nE 's/.*"\."[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/p' .release-please-manifest.json | tr -d '[:space:]')"
+          if [ "$TAG_INPUT" != "$manifest_version" ]; then
+            echo "::error::Tag $TAG_INPUT does not match manifest version $manifest_version."
+            exit 1
+          fi
 
       - name: Check
-        if: steps.version.outputs.release == 'true'
         env:
-          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ steps.version.outputs.tag }}
+          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ inputs.tag }}
         run: ./gradlew :components:allTests :components:assemble --no-configuration-cache
 
       - name: Publish to Maven Central
-        if: steps.version.outputs.release == 'true'
         env:
-          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ steps.version.outputs.tag }}
+          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ inputs.tag }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
         run: ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
 
-      - name: Create tag and GitHub Release
-        if: steps.version.outputs.release == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.version.outputs.tag }}
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$TAG" -m "$TAG"
-          git push origin "$TAG"
-          gh release create "$TAG" --title "$TAG" --generate-notes
+  create-github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ inputs.tag }}
+          name: ${{ inputs.tag }}
+          generate_release_notes: true
