@@ -1,0 +1,16 @@
+[versions]
+agp = "9.3.1"
+kotlin = "2.4.10"
+compose = "1.11.1"
+mavenPublish = "0.37.0"
+kommon = "0.1.0"
+
+[libraries]
+kommon-design-system = { module = "io.github.maniramezan.kommon:design-system", version.ref = "kommon" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
