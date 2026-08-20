@@ -40,8 +40,9 @@ kotlin {
 
 mavenPublishing {
     publishToMavenCentral()
-    signAllPublications()
-    coordinates(group.toString(), "components", version.toString())
+    if (providers.gradleProperty("RELEASE_SIGNING_ENABLED").orElse("true").get().toBoolean()) {
+        signAllPublications()
+    }
     pom {
         name = "KMPComponents"
         description = "Reusable Compose Multiplatform components backed by kommon design tokens"
