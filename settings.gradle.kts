@@ -14,10 +14,13 @@ dependencyResolutionManagement {
     }
 }
 
-val localKommon = listOf(file("../kommon"), file("kommon")).firstOrNull {
-    it.resolve("settings.gradle.kts").isFile
+if (providers.gradleProperty("useLocalKommon").orNull.toBoolean()) {
+    val localKommon = file("../kommon")
+    require(localKommon.resolve("settings.gradle.kts").isFile) {
+        "useLocalKommon requires kommon to be checked out next to KMPComponents"
+    }
+    includeBuild(localKommon)
 }
-if (localKommon != null) includeBuild(localKommon)
 
 rootProject.name = "KMPComponents"
 include(":components")

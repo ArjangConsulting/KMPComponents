@@ -10,11 +10,6 @@ jobs:
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: maniramezan/kommon
-          ref: main
-          path: kommon
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
