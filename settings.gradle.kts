@@ -14,9 +14,10 @@ dependencyResolutionManagement {
     }
 }
 
-if (file("../kommon/settings.gradle.kts").isFile) {
-    includeBuild("../kommon")
+val localKommon = listOf(file("../kommon"), file("kommon")).firstOrNull {
+    it.resolve("settings.gradle.kts").isFile
 }
+if (localKommon != null) includeBuild(localKommon)
 
 rootProject.name = "KMPComponents"
 include(":components")

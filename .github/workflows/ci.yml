@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: maniramezan/kommon
-          ref: feature/kmp-design-system
-          path: ../kommon
+          ref: main
+          path: kommon
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
