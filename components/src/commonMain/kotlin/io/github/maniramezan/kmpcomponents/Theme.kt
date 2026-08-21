@@ -78,13 +78,13 @@ private fun SpacingTokens.toComposeSpacing(): ComposeSpacing = ComposeSpacing(
 private fun ColorSchemeTokens.toMaterialColors(dark: Boolean): ColorScheme {
     val colors = if (dark) darkColorScheme() else lightColorScheme()
     return colors.copy(
-        primary = primary.toColor(),
-        onPrimary = onPrimary.toColor(),
-        surface = surface.toColor(),
-        onSurface = onSurface.toColor(),
-        surfaceVariant = surfaceVariant.toColor(),
-        outline = outline.toColor(),
-        error = error.toColor(),
+        primary = primary.toComposeColor(),
+        onPrimary = onPrimary.toComposeColor(),
+        surface = surface.toComposeColor(),
+        onSurface = onSurface.toComposeColor(),
+        surfaceVariant = surfaceVariant.toComposeColor(),
+        outline = outline.toComposeColor(),
+        error = error.toComposeColor(),
     )
 }
 
@@ -108,4 +108,4 @@ private fun TypeStyleToken.toTextStyle(fontFamily: FontFamily? = null): TextStyl
     fontFamily = fontFamily,
 )
 
-private fun ColorToken.toColor(): Color = Color(argb.toULong())
+internal fun ColorToken.toComposeColor(): Color = Color(argb.toInt())
