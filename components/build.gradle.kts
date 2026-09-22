@@ -13,7 +13,7 @@ kotlin {
 
     android {
         namespace = "io.github.maniramezan.kmpcomponents"
-        compileSdk = 36
+        compileSdk = 37
         minSdk = 26
         compilerOptions.jvmTarget = JvmTarget.JVM_17
         withHostTest {}
