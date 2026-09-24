@@ -5,6 +5,13 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   verify:
     runs-on: macos-26
@@ -13,6 +20,8 @@ jobs:
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: 17
+          # Keep in sync with release.yml so CI verifies exactly what gets published.
+          java-version: '21'
       - uses: gradle/actions/setup-gradle@v6
-      - run: gradle :components:allTests :components:assemble
+      # Use the wrapper so CI builds with the pinned Gradle version rather than the runner's.
+      - run: ./gradlew :components:allTests :components:assemble :sample:compileKotlinJvm

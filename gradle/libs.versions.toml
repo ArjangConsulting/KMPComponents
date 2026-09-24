@@ -2,10 +2,17 @@
 agp = "9.4.1"
 kotlin = "2.4.20"
 compose = "1.12.0"
+# Compose Material 3 is versioned separately; keep it on the release paired with `compose`.
+composeMaterial3 = "1.9.0"
 mavenPublish = "0.37.0"
 kommon = "0.1.6"
 
 [libraries]
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "compose" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMaterial3" }
 kommon-design-system = { module = "io.github.maniramezan.kommon:design-system", version.ref = "kommon" }
 
 [plugins]
