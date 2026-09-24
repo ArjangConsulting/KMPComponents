@@ -11,6 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -21,7 +24,7 @@ import androidx.compose.ui.text.input.VisualTransformation
  * text underneath.
  *
  * When [errorText] is non-null the field is rendered in the error state and [errorText] replaces
- * [supportingText].
+ * [supportingText]. Newly shown errors are announced through a polite live region.
  */
 @Composable
 public fun FormTextField(
@@ -48,7 +51,18 @@ public fun FormTextField(
         label = { Text(label) },
         placeholder = placeholder?.let { text -> @Composable { Text(text) } },
         trailingIcon = trailingContent,
-        supportingText = helperText?.let { text -> @Composable { Text(text) } },
+        supportingText = helperText?.let { text ->
+            @Composable {
+                Text(
+                    text = text,
+                    modifier = if (errorText != null) {
+                        Modifier.semantics { liveRegion = LiveRegionMode.Polite }
+                    } else {
+                        Modifier
+                    },
+                )
+            }
+        },
         isError = errorText != null,
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
@@ -62,8 +76,9 @@ public fun FormTextField(
  *
  * The value is masked by default and a trailing text button toggles visibility. The revealed
  * state is intentionally *not* saved across configuration changes or process death so a secret is
- * never restored in plain text. The keyboard is configured as a password keyboard with autocorrect
- * disabled so the value is not learned by the IME.
+ * never restored in plain text. Clearing the value also hides it again, including when a form is
+ * reset. The keyboard is configured as a password keyboard with autocorrect disabled so the value
+ * is not learned by the IME.
  */
 @Composable
 public fun SecretTextField(
@@ -79,7 +94,7 @@ public fun SecretTextField(
     showLabel: String = "Show",
     hideLabel: String = "Hide",
 ) {
-    var revealed by remember { mutableStateOf(false) }
+    var revealed by remember(value.isEmpty()) { mutableStateOf(false) }
     FormTextField(
         value = value,
         onValueChange = onValueChange,

@@ -97,7 +97,8 @@ KmpTheme(tokens = brand) { /* ... */ }
 
 - `ProviderConfigurationState.toString()` redacts `apiKey`, so the state can be logged safely.
   Persisting the key securely (Keychain / Keystore) is the app's job.
-- `SecretTextField` does not restore its revealed state after recreation.
+- `SecretTextField` does not restore its revealed state after recreation and hides the value again
+  when it is cleared.
 
 ## Development
 

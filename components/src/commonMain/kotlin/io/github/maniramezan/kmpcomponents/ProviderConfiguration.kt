@@ -38,14 +38,70 @@ public enum class ProviderConfigurationField { PROVIDER_NAME, BASE_URL, MODEL, A
 
 public enum class ProviderConfigurationError { REQUIRED, INVALID_URL }
 
-private val HTTP_URL = Regex("^https?://[^\\s/?#]+([/?#]\\S*)?$", RegexOption.IGNORE_CASE)
+private val HTTP_SCHEME = Regex("^https?://", RegexOption.IGNORE_CASE)
+private val HOST_LABEL = Regex("^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$")
+private val IPV6_GROUP = Regex("^[0-9A-Fa-f]{1,4}$")
+
+private fun isIpv4Host(host: String): Boolean {
+    val octets = host.split('.')
+    return octets.size == 4 && octets.all { octet ->
+        octet.isNotEmpty() && octet.all(Char::isDigit) && octet.toIntOrNull()?.let { it in 0..255 } == true
+    }
+}
+
+private fun isIpv6Host(host: String): Boolean {
+    val compressionAt = host.indexOf("::")
+    if (compressionAt >= 0 && host.indexOf("::", compressionAt + 2) >= 0) return false
+    val parts = if (compressionAt >= 0) {
+        listOf(host.substring(0, compressionAt), host.substring(compressionAt + 2))
+    } else {
+        listOf(host)
+    }
+    if (parts.any { it.isNotEmpty() && (it.startsWith(':') || it.endsWith(':')) }) return false
+    val groups = parts.flatMap { if (it.isEmpty()) emptyList() else it.split(':') }
+    var groupCount = 0
+    groups.forEachIndexed { index, group ->
+        if ('.' in group) {
+            if (index != groups.lastIndex || !isIpv4Host(group)) return false
+            groupCount += 2
+        } else {
+            if (!IPV6_GROUP.matches(group)) return false
+            groupCount++
+        }
+    }
+    return if (compressionAt >= 0) groupCount < 8 else groupCount == 8
+}
+
+private fun isHttpUrl(value: String): Boolean {
+    val url = value.trim()
+    if (url.any { it.isWhitespace() || it.code < 0x20 }) return false
+    val scheme = HTTP_SCHEME.find(url)?.value ?: return false
+    val authority = url.substring(scheme.length).takeWhile { it != '/' && it != '?' && it != '#' }
+    if (authority.isEmpty() || '@' in authority) return false
+
+    val portSuffix = if (authority.startsWith('[')) {
+        val closingBracket = authority.indexOf(']')
+        if (closingBracket < 2) return false
+        val host = authority.substring(1, closingBracket)
+        if (!isIpv6Host(host)) return false
+        authority.substring(closingBracket + 1)
+    } else {
+        val host = authority.substringBefore(':')
+        if (host.split('.').any { !HOST_LABEL.matches(it) }) return false
+        authority.substring(host.length)
+    }
+    if (portSuffix.isEmpty()) return true
+    if (!portSuffix.startsWith(':')) return false
+    val port = portSuffix.substring(1)
+    return port.isNotEmpty() && port.all(Char::isDigit) && port.toIntOrNull()?.let { it in 1..65535 } == true
+}
 
 /**
  * Validates every field and returns the first problem found per field; an empty map means valid.
  *
  * All fields are required except [ProviderConfigurationState.apiKey] when [apiKeyRequired] is
- * false. [ProviderConfigurationState.baseUrl] must be an absolute `http` or `https` URL.
- * Surrounding whitespace is ignored.
+ * false. [ProviderConfigurationState.baseUrl] must be an absolute `http` or `https` URL with a
+ * valid host and, if present, a port from 1 to 65535. Surrounding whitespace is ignored.
  */
 public fun ProviderConfigurationState.validate(
     apiKeyRequired: Boolean = true,
@@ -53,7 +109,7 @@ public fun ProviderConfigurationState.validate(
     if (providerName.isBlank()) put(ProviderConfigurationField.PROVIDER_NAME, ProviderConfigurationError.REQUIRED)
     when {
         baseUrl.isBlank() -> put(ProviderConfigurationField.BASE_URL, ProviderConfigurationError.REQUIRED)
-        !HTTP_URL.matches(baseUrl.trim()) ->
+        !isHttpUrl(baseUrl) ->
             put(ProviderConfigurationField.BASE_URL, ProviderConfigurationError.INVALID_URL)
     }
     if (model.isBlank()) put(ProviderConfigurationField.MODEL, ProviderConfigurationError.REQUIRED)
@@ -77,6 +133,7 @@ public data class ProviderConfigurationLabels(
     public val invalidUrlError: String = "Enter a URL starting with http:// or https://",
     public val showSecret: String = "Show",
     public val hideSecret: String = "Hide",
+    public val baseUrlPlaceholder: String = "https://",
 ) {
     public fun messageFor(error: ProviderConfigurationError): String = when (error) {
         ProviderConfigurationError.REQUIRED -> requiredError
@@ -129,7 +186,7 @@ public fun ProviderConfigurationForm(
             label = labels.baseUrl,
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
-            placeholder = "https://",
+            placeholder = labels.baseUrlPlaceholder,
             errorText = errorFor(ProviderConfigurationField.BASE_URL),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
