@@ -76,7 +76,11 @@ The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin; sa
 cannot configure the project, so say so rather than claiming a change was verified.
 
 - `-PuseLocalKommon=true` substitutes a sibling `../kommon` checkout via composite build.
-- Versions live in `gradle/libs.versions.toml` only. Dependabot groups Kotlin, Compose, AGP,
+- Versions live in `gradle/libs.versions.toml` only. Declare Compose libraries through catalog
+  entries (`libs.compose.*`); the plugin's `compose.runtime`/`compose.material3`/... accessors are
+  deprecated at error level in Compose Multiplatform 1.12. Material 3 has its own version
+  (`composeMaterial3`); keep it on the release the Compose plugin pairs with `compose`.
+  Dependabot groups Kotlin, Compose, AGP,
   publishing, and kommon updates.
 - Keep Kotlin/JVM bytecode at `JvmTarget.JVM_17` to match kommon.
 - `.editorconfig` holds the house style (ktlint `intellij_idea` style, 120 columns, expression bodies

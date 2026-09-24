@@ -27,10 +27,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.kommon.design.system)
-            api(compose.runtime)
-            api(compose.material3)
-            implementation(compose.foundation)
-            implementation(compose.ui)
+            api(libs.compose.runtime)
+            api(libs.compose.material3)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.ui)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
@@ -39,7 +39,7 @@ kotlin {
             // Compose UI tests run on desktop only: they need a Skiko renderer, which Android host
             // tests lack.
             implementation(compose.desktop.currentOs)
-            implementation(compose.uiTest)
+            implementation(libs.compose.ui.test)
         }
     }
 }
