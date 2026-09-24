@@ -62,7 +62,7 @@ jobs:
       - name: Check
         env:
           ORG_GRADLE_PROJECT_VERSION_NAME: ${{ inputs.tag }}
-        run: ./gradlew :components:allTests :components:assemble --no-configuration-cache
+        run: ./gradlew :components:allTests :components:assemble :sample:compileKotlinJvm --no-configuration-cache
 
       - name: Publish to Maven Central
         env:

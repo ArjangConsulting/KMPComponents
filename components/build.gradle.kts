@@ -35,6 +35,12 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
+        jvmTest.dependencies {
+            // Compose UI tests run on desktop only: they need a Skiko renderer, which Android host
+            // tests lack.
+            implementation(compose.desktop.currentOs)
+            implementation(compose.uiTest)
+        }
     }
 }
 
