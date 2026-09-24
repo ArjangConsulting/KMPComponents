@@ -3,7 +3,11 @@ package io.github.maniramezan.kmpcomponents
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
@@ -11,7 +15,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,6 +30,22 @@ class ComponentUiTest {
         onNodeWithText("Show").performClick()
         onNodeWithText("Hide").assertIsDisplayed()
         onNodeWithText("Hide").performClick()
+        onNodeWithText("Show").assertIsDisplayed()
+    }
+
+    @Test
+    fun `clearing a secret resets its visibility`() = runComposeUiTest {
+        var secret by mutableStateOf("first-secret")
+        setContent {
+            KmpTheme { SecretTextField(value = secret, onValueChange = { secret = it }, label = "API key") }
+        }
+        onNodeWithText("Show").performClick()
+        onNodeWithText("Hide").assertIsDisplayed()
+        secret = ""
+        waitForIdle()
+        onNodeWithText("Show").assertIsDisplayed()
+        secret = "next-secret"
+        waitForIdle()
         onNodeWithText("Show").assertIsDisplayed()
     }
 
@@ -57,6 +77,8 @@ class ComponentUiTest {
         waitForIdle()
         onNodeWithText(ProviderConfigurationLabels().invalidUrlError).assertIsDisplayed()
         onAllNodes(hasText("Required")).assertCountEquals(3)
+        onNodeWithText(ProviderConfigurationLabels().invalidUrlError, useUnmergedTree = true)
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite))
     }
 
     @Test

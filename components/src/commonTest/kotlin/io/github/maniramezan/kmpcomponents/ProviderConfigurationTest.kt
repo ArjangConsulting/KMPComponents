@@ -53,14 +53,32 @@ class ProviderConfigurationTest {
 
     @Test
     fun `base url must be absolute http or https`() {
-        listOf("api.example.com", "ftp://example.com", "https://", "https://exa mple.com").forEach { url ->
+        listOf(
+            "api.example.com",
+            "ftp://example.com",
+            "https://",
+            "https://exa mple.com",
+            "https://:oops",
+            "https://example.com:99999",
+            "https://example.com:",
+            "https://example.com:+80",
+            "https://example..com",
+            "https://user@example.com",
+            "http://[:::]",
+            "http://[::ffff:999.1.1.1]",
+        ).forEach { url ->
             assertEquals(
                 ProviderConfigurationError.INVALID_URL,
                 complete.copy(baseUrl = url).validate()[ProviderConfigurationField.BASE_URL],
                 url,
             )
         }
-        listOf("http://localhost:11434", "HTTPS://Example.com", " https://example.com/v1?x=1 ").forEach { url ->
+        listOf(
+            "http://localhost:11434",
+            "HTTPS://Example.com",
+            " https://example.com/v1?x=1 ",
+            "http://[::1]:11434",
+        ).forEach { url ->
             assertTrue(complete.copy(baseUrl = url).isValid(), url)
         }
     }
