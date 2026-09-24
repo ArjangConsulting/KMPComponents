@@ -3,7 +3,7 @@ agp = "9.4.1"
 kotlin = "2.4.20"
 compose = "1.12.0"
 mavenPublish = "0.37.0"
-kommon = "0.1.4"
+kommon = "0.1.6"
 
 [libraries]
 kommon-design-system = { module = "io.github.maniramezan.kommon:design-system", version.ref = "kommon" }
