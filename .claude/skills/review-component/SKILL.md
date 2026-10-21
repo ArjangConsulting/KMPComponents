@@ -30,7 +30,8 @@ real failure.
 - Parameter order: required, `modifier`, optional, trailing content. `modifier` on the root only.
 - User-visible strings are parameters or `@Immutable` `XxxLabels` defaults.
 - Public models are `@Immutable data class` with `val`s; enums use SCREAMING_CASE entries.
-- New public API has KDoc; breaking changes are called out for a `feat!:` commit.
+- New public API has KDoc; breaking changes are called out for a `feat!:` commit. The
+  `components/api/` dump diff is the API diff: removed or changed signatures are breaking.
 - Reusable sub-parts are exposed as their own components rather than duplicated.
 
 ## Accessibility
@@ -46,5 +47,5 @@ real failure.
 
 ## Coverage and docs
 
-- `commonTest` for logic, `jvmTest` UI test for interaction, sample catalog entry, README row,
-  `AGENTS.md` repository map updated.
+- `commonTest` for logic, `jvmTest` UI test for interaction, a `ScreenshotTest` gallery entry with
+  reviewed goldens, sample catalog entry, README row, `AGENTS.md` repository map updated.

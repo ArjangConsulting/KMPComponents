@@ -21,15 +21,29 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     and their data classes (`ComposeSpacing`, `KmpColors`, `KmpTypography`, `KmpMotion`).
   - `TokenAdapters.kt` — pure, non-composable token -> Compose conversions. All mapping decisions
     (derived color roles, typography expansion, shapes) live here and are unit tested.
-  - `ThemeMode.kt`, `ThemeModeSelector.kt`, `SectionCard.kt`, `FormTextField.kt`
-    (`FormTextField`, `SecretTextField`), `StatusMessage.kt`, `ProviderConfiguration.kt`
-    (state, validation, labels, form).
+  - Forms and settings: `ThemeMode.kt` (`ThemeMode`, `isDark`, `toggled`), `ThemeModeSelector.kt`
+    (`ThemeModeSelector`, `ThemeModeDropdown`), `SectionCard.kt`, `FormTextField.kt`
+    (`FormTextField`, `SecretTextField`), `ProviderConfiguration.kt` (state, validation, labels,
+    form), `CheckStatus.kt` (`CheckStatus`, `CheckStatusRow`).
+  - Feedback: `StatusMessage.kt` (also the shared tone accent), `Badges.kt` (`TonalBadge`,
+    `CountBadge`), `EmptyState.kt`, `ConfirmDialog.kt`, `InfoTooltip.kt`.
+  - Navigation and layout: `SidebarNavigation.kt` (`SidebarNavigation`, `SidebarItem`),
+    `TabChip.kt` (`TabChipRow`, `TabChip`), `SelectableCard.kt`, `SplitPane.kt`
+    (`HorizontalSplitPane`).
+  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info) so the library needs no icon font.
+  - `jvmMain`/`androidMain`/`iosMain` — only `resizeHorizontalPointerIcon`.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
-- `sample/` — unpublished desktop catalog showing every component (`./gradlew :sample:run`).
+    `ScreenshotTest.kt` renders a gallery of every component into golden images in
+    `jvmTest/snapshots/`.
+  - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
+- `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog;
+  `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
+  `sample/ios` (XcodeGen spec and Swift host).
+- `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
-- `.github/workflows/` — `ci.yml` (PRs and main), `release-please.yml` -> `release.yml` (Maven
-  Central publish on release).
+- `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on
+  main), `release-please.yml` -> `release.yml` (Maven Central publish on release).
 
 ## Component API rules
 
@@ -60,18 +74,32 @@ Follow these for every public composable; reviewers check them.
 
 Load `.claude/skills/add-component/SKILL.md`. In short: one file per component family in
 `components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/`, logic tests in
-`commonTest`, a UI test in `jvmTest`, an entry in `sample/.../ComponentCatalog.kt`, and a row in the
-README catalog table.
+`commonTest`, a UI test in `jvmTest`, a gallery entry in `ScreenshotTest.kt` (then re-record), an
+updated ABI dump, an entry in `sample/.../ComponentCatalog.kt`, and a row in the README catalog
+table.
+
+Glyphs need no icon dependency: add a case to `Glyphs.kt`. Size anything that is not spacing from
+typography (`glyphSize(style)`) so it follows the user's font scale.
 
 ## Build and verification
 
 ```bash
 ./gradlew :components:jvmTest                       # fastest: common + desktop UI tests
 ./gradlew :components:allTests                      # all targets (iOS needs macOS + Xcode)
-./gradlew :components:assemble :sample:compileKotlinJvm
+./gradlew ktlintCheck                               # style; ktlintFormat fixes most findings
+./gradlew :components:verifyRoborazziJvm            # desktop tests + screenshot comparison
+./gradlew :components:recordRoborazziJvm            # re-record goldens after an intended change
+./gradlew :components:checkKotlinAbi                # public API vs components/api
+./gradlew :components:updateKotlinAbi               # accept an intended API change
+./gradlew :components:koverHtmlReport               # coverage (build/reports/kover)
+./gradlew :components:dokkaGenerate                 # API docs (build/dokka/html)
+./gradlew :components:assemble :sample:compileKotlinJvm :sample-android:assembleDebug
 ```
 
-CI runs `:components:allTests :components:assemble :sample:compileKotlinJvm` on macOS with JDK 21.
+CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests`, `verifyRoborazziJvm`,
+`checkKotlinAbi`, Kover, `assemble`, `dokkaGenerate`, and builds the desktop, Android, and iOS
+samples. A screenshot failure uploads the diff images in the `reports` artifact. Review a changed
+golden before committing it; an API dump change means a public API change (see Releases).
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin; sandboxes without it
 cannot configure the project, so say so rather than claiming a change was verified.
 
@@ -80,8 +108,9 @@ cannot configure the project, so say so rather than claiming a change was verifi
   entries (`libs.compose.*`); the plugin's `compose.runtime`/`compose.material3`/... accessors are
   deprecated at error level in Compose Multiplatform 1.12. Material 3 has its own version
   (`composeMaterial3`); keep it on the release the Compose plugin pairs with `compose`.
-  Dependabot groups Kotlin, Compose, AGP,
-  publishing, and kommon updates.
+  Dependabot groups Kotlin, Compose, AGP, AndroidX, publishing, kommon, and build tooling (Dokka,
+  Kover, ktlint, Roborazzi) updates. The ktlint engine version (`ktlint` in the catalog) is not
+  tracked by Dependabot; bump it by hand.
 - Keep Kotlin/JVM bytecode at `JvmTarget.JVM_17` to match kommon.
 - `.editorconfig` holds the house style (ktlint `intellij_idea` style, 120 columns, expression bodies
   may stay on the signature line, `@Composable` functions are PascalCase).
