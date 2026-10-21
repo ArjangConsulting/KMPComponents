@@ -23,5 +23,35 @@ jobs:
           # Keep in sync with release.yml so CI verifies exactly what gets published.
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v6
+
+      - name: Lint
+        run: ./gradlew ktlintCheck
+
       # Use the wrapper so CI builds with the pinned Gradle version rather than the runner's.
-      - run: ./gradlew :components:allTests :components:assemble :sample:compileKotlinJvm
+      # verifyRoborazziJvm runs the desktop tests with screenshot comparison against the goldens.
+      - name: Test and check the public API
+        run: >-
+          ./gradlew :components:allTests :components:verifyRoborazziJvm :components:checkKotlinAbi
+          :components:koverXmlReport :components:koverLog
+
+      - name: Build library, API docs, and samples
+        run: >-
+          ./gradlew :components:assemble :components:dokkaGenerate :sample:compileKotlinJvm
+          :sample-android:assembleDebug :sample:linkDebugFrameworkIosSimulatorArm64
+
+      - name: Upload API docs for Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs-site
+          path: components/build/dokka/html/
+          if-no-files-found: error
+
+      # Test reports, Kover coverage, and Roborazzi diff images when a screenshot changes.
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reports
+          path: |
+            components/build/reports/**
+            components/build/outputs/roborazzi/**
