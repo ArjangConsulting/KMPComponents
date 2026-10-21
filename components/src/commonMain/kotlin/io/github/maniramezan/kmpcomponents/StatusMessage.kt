@@ -3,7 +3,6 @@ package io.github.maniramezan.kmpcomponents
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -27,7 +26,8 @@ private const val STATUS_CONTAINER_TINT = 0.12f
  * An inline, non-dismissible message such as "Connection verified" or "API key rejected".
  *
  * Warning and error messages are announced by screen readers when they appear (polite live
- * region). For transient feedback prefer a snackbar.
+ * region). The message sizes to its content; pass `Modifier.fillMaxWidth()` for a full-width
+ * banner. For transient feedback prefer a snackbar.
  */
 @Composable
 public fun StatusMessage(
@@ -39,13 +39,11 @@ public fun StatusMessage(
     val accent = statusAccent(tone)
     val announce = tone == StatusTone.WARNING || tone == StatusTone.ERROR
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .semantics(mergeDescendants = true) {
-                if (announce) liveRegion = LiveRegionMode.Polite
-            },
+        modifier = modifier.semantics(mergeDescendants = true) {
+            if (announce) liveRegion = LiveRegionMode.Polite
+        },
         shape = MaterialTheme.shapes.medium,
-        color = lerp(MaterialTheme.colorScheme.surface, accent, STATUS_CONTAINER_TINT),
+        color = tonalContainerColor(accent),
         contentColor = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(1.dp, accent),
     ) {
@@ -61,11 +59,19 @@ public fun StatusMessage(
     }
 }
 
+/** The accent color for [tone], shared by [StatusMessage] and [TonalBadge]. */
 @Composable
 @ReadOnlyComposable
-private fun statusAccent(tone: StatusTone): Color = when (tone) {
+internal fun statusAccent(tone: StatusTone): Color = when (tone) {
     StatusTone.INFO -> MaterialTheme.colorScheme.primary
     StatusTone.SUCCESS -> MaterialTheme.kmpColors.success
     StatusTone.WARNING -> MaterialTheme.kmpColors.warning
     StatusTone.ERROR -> MaterialTheme.colorScheme.error
 }
+
+/** A container for content tinted with [accent]: the surface blended slightly toward [accent]. */
+@Composable
+@ReadOnlyComposable
+internal fun tonalContainerColor(
+    accent: Color,
+): Color = lerp(MaterialTheme.colorScheme.surface, accent, STATUS_CONTAINER_TINT)

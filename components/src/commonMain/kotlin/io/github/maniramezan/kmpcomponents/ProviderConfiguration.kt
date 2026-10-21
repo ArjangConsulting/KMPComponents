@@ -87,7 +87,11 @@ private fun isHttpUrl(value: String): Boolean {
         authority.substring(closingBracket + 1)
     } else {
         val host = authority.substringBefore(':')
-        if (host.split('.').any { !HOST_LABEL.matches(it) }) return false
+        val labels = host.split('.')
+        if (labels.any { !HOST_LABEL.matches(it) }) return false
+        // A numeric last label makes the host an IPv4 address (as browsers parse it), so 999.1.1.1
+        // or 10.0.1 must not pass as host names.
+        if (labels.last().all(Char::isDigit) && !isIpv4Host(host)) return false
         authority.substring(host.length)
     }
     if (portSuffix.isEmpty()) return true
@@ -101,7 +105,8 @@ private fun isHttpUrl(value: String): Boolean {
  *
  * All fields are required except [ProviderConfigurationState.apiKey] when [apiKeyRequired] is
  * false. [ProviderConfigurationState.baseUrl] must be an absolute `http` or `https` URL with a
- * valid host and, if present, a port from 1 to 65535. Surrounding whitespace is ignored.
+ * valid host name, IPv4 address, or bracketed IPv6 address and, if present, a port from 1 to 65535.
+ * Surrounding whitespace is ignored.
  */
 public fun ProviderConfigurationState.validate(
     apiKeyRequired: Boolean = true,
@@ -109,8 +114,7 @@ public fun ProviderConfigurationState.validate(
     if (providerName.isBlank()) put(ProviderConfigurationField.PROVIDER_NAME, ProviderConfigurationError.REQUIRED)
     when {
         baseUrl.isBlank() -> put(ProviderConfigurationField.BASE_URL, ProviderConfigurationError.REQUIRED)
-        !isHttpUrl(baseUrl) ->
-            put(ProviderConfigurationField.BASE_URL, ProviderConfigurationError.INVALID_URL)
+        !isHttpUrl(baseUrl) -> put(ProviderConfigurationField.BASE_URL, ProviderConfigurationError.INVALID_URL)
     }
     if (model.isBlank()) put(ProviderConfigurationField.MODEL, ProviderConfigurationError.REQUIRED)
     if (apiKeyRequired && apiKey.isBlank()) {

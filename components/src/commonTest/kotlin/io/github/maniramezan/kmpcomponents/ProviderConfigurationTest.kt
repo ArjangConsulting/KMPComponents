@@ -66,6 +66,10 @@ class ProviderConfigurationTest {
             "https://user@example.com",
             "http://[:::]",
             "http://[::ffff:999.1.1.1]",
+            "http://999.1.1.1",
+            "http://10.0.1",
+            "http://256.256.256.256:8080",
+            "http://example.123",
         ).forEach { url ->
             assertEquals(
                 ProviderConfigurationError.INVALID_URL,
@@ -78,6 +82,9 @@ class ProviderConfigurationTest {
             "HTTPS://Example.com",
             " https://example.com/v1?x=1 ",
             "http://[::1]:11434",
+            "http://10.0.0.1:8080",
+            "http://192.168.1.20",
+            "https://123.example.com",
         ).forEach { url ->
             assertTrue(complete.copy(baseUrl = url).isValid(), url)
         }
