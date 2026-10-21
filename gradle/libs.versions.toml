@@ -5,7 +5,7 @@ compose = "1.12.1"
 # Compose Material 3 is versioned separately; keep it on the release paired with `compose`.
 composeMaterial3 = "1.9.0"
 mavenPublish = "0.37.0"
-kommon = "0.1.6"
+kommon = "0.2.0"
 
 [libraries]
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
