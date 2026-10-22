@@ -70,6 +70,9 @@ or browse the copy that CI publishes from `main` to
 | `SearchField` | Single-line search field with a search glyph, a clear button, and a keyboard Search action. |
 | `ThemeSwitch` | Setting row with a label, optional supporting text and tooltip, and a trailing switch. The whole row toggles. |
 | `ThemeCheckbox` / `ThemeTriStateCheckbox` | Checkbox rows with a label; the tri-state one is for "select all" over a group. |
+| `RadioGroup` | Vertical radio list; each full-width row is the tap target. |
+| `ThemeSlider` | Full-width slider with an optional spoken label, value description, and steps. |
+| `SelectionList` / `SelectionListContent` / `SelectionListNode` | Searchable one- or two-level picker, single or multiple choice, in a bottom sheet or inline. Parents expand inline and summarize their selected children when collapsed. |
 
 ### Feedback
 
@@ -119,7 +122,7 @@ sized from the body text so they follow the user's font scale.
 Components that also exist in [ComposeUIComponents](https://github.com/maniramezan/ComposeUIComponents)
 or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here (`SectionHeader`, `ContentRow`, `SearchField`,
 `ProgressIndicator`, `NoticeCard`, `MenuPicker`, `EmptyState`, `PrimaryButton`, `SecondaryButton`,
-`FAB`, `SegmentedControl`, `PillChip`, `ActionPill`). Where that name would collide
+`FAB`, `SegmentedControl`, `PillChip`, `ActionPill`, `RadioGroup`, `SelectionList`). Where that name would collide
 with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
 `ThemeCheckbox`), like SwiftUIComponents' `ThemeButton`. Some ComposeUIComponents names map to an
 existing component here:
@@ -128,6 +131,7 @@ existing component here:
 | --- | --- |
 | `Switch` | `ThemeSwitch` |
 | `Checkbox` | `ThemeCheckbox` |
+| `Slider` | `ThemeSlider` |
 | `TextButton` | `ThemeTextButton` |
 | `IconButton` | `ThemeIconButton` |
 | `ExtendedFloatingActionButton` | `ThemeExtendedFloatingActionButton` |

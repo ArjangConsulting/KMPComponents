@@ -31,7 +31,9 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `TabChip.kt` (`TabChipRow`, `TabChip`), `SelectableCard.kt`, `SplitPane.kt`
     (`HorizontalSplitPane`), `SectionHeader.kt`, `ContentRow.kt`, `KeyValueRow.kt`.
   - Inputs: `MenuPicker.kt`, `SearchField.kt`, `ToggleRows.kt` (`ThemeSwitch`, `ThemeCheckbox`,
-    `ThemeTriStateCheckbox`).
+    `ThemeTriStateCheckbox`), `InputControls.kt` (`RadioGroup`, `ThemeSlider`),
+    `SelectionList.kt` (`SelectionList`, `SelectionListContent`, `SelectionListLabels`) with its
+    model and filtering logic in `SelectionListNode.kt`.
   - More feedback: `NoticeCard.kt`, `ProgressIndicator.kt` (`ProgressIndicator`,
     `InlineProgressIndicator`, internal `InlineSpinner`).
   - Actions: `Buttons.kt` (`PrimaryButton`, `SecondaryButton`, `ThemeTextButton`,
@@ -41,18 +43,18 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     caller-supplied `Painter`s sized with `glyphSize()`.
   - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`), `TooltipIconButton.kt`
     (`TooltipIconButton`, `GlyphIconButton`: icon-only buttons with a tooltip).
-  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search) so the library needs no icon font.
+  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron) so the library needs no icon font.
   - `jvmMain`/`androidMain`/`iosMain` — only `resizeHorizontalPointerIcon`.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
     `ScreenshotTest.kt` renders a gallery of the original components into golden images in
     `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
-    `ActionsScreenshotTest.kt`)
+    `ActionsScreenshotTest.kt`, `SelectionScreenshotTest.kt`)
     so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
-  (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`
-  and `ActionsCatalog.kt`, plus the sample's own `SampleIcons.kt`);
+  (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
+  `ActionsCatalog.kt`, and `ChoicesCatalog.kt`, plus the sample's own `SampleIcons.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
   `sample/ios` (XcodeGen spec and Swift host).
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).

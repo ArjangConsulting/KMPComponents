@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.isSpecified
 // Small line glyphs drawn on a Canvas so components need no icon-font dependency. They are
 // decorative: callers put the accessible label on the interactive parent.
 
-internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH }
+internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH, CHECK, CHEVRON_DOWN }
 
 /** A glyph sized to [style]'s line height, so it scales with the user's font size. */
 @Composable
@@ -41,6 +41,15 @@ private const val SEARCH_LENS_CENTER = 0.42f
 private const val SEARCH_LENS_RADIUS = 0.28f
 private const val SEARCH_HANDLE_END = 0.86f
 private const val HALF_SQRT_2 = 0.70710677f
+private const val CHECK_START_X = 0.2f
+private const val CHECK_START_Y = 0.52f
+private const val CHECK_CORNER_X = 0.42f
+private const val CHECK_CORNER_Y = 0.72f
+private const val CHECK_END_X = 0.8f
+private const val CHECK_END_Y = 0.3f
+private const val CHEVRON_INSET = 0.25f
+private const val CHEVRON_TOP = 0.38f
+private const val CHEVRON_BOTTOM = 0.62f
 
 @Composable
 internal fun GlyphIcon(
@@ -95,6 +104,18 @@ internal fun GlyphIcon(
                     stroke,
                     StrokeCap.Round,
                 )
+            }
+
+            Glyph.CHECK -> {
+                val corner = Offset(w * CHECK_CORNER_X, h * CHECK_CORNER_Y)
+                drawLine(color, Offset(w * CHECK_START_X, h * CHECK_START_Y), corner, stroke, StrokeCap.Round)
+                drawLine(color, corner, Offset(w * CHECK_END_X, h * CHECK_END_Y), stroke, StrokeCap.Round)
+            }
+
+            Glyph.CHEVRON_DOWN -> {
+                val tip = Offset(center.x, h * CHEVRON_BOTTOM)
+                drawLine(color, Offset(w * CHEVRON_INSET, h * CHEVRON_TOP), tip, stroke, StrokeCap.Round)
+                drawLine(color, tip, Offset(w * (1f - CHEVRON_INSET), h * CHEVRON_TOP), stroke, StrokeCap.Round)
             }
         }
     }
