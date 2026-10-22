@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -20,7 +21,7 @@ import androidx.compose.ui.unit.isSpecified
 // Small line glyphs drawn on a Canvas so components need no icon-font dependency. They are
 // decorative: callers put the accessible label on the interactive parent.
 
-internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH, CHECK, CHEVRON_DOWN }
+internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH, CHECK, CHEVRON_DOWN, COPY }
 
 /** A glyph sized to [style]'s line height, so it scales with the user's font size. */
 @Composable
@@ -50,6 +51,9 @@ private const val CHECK_END_Y = 0.3f
 private const val CHEVRON_INSET = 0.25f
 private const val CHEVRON_TOP = 0.38f
 private const val CHEVRON_BOTTOM = 0.62f
+private const val COPY_SHEET_INSET = 0.18f
+private const val COPY_SHEET_SIZE = 0.52f
+private const val COPY_OFFSET = 0.12f
 
 @Composable
 internal fun GlyphIcon(
@@ -110,6 +114,16 @@ internal fun GlyphIcon(
                 val corner = Offset(w * CHECK_CORNER_X, h * CHECK_CORNER_Y)
                 drawLine(color, Offset(w * CHECK_START_X, h * CHECK_START_Y), corner, stroke, StrokeCap.Round)
                 drawLine(color, corner, Offset(w * CHECK_END_X, h * CHECK_END_Y), stroke, StrokeCap.Round)
+            }
+
+            Glyph.COPY -> {
+                // Two overlapping sheets: the back one offset up and to the start.
+                val sheet = Size(w * COPY_SHEET_SIZE, h * COPY_SHEET_SIZE)
+                val corner = CornerRadius(stroke, stroke)
+                val front = Offset(w * (COPY_SHEET_INSET + COPY_OFFSET), h * (COPY_SHEET_INSET + COPY_OFFSET))
+                val back = Offset(w * COPY_SHEET_INSET, h * COPY_SHEET_INSET)
+                drawRoundRect(color, topLeft = back, size = sheet, cornerRadius = corner, style = Stroke(stroke))
+                drawRoundRect(color, topLeft = front, size = sheet, cornerRadius = corner, style = Stroke(stroke))
             }
 
             Glyph.CHEVRON_DOWN -> {
