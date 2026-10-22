@@ -27,6 +27,8 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
 - `sample/` — unpublished desktop catalog showing every component (`./gradlew :sample:run`).
+- `.run/` — shared IntelliJ run configurations (sample catalog, JVM tests, all-target tests, CI
+  check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
 - `.github/workflows/` — `ci.yml` (PRs and main), `release-please.yml` -> `release.yml` (Maven
   Central publish on release).

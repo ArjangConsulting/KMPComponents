@@ -69,6 +69,10 @@ Run the interactive catalog on desktop:
 ./gradlew :sample:run
 ```
 
+In IntelliJ IDEA or Android Studio, the shared run configurations in `.run/` cover the same entry
+points: **Run** > *Sample catalog (desktop)*, and **Test** > *Tests (JVM)*, *Tests (all targets)*,
+and *Check (CI)*.
+
 ## Theming
 
 `KmpTheme(mode, tokens)` converts kommon tokens once per token change (results are `remember`ed)
