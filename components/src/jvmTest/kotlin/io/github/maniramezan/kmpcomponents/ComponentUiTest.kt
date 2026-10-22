@@ -1,8 +1,11 @@
 package io.github.maniramezan.kmpcomponents
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -12,10 +15,12 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
+import io.github.maniramezan.kommon.designsystem.KommonDesignTokens
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -102,5 +107,93 @@ class ComponentUiTest {
         onNodeWithText("Provider").assertIsDisplayed()
         onNodeWithText("Where requests go").assertIsDisplayed()
         onNodeWithText("Connected").assertIsDisplayed()
+    }
+
+    @Test
+    fun `secret field icon toggle is labeled with the next action`() = runComposeUiTest {
+        setContent {
+            KmpTheme {
+                SecretTextField(
+                    value = "sk-123",
+                    onValueChange = {},
+                    label = "API key",
+                    showLabel = "Show key",
+                    hideLabel = "Hide key",
+                    revealToggle = SecretRevealToggle.ICON,
+                )
+            }
+        }
+        onNodeWithContentDescription("Show key").performClick()
+        onNodeWithContentDescription("Hide key").assertIsDisplayed()
+    }
+
+    @Test
+    fun `form field error replaces supporting text and is announced`() = runComposeUiTest {
+        var error by mutableStateOf<String?>(null)
+        setContent {
+            KmpTheme {
+                FormTextField(
+                    value = "",
+                    onValueChange = {},
+                    label = "Name",
+                    placeholder = "Your name",
+                    supportingText = "Shown on invoices",
+                    errorText = error,
+                )
+            }
+        }
+        onNodeWithText("Shown on invoices", useUnmergedTree = true)
+            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.LiveRegion))
+        error = "Required"
+        waitForIdle()
+        onAllNodes(hasText("Shown on invoices"), useUnmergedTree = true).assertCountEquals(0)
+        onNodeWithText("Required", useUnmergedTree = true)
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite))
+    }
+
+    @Test
+    fun `only warning and error status messages are announced`() = runComposeUiTest {
+        setContent {
+            KmpTheme {
+                Column {
+                    StatusTone.entries.forEach { tone ->
+                        StatusMessage(message = tone.name, tone = tone, title = "T-$tone")
+                    }
+                }
+            }
+        }
+        StatusTone.entries.forEach { tone ->
+            val announced = tone == StatusTone.WARNING || tone == StatusTone.ERROR
+            val matcher = if (announced) {
+                SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite)
+            } else {
+                SemanticsMatcher.keyNotDefined(SemanticsProperties.LiveRegion)
+            }
+            onNode(hasText(tone.name) and hasText("T-$tone")).assert(matcher)
+        }
+    }
+
+    @Test
+    fun `kmp theme provides the tokens for the chosen mode`() = runComposeUiTest {
+        val tokens = KommonDesignTokens.default
+        var surface: Color? = null
+        var spacing: ComposeSpacing? = null
+        setContent {
+            KmpTheme(mode = ThemeMode.DARK, tokens = tokens) {
+                surface = MaterialTheme.colorScheme.surface
+                spacing = MaterialTheme.kmpSpacing
+            }
+        }
+        waitForIdle()
+        assertEquals(tokens.darkColors.surface.toComposeColor(), surface)
+        assertEquals(tokens.spacing.toComposeSpacing(), spacing)
+    }
+
+    @Test
+    fun `kmp spacing outside a theme falls back to kommon defaults`() = runComposeUiTest {
+        var spacing: ComposeSpacing? = null
+        setContent { spacing = MaterialTheme.kmpSpacing }
+        waitForIdle()
+        assertEquals(KommonDesignTokens.default.spacing.toComposeSpacing(), spacing)
     }
 }

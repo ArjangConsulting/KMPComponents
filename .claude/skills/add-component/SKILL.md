@@ -13,7 +13,7 @@ Read `AGENTS.md` ("Component API rules") first. Then:
 - Does it need a visual value kommon lacks? Derive it from existing tokens in `TokenAdapters.kt`
   or `MaterialTheme.kmp*`; do not add tokens here.
 - Can it be composed from existing public pieces (`FormTextField`, `SecretTextField`,
-  `SectionCard`, `StatusMessage`)? Prefer that. If an existing component contains a reusable
+  `SectionCard`, `StatusMessage`, `TonalBadge`, `CheckStatusRow`, `SelectableCard`, ...)? Prefer that. If an existing component contains a reusable
   piece, extract that piece as its own public composable first.
 
 ## 2. Implement
@@ -41,6 +41,7 @@ Checklist while writing:
 
 - `modifier` applied to the root only; child modifiers start from `Modifier`.
 - Strings come from parameters / `XxxLabels`; no literal colors, `dp` spacing, or `sp` sizes.
+  Icons come from `Glyphs.kt`, sized with `glyphSize(style)` so they scale with the font.
 - Semantics: `heading()` for titles, polite `liveRegion` for dynamic warnings/errors, labels for
   icon-only controls.
 - `remember` derived values keyed on their inputs; avoid allocations that break skipping.
@@ -53,6 +54,9 @@ Checklist while writing:
 - Interaction -> add a case to `components/src/jvmTest/.../ComponentUiTest.kt` (or a new file)
   with `runComposeUiTest { setContent { KmpTheme { ... } } }`. Assert callbacks fire and visible
   text/state changes. These run on desktop only.
+- Visuals -> add the component to `Gallery()` in `jvmTest/.../ScreenshotTest.kt`, run
+  `./gradlew :components:recordRoborazziJvm`, and look at the updated images in
+  `jvmTest/snapshots/` (light, dark, 200% font) before committing them.
 
 ## 4. Showcase and document
 
@@ -63,8 +67,12 @@ Checklist while writing:
 ## 5. Verify and commit
 
 ```bash
-./gradlew :components:jvmTest :components:assemble :sample:compileKotlinJvm
+./gradlew :components:updateKotlinAbi              # records the new public API in components/api
+./gradlew ktlintFormat ktlintCheck :components:verifyRoborazziJvm :components:checkKotlinAbi \
+    :components:assemble :sample:compileKotlinJvm
 ```
+
+Commit the `components/api/` dump with the change; reviewers read it as the API diff.
 
 If the environment cannot reach Google Maven the build cannot configure; say that explicitly
 instead of reporting success. Commit with a Conventional Commit (`feat: add Thing component`);

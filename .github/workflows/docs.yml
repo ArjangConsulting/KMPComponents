@@ -1,0 +1,63 @@
+name: Docs
+
+# Publishes the API docs that CI built on main to GitHub Pages. Requires Settings > Pages >
+# Source: GitHub Actions.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository) ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: macos-26
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+        if: github.event_name == 'workflow_dispatch'
+      - uses: actions/setup-java@v6
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v6
+        if: github.event_name == 'workflow_dispatch'
+
+      - name: Build API docs
+        if: github.event_name == 'workflow_dispatch'
+        run: ./gradlew :components:dokkaGenerate
+
+      - name: Download API docs from CI
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v8
+        with:
+          name: docs-site
+          path: site
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ github.event_name == 'workflow_run' && 'site' || 'components/build/dokka/html' }}
+
+      - id: deployment
+        uses: actions/deploy-pages@v5

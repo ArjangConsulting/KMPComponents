@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -6,10 +7,18 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.maven.publish)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.kover)
+    alias(libs.plugins.roborazzi)
 }
 
 kotlin {
     explicitApi()
+
+    // Guards the published API: `checkKotlinAbi` (part of `check`) fails when the public surface
+    // changes without `./gradlew :components:updateKotlinAbi` updating components/api/.
+    @OptIn(ExperimentalAbiValidation::class)
+    abiValidation()
 
     android {
         namespace = "io.github.maniramezan.kmpcomponents"
@@ -40,6 +49,7 @@ kotlin {
             // tests lack.
             implementation(compose.desktop.currentOs)
             implementation(libs.compose.ui.test)
+            implementation(libs.roborazzi.compose.desktop)
         }
     }
 }
