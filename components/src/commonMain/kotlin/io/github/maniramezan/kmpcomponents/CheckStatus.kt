@@ -2,8 +2,6 @@ package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Dp
 
 /**
  * The state of an on-demand check such as "Test connection": not run yet, running, or finished
@@ -75,13 +72,10 @@ public fun CheckStatusRow(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
     ) {
         if (status.isChecking) {
-            val size: Dp = glyphSize(MaterialTheme.typography.bodyMedium)
-            CircularProgressIndicator(modifier = Modifier.size(size), strokeWidth = size / SPINNER_STROKE_DIVISOR)
+            InlineSpinner(color = MaterialTheme.colorScheme.primary)
         }
         if (text.isNotEmpty()) {
             Text(text, style = MaterialTheme.typography.bodyMedium, color = color)
         }
     }
 }
-
-private const val SPINNER_STROKE_DIVISOR = 8
