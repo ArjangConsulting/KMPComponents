@@ -9,3 +9,12 @@ public fun ThemeMode.isDark(systemInDarkTheme: Boolean): Boolean = when (this) {
     ThemeMode.LIGHT -> false
     ThemeMode.DARK -> true
 }
+
+/**
+ * The explicit mode that flips what is currently shown, for a single light/dark toggle button.
+ *
+ * The result is always [ThemeMode.LIGHT] or [ThemeMode.DARK], never [ThemeMode.SYSTEM], so toggling
+ * while following the system pins the opposite of the current system appearance.
+ */
+public fun ThemeMode.toggled(systemInDarkTheme: Boolean): ThemeMode =
+    if (isDark(systemInDarkTheme)) ThemeMode.LIGHT else ThemeMode.DARK
