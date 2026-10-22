@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.isSpecified
 // Small line glyphs drawn on a Canvas so components need no icon-font dependency. They are
 // decorative: callers put the accessible label on the interactive parent.
 
-internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO }
+internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH }
 
 /** A glyph sized to [style]'s line height, so it scales with the user's font size. */
 @Composable
@@ -37,6 +37,10 @@ private const val INFO_DOT_Y = 0.3f
 private const val INFO_DOT_RADIUS = 0.75f
 private const val INFO_STEM_TOP = 0.45f
 private const val INFO_STEM_BOTTOM = 0.72f
+private const val SEARCH_LENS_CENTER = 0.42f
+private const val SEARCH_LENS_RADIUS = 0.28f
+private const val SEARCH_HANDLE_END = 0.86f
+private const val HALF_SQRT_2 = 0.70710677f
 
 @Composable
 internal fun GlyphIcon(
@@ -73,6 +77,21 @@ internal fun GlyphIcon(
                     color,
                     Offset(center.x, h * INFO_STEM_TOP),
                     Offset(center.x, h * INFO_STEM_BOTTOM),
+                    stroke,
+                    StrokeCap.Round,
+                )
+            }
+
+            Glyph.SEARCH -> {
+                val lensCenter = Offset(w * SEARCH_LENS_CENTER, h * SEARCH_LENS_CENTER)
+                val lensRadius = this.size.minDimension * SEARCH_LENS_RADIUS
+                drawCircle(color, radius = lensRadius, center = lensCenter, style = Stroke(stroke))
+                // The handle starts on the lens rim at 45 degrees and runs to the bottom-end corner.
+                val rim = lensRadius * HALF_SQRT_2
+                drawLine(
+                    color,
+                    Offset(lensCenter.x + rim, lensCenter.y + rim),
+                    Offset(w * SEARCH_HANDLE_END, h * SEARCH_HANDLE_END),
                     stroke,
                     StrokeCap.Round,
                 )

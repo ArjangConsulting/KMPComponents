@@ -97,6 +97,7 @@ fun ComponentCatalog() {
                         onFontScaleChange = { fontScale = it },
                     )
                     ProviderSection()
+                    EssentialsSection()
                     StatusSection()
                     NavigationSection()
                     SelectionSection()

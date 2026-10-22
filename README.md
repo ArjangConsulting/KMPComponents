@@ -59,13 +59,17 @@ or browse the copy that CI publishes from `main` to
 | --- | --- |
 | `KmpTheme` | Applies kommon `ThemeTokens` as a Material 3 theme for a `ThemeMode`. |
 | `ThemeModeSelector` | Segmented System / Light / Dark control. |
-| `ThemeModeDropdown` | Labeled dropdown for the same choice, for settings forms. |
+| `ThemeModeDropdown` | Labeled dropdown for the same choice, for settings forms. Built on `MenuPicker`. |
 | `ThemeMode.toggled` | The opposite explicit mode, for a single light/dark toggle button. |
 | `SectionCard` | Titled group of content with optional description and header action. Title is an accessibility heading. |
 | `FormTextField` | Outlined text field with label, placeholder, and supporting/error text. |
 | `SecretTextField` | Masked field with a Show/Hide text or eye-icon toggle and a password keyboard without autocorrect. |
 | `ProviderConfigurationForm` | Provider name, base URL, model, and API key fields with validation, built from the fields above. |
 | `CheckStatus` / `CheckStatusRow` | State and one-line display of an on-demand check such as "Test connection" (idle, spinner, success, failure). Results are announced. |
+| `MenuPicker` | Labeled dropdown field for picking one item of any type, for forms where a segmented control does not fit. |
+| `SearchField` | Single-line search field with a search glyph, a clear button, and a keyboard Search action. |
+| `ThemeSwitch` | Setting row with a label, optional supporting text and tooltip, and a trailing switch. The whole row toggles. |
+| `ThemeCheckbox` / `ThemeTriStateCheckbox` | Checkbox rows with a label; the tri-state one is for "select all" over a group. |
 
 ### Feedback
 
@@ -77,6 +81,9 @@ or browse the copy that CI publishes from `main` to
 | `EmptyState` | Centered title, message, and optional action for an empty pane. |
 | `ConfirmDialog` | Confirm / cancel dialog, optionally with a destructive (error-colored) confirm button. |
 | `InfoTooltip` | Info glyph showing an explanation on hover, long-press, or focus; screen readers read it directly. |
+| `NoticeCard` | Full-width `StatusTone` notice with an optional action ("Retry") and dismiss button. |
+| `ProgressIndicator` | Centered spinner or determinate bar with an announced label, for a loading pane. |
+| `InlineProgressIndicator` | Text-sized spinner and label for work in progress inside a row or toolbar. |
 
 ### Navigation and layout
 
@@ -86,6 +93,26 @@ or browse the copy that CI publishes from `main` to
 | `TabChipRow` / `TabChip` | Scrolling row of compact tabs with optional close controls. |
 | `SelectableCard` | Card in a pick-one list; the selected card is tinted and reported as selected. |
 | `HorizontalSplitPane` | Two panes with a divider you can drag, move with arrow keys, or adjust with a screen reader. |
+| `SectionHeader` | Title (an accessibility heading), optional subtitle, and trailing actions above a list or pane. |
+| `ContentRow` | List row with title, secondary and supporting text, leading/trailing slots, and optional click and selection. |
+| `KeyValueRow` | Read-only label/value pair for details panels, read as one item. |
+
+### Names shared with the sibling libraries
+
+Components that also exist in [ComposeUIComponents](https://github.com/maniramezan/ComposeUIComponents)
+or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here (`SectionHeader`, `ContentRow`, `SearchField`,
+`ProgressIndicator`, `NoticeCard`, `MenuPicker`, `EmptyState`). Where that name would collide
+with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
+`ThemeCheckbox`), like SwiftUIComponents' `ThemeButton`. Some ComposeUIComponents names map to an
+existing component here:
+
+| ComposeUIComponents | KMPComponents |
+| --- | --- |
+| `Switch` | `ThemeSwitch` |
+| `Checkbox` | `ThemeCheckbox` |
+| `TextField` | `FormTextField` |
+| `PasswordField` | `SecretTextField` |
+| `Section` | `SectionCard` |
 
 All components are stateless unless noted, take a `Modifier` as their first optional parameter,
 and accept user-visible strings as parameters (or a `*Labels` data class) so apps can localize

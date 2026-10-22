@@ -29,15 +29,23 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `CountBadge`), `EmptyState.kt`, `ConfirmDialog.kt`, `InfoTooltip.kt`.
   - Navigation and layout: `SidebarNavigation.kt` (`SidebarNavigation`, `SidebarItem`),
     `TabChip.kt` (`TabChipRow`, `TabChip`), `SelectableCard.kt`, `SplitPane.kt`
-    (`HorizontalSplitPane`).
-  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info) so the library needs no icon font.
+    (`HorizontalSplitPane`), `SectionHeader.kt`, `ContentRow.kt`, `KeyValueRow.kt`.
+  - Inputs: `MenuPicker.kt`, `SearchField.kt`, `ToggleRows.kt` (`ThemeSwitch`, `ThemeCheckbox`,
+    `ThemeTriStateCheckbox`).
+  - More feedback: `NoticeCard.kt`, `ProgressIndicator.kt` (`ProgressIndicator`,
+    `InlineProgressIndicator`, internal `InlineSpinner`).
+  - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`), `GlyphIconButton.kt`
+    (icon-only button with tooltip).
+  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search) so the library needs no icon font.
   - `jvmMain`/`androidMain`/`iosMain` — only `resizeHorizontalPointerIcon`.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
-    `ScreenshotTest.kt` renders a gallery of every component into golden images in
-    `jvmTest/snapshots/`.
+    `ScreenshotTest.kt` renders a gallery of the original components into golden images in
+    `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`)
+    so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
-- `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog;
+- `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
+  (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
   `sample/ios` (XcodeGen spec and Swift host).
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).
@@ -71,6 +79,11 @@ Follow these for every public composable; reviewers check them.
 9. **KDoc** on every public declaration that isn't self-explanatory, including non-obvious
    behavior (masking, when errors show, what is announced).
 10. `explicitApi()` is on: every public declaration needs `public` and an explicit type.
+11. **Names follow the sibling libraries.** If ComposeUIComponents or SwiftUIComponents already
+    has the component, reuse its name. If that name collides with a Material 3 (or
+    `androidx.compose.ui.window`) composable, prefix it with `Theme` (`ThemeSwitch`, not
+    `Switch`) so apps never pick up the unthemed Material one by accident. List new name
+    mappings in the README.
 
 ## Adding or changing a component
 

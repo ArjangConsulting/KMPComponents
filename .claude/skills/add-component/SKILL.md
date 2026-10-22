@@ -54,13 +54,16 @@ Checklist while writing:
 - Interaction -> add a case to `components/src/jvmTest/.../ComponentUiTest.kt` (or a new file)
   with `runComposeUiTest { setContent { KmpTheme { ... } } }`. Assert callbacks fire and visible
   text/state changes. These run on desktop only.
-- Visuals -> add the component to `Gallery()` in `jvmTest/.../ScreenshotTest.kt`, run
+- Visuals -> add the component to its family's gallery (`Gallery()` in `ScreenshotTest.kt` for the
+  original components, `EssentialsGallery()` in `EssentialsScreenshotTest.kt`, or a new
+  `<Family>ScreenshotTest.kt` for a new family), run
   `./gradlew :components:recordRoborazziJvm`, and look at the updated images in
   `jvmTest/snapshots/` (light, dark, 200% font) before committing them.
 
 ## 4. Showcase and document
 
-- Add the component to `sample/src/jvmMain/.../ComponentCatalog.kt`.
+- Add the component to the sample catalog in `sample/src/commonMain/.../` (`ComponentCatalog.kt`,
+  or the family's own file such as `EssentialsCatalog.kt`).
 - Add a row to the README "Catalog" table; update "Theming" if you added a theme accessor.
 - Update the repository map in `AGENTS.md` if you added a file.
 
