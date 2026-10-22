@@ -102,6 +102,7 @@ sized from the body text so they follow the user's font scale.
 | `FAB` / `ThemeExtendedFloatingActionButton` | Floating action buttons; the extended one is named by its visible label. |
 | `SegmentedControl` | Pill-shaped segments for one choice, with `SegmentDensity` and `SegmentWidthMode`. |
 | `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark. |
+| `SegmentedContent` | Segment bar (pill, underline, or bare) above content that crossfades; scrolls with edge fades instead of truncating titles. |
 | `PillChip` | Capsule chip with selected and unselected looks; selectable when clickable, static otherwise. |
 | `ActionPill` | Capsule command with arbitrary content and no selected state. |
 
@@ -164,7 +165,7 @@ Components that also exist in [ComposeUIComponents](https://github.com/maniramez
 or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here,
 for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
 `BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, `Skeleton`, `TabBar`, `NavRail`,
-`PaginatedContent`, `ShowcaseFeed`, `FlipCard`, `ChatLog`, `TypingIndicator`, `LoadingOverlay`,
+`PaginatedContent`, `SegmentedContent`, `ShowcaseFeed`, `FlipCard`, `ChatLog`, `TypingIndicator`, `LoadingOverlay`,
 and the `Assistant*` components. Where that name would
 collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
 `ThemeCard`), like SwiftUIComponents' `ThemeButton`. Enum entries use SCREAMING_CASE

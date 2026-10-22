@@ -39,7 +39,8 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   - Actions: `Buttons.kt` (`PrimaryButton`, `SecondaryButton`, `ThemeTextButton`,
     `ThemeIconButton`, `LoadingIconButton`, `FAB`, `ThemeExtendedFloatingActionButton`),
     `SegmentedControl.kt` (`SegmentedControl`, `ThemeSingleChoiceSegmentedButtonRow`,
-    `SegmentDensity`, `SegmentWidthMode`), `PillChip.kt`, `ActionPill.kt`. Icons are
+    `SegmentDensity`, `SegmentWidthMode`), `SegmentedContent.kt` (layout choice in
+    `segmentLayout`), `PillChip.kt`, `ActionPill.kt`. Icons are
     caller-supplied `Painter`s sized with `glyphSize()`.
   - Containers and feedback: `Containers.kt` (`ThemeCard`, `ThemeSurface`, `BottomSheet`,
     `ThemeDialog`, `ThemeSnackbar`), `Toast.kt` (`Toast`, `ToastHost`, `ToastHostState`),
@@ -65,7 +66,7 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
     `ActionsScreenshotTest.kt`, `SelectionScreenshotTest.kt`,
     `ContainersScreenshotTest.kt`, `NavigationScreenshotTest.kt`,
-    `AssistantScreenshotTest.kt`)
+    `AssistantScreenshotTest.kt`; `SegmentedContentTest.kt` holds both its interaction test and goldens)
     so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog

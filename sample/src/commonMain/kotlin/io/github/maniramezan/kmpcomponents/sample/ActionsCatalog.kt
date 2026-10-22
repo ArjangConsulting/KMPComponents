@@ -3,6 +3,7 @@ package io.github.maniramezan.kmpcomponents.sample
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,8 +27,11 @@ import io.github.maniramezan.kmpcomponents.PrimaryButton
 import io.github.maniramezan.kmpcomponents.SecondaryButton
 import io.github.maniramezan.kmpcomponents.SectionCard
 import io.github.maniramezan.kmpcomponents.SegmentDensity
+import io.github.maniramezan.kmpcomponents.SegmentSelectionIndicator
 import io.github.maniramezan.kmpcomponents.SegmentWidthMode
+import io.github.maniramezan.kmpcomponents.SegmentedContent
 import io.github.maniramezan.kmpcomponents.SegmentedControl
+import io.github.maniramezan.kmpcomponents.SegmentedItem
 import io.github.maniramezan.kmpcomponents.ThemeExtendedFloatingActionButton
 import io.github.maniramezan.kmpcomponents.ThemeIconButton
 import io.github.maniramezan.kmpcomponents.ThemeSingleChoiceSegmentedButtonRow
@@ -112,6 +116,14 @@ private fun SegmentsDemo() {
             onOptionSelected = { format = it },
             modifier = Modifier.fillMaxWidth(),
         )
+        SegmentedContent(
+            items = listOf("Headers", "Body", "Cookies", "Query parameters", "Timeline").map(::SegmentedItem),
+            indicator = SegmentSelectionIndicator.UNDERLINE,
+            backgroundColor = MaterialTheme.colorScheme.surface,
+        ) { _, item -> Text("${item.title} panel", Modifier.padding(MaterialTheme.kmpSpacing.small)) }
+        SegmentedContent(items = listOf("Request", "Response").map(::SegmentedItem)) { _, item ->
+            Text("${item.title} body", Modifier.padding(MaterialTheme.kmpSpacing.small))
+        }
     }
 }
 
