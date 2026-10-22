@@ -105,6 +105,10 @@ xcodegen generate --spec sample/ios/project.yml && open sample/ios/KmpComponents
 The iOS project builds the Kotlin framework in a pre-build phase; pick an Apple Silicon simulator
 and run. It needs [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
+In IntelliJ IDEA or Android Studio, the shared run configurations in `.run/` cover the same entry
+points: **Run** > *Sample catalog (desktop)*, and **Test** > *Tests (JVM)*, *Tests (all targets)*,
+and *Check (CI)*.
+
 ## Theming
 
 `KmpTheme(mode, tokens)` converts kommon tokens once per token change (results are `remember`ed)

@@ -41,6 +41,8 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
   `sample/ios` (XcodeGen spec and Swift host).
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).
+- `.run/` — shared IntelliJ run configurations (sample catalog, JVM tests, all-target tests, CI
+  check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
 - `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on
   main), `release-please.yml` -> `release.yml` (Maven Central publish on release).
@@ -108,9 +110,8 @@ cannot configure the project, so say so rather than claiming a change was verifi
   entries (`libs.compose.*`); the plugin's `compose.runtime`/`compose.material3`/... accessors are
   deprecated at error level in Compose Multiplatform 1.12. Material 3 has its own version
   (`composeMaterial3`); keep it on the release the Compose plugin pairs with `compose`.
-  Dependabot groups Kotlin, Compose, AGP, AndroidX, publishing, kommon, and build tooling (Dokka,
-  Kover, ktlint, Roborazzi) updates. The ktlint engine version (`ktlint` in the catalog) is not
-  tracked by Dependabot; bump it by hand.
+  Dependabot groups Gradle and GitHub Actions updates into one weekly dependency PR. The ktlint
+  engine version (`ktlint` in the catalog) is not tracked by Dependabot; bump it by hand.
 - Keep Kotlin/JVM bytecode at `JvmTarget.JVM_17` to match kommon.
 - `.editorconfig` holds the house style (ktlint `intellij_idea` style, 120 columns, expression bodies
   may stay on the signature line, `@Composable` functions are PascalCase).
