@@ -85,6 +85,23 @@ or browse the copy that CI publishes from `main` to
 | `ProgressIndicator` | Centered spinner or determinate bar with an announced label, for a loading pane. |
 | `InlineProgressIndicator` | Text-sized spinner and label for work in progress inside a row or toolbar. |
 
+### Actions
+
+Icons are `Painter`s you supply (for an `ImageVector`, `rememberVectorPainter(icon)`); they are
+sized from the body text so they follow the user's font scale.
+
+| Component | Purpose |
+| --- | --- |
+| `PrimaryButton` / `SecondaryButton` | Filled and outlined text buttons for the primary and secondary action. |
+| `ThemeTextButton` | Low-emphasis text button, optionally `destructive` (error-colored). |
+| `ThemeIconButton` | Icon-only button; its description is also shown as a tooltip. |
+| `LoadingIconButton` | Icon button that shows a spinner and ignores clicks while loading. |
+| `FAB` / `ThemeExtendedFloatingActionButton` | Floating action buttons; the extended one is named by its visible label. |
+| `SegmentedControl` | Pill-shaped segments for one choice, with `SegmentDensity` and `SegmentWidthMode`. |
+| `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark. |
+| `PillChip` | Capsule chip with selected and unselected looks; selectable when clickable, static otherwise. |
+| `ActionPill` | Capsule command with arbitrary content and no selected state. |
+
 ### Navigation and layout
 
 | Component | Purpose |
@@ -101,7 +118,8 @@ or browse the copy that CI publishes from `main` to
 
 Components that also exist in [ComposeUIComponents](https://github.com/maniramezan/ComposeUIComponents)
 or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here (`SectionHeader`, `ContentRow`, `SearchField`,
-`ProgressIndicator`, `NoticeCard`, `MenuPicker`, `EmptyState`). Where that name would collide
+`ProgressIndicator`, `NoticeCard`, `MenuPicker`, `EmptyState`, `PrimaryButton`, `SecondaryButton`,
+`FAB`, `SegmentedControl`, `PillChip`, `ActionPill`). Where that name would collide
 with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
 `ThemeCheckbox`), like SwiftUIComponents' `ThemeButton`. Some ComposeUIComponents names map to an
 existing component here:
@@ -110,6 +128,10 @@ existing component here:
 | --- | --- |
 | `Switch` | `ThemeSwitch` |
 | `Checkbox` | `ThemeCheckbox` |
+| `TextButton` | `ThemeTextButton` |
+| `IconButton` | `ThemeIconButton` |
+| `ExtendedFloatingActionButton` | `ThemeExtendedFloatingActionButton` |
+| `SingleChoiceSegmentedButtonRow` | `ThemeSingleChoiceSegmentedButtonRow` |
 | `TextField` | `FormTextField` |
 | `PasswordField` | `SecretTextField` |
 | `Section` | `SectionCard` |
