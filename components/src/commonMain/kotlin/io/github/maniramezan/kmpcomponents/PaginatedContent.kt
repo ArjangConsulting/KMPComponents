@@ -140,7 +140,7 @@ public fun PaginatedContent(
             snapshotFlow { pagerState.settledPage }.distinctUntilChanged().collect { onPageChanged(it) }
         }
     }
-    val hint = showScrollHint && pages.size > 1 && !isReduceMotionEnabled()
+    val hint = showScrollHint && pages.size > 1 && decorativeAnimationsEnabled()
     val motion = MaterialTheme.kmpMotion
     if (hint) {
         LaunchedEffect(pagerState) {

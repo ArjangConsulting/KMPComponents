@@ -67,7 +67,7 @@ or browse the copy that CI publishes from `main` to
 | `ProviderConfigurationForm` | Provider name, base URL, model, and API key fields with validation, built from the fields above. |
 | `CheckStatus` / `CheckStatusRow` | State and one-line display of an on-demand check such as "Test connection" (idle, spinner, success, failure). Results are announced. |
 | `MenuPicker` | Labeled dropdown field for picking one item of any type, for forms where a segmented control does not fit. |
-| `SearchField` | Single-line search field with a search glyph, a clear button, and a keyboard Search action. |
+| `SearchField` | Single-line search field with a search glyph, a clear button, and a keyboard Search action. A blank placeholder draws none. |
 | `ThemeSwitch` | Setting row with a label, optional supporting text and tooltip, and a trailing switch. The whole row toggles. |
 | `ThemeCheckbox` / `ThemeTriStateCheckbox` | Checkbox rows with a label; the tri-state one is for "select all" over a group. |
 | `RadioGroup` | Vertical radio list; each full-width row is the tap target. |
@@ -122,6 +122,19 @@ sized from the body text so they follow the user's font scale.
 | `FlowLayout` | Wrapping row with the standard gaps, for chips and button groups. |
 | `AdaptiveContentContainer` | Centers content and caps its width on wide windows. |
 
+### Chat and assistant
+
+| Component | Purpose |
+| --- | --- |
+| `ChatLog` / `ChatMessage` / `ChatMessageState` | Conversation with user and assistant bubbles, typing and retryable error states; follows new messages only while the reader is at the bottom. |
+| `TypingIndicator` | Three-dot "reply is being written" wave; still when the system reduces motion. |
+| `LoadingOverlay` | Scrim that blocks interaction with its content during work the user must wait for, and announces it. |
+| `AssistantContextCard` | Title, highlighted value, optional quote, and footnote describing what the assistant sees. |
+| `AssistantQuickActionChips` | Scrolling filter chips for quick actions, with caller-owned state. |
+| `AssistantStatusBanner` | Announced error banner for an unavailable provider or blocking failure. |
+| `AssistantLimitPromptCard` | Quota or upgrade prompt with primary and secondary actions. |
+| `AssistantDisclaimerFooter` | Low-emphasis disclaimer line. |
+
 ### Navigation and layout
 
 | Component | Purpose |
@@ -151,7 +164,8 @@ Components that also exist in [ComposeUIComponents](https://github.com/maniramez
 or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here,
 for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
 `BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, `Skeleton`, `TabBar`, `NavRail`,
-`PaginatedContent`, `ShowcaseFeed`, and `FlipCard`. Where that name would
+`PaginatedContent`, `ShowcaseFeed`, `FlipCard`, `ChatLog`, `TypingIndicator`, `LoadingOverlay`,
+and the `Assistant*` components. Where that name would
 collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
 `ThemeCard`), like SwiftUIComponents' `ThemeButton`. Enum entries use SCREAMING_CASE
 (`ToastDuration.SHORT`, not `Short`). Some ComposeUIComponents names map to a different or
