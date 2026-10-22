@@ -41,7 +41,7 @@ import androidx.compose.material3.VerticalDivider as MaterialVerticalDivider
 /** Width caps for [AdaptiveContentContainer], taken from Material's window size class breakpoints. */
 public object AdaptiveContentContainerDefaults {
     /** Forms and reading content: the compact/medium window breakpoint. */
-    public val FormMaxWidth: Dp = 600.dp
+    public val FormMaxWidth: Dp = CompactWindowMaxWidth
 
     /** Lists and wider content: the medium/expanded window breakpoint. */
     public val ListMaxWidth: Dp = 840.dp

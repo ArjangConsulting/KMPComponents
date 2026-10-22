@@ -9,6 +9,29 @@ public final class io/github/maniramezan/kmpcomponents/AdaptiveContentContainerD
 	public final fun getListMaxWidth-D9Ej5fM ()F
 }
 
+public final class io/github/maniramezan/kmpcomponents/AppTextKt {
+	public static final fun AppText-ww6aTOc (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/AppTextStyle;JLandroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/AppTextStyle : java/lang/Enum {
+	public static final field BODY Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field BODY_LARGE_SEMIBOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field BODY_MEDIUM_SEMIBOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field BODY_SMALL_MEDIUM Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field BODY_SMALL_SEMIBOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field DISPLAY Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field LABEL Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field LABEL_LARGE_BOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field LABEL_MEDIUM_BOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field LABEL_MEDIUM_SEMIBOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field LABEL_SMALL_BOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field LABEL_SMALL_SEMIBOLD Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static final field TITLE Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/AppTextStyle;
+}
+
 public final class io/github/maniramezan/kmpcomponents/BadgesKt {
 	public static final fun CountBadge-T042LqI (ILandroidx/compose/ui/Modifier;JILjava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun TonalBadge (Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/StatusTone;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
@@ -93,6 +116,25 @@ public final class io/github/maniramezan/kmpcomponents/CheckStatusLabels {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/maniramezan/kmpcomponents/ComposableSingletons$NavigationKt {
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ComposableSingletons$NavigationKt;
+	public fun <init> ()V
+	public final fun getLambda$-1216079509$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-953991257$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$1606896964$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$565815109$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$674557129$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$829284764$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$945412026$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ComposableSingletons$PaginatedContentKt {
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ComposableSingletons$PaginatedContentKt;
+	public fun <init> ()V
+	public final fun getLambda$-46740372$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$957698069$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function5;
+}
+
 public final class io/github/maniramezan/kmpcomponents/ComposableSingletons$SearchFieldKt {
 	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ComposableSingletons$SearchFieldKt;
 	public fun <init> ()V
@@ -139,6 +181,18 @@ public final class io/github/maniramezan/kmpcomponents/ContentRowKt {
 
 public final class io/github/maniramezan/kmpcomponents/EmptyStateKt {
 	public static final fun EmptyState (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/FlipAxis : java/lang/Enum {
+	public static final field HORIZONTAL Lio/github/maniramezan/kmpcomponents/FlipAxis;
+	public static final field VERTICAL Lio/github/maniramezan/kmpcomponents/FlipAxis;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/FlipAxis;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/FlipAxis;
+}
+
+public final class io/github/maniramezan/kmpcomponents/FlipCardKt {
+	public static final fun FlipCard-9EmdrwA (Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/ui/Modifier;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function1;Lio/github/maniramezan/kmpcomponents/FlipAxis;Landroidx/compose/animation/core/AnimationSpec;ZLandroidx/compose/ui/graphics/Shape;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;III)V
 }
 
 public final class io/github/maniramezan/kmpcomponents/FormTextFieldKt {
@@ -222,12 +276,73 @@ public final class io/github/maniramezan/kmpcomponents/LayoutKt {
 	public static final fun ThemeVerticalDivider-9IZ8Weo (Landroidx/compose/ui/Modifier;FJLandroidx/compose/runtime/Composer;II)V
 }
 
+public final class io/github/maniramezan/kmpcomponents/ListsKt {
+	public static final fun LazyList (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun LoadMoreFooter (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeListItem (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class io/github/maniramezan/kmpcomponents/MenuPickerKt {
 	public static final fun MenuPicker (Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
 }
 
+public final class io/github/maniramezan/kmpcomponents/NavigationKt {
+	public static final fun AdaptiveNavScaffold (Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lio/github/maniramezan/kmpcomponents/TabBarItemColors;Lio/github/maniramezan/kmpcomponents/TabBarScrollBehavior;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun NavRail (Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/TabBarItemColors;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TabBar-OadGlvw (Landroidx/compose/ui/Modifier;JLandroidx/compose/foundation/layout/WindowInsets;Lio/github/maniramezan/kmpcomponents/TabBarArrangement;Lio/github/maniramezan/kmpcomponents/TabBarScrollBehavior;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TabBar-mxsUjTo (Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;JLandroidx/compose/foundation/layout/WindowInsets;Lio/github/maniramezan/kmpcomponents/TabBarArrangement;Lio/github/maniramezan/kmpcomponents/TabBarItemColors;Lio/github/maniramezan/kmpcomponents/TabBarScrollBehavior;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TabBarItem (Landroidx/compose/foundation/layout/RowScope;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lio/github/maniramezan/kmpcomponents/TabBarItemColors;Ljava/lang/String;Landroidx/compose/runtime/Composer;III)V
+	public static final fun ThemeLargeTopAppBar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeMediumTopAppBar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeTabRow (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeTopAppBar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class io/github/maniramezan/kmpcomponents/NoticeCardKt {
 	public static final fun NoticeCard (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/StatusTone;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/PageDirection : java/lang/Enum {
+	public static final field BIDIRECTIONAL Lio/github/maniramezan/kmpcomponents/PageDirection;
+	public static final field UNIDIRECTIONAL Lio/github/maniramezan/kmpcomponents/PageDirection;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/PageDirection;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/PageDirection;
+}
+
+public final class io/github/maniramezan/kmpcomponents/PageFooterStyle : java/lang/Enum {
+	public static final field DOTS Lio/github/maniramezan/kmpcomponents/PageFooterStyle;
+	public static final field NONE Lio/github/maniramezan/kmpcomponents/PageFooterStyle;
+	public static final field PROGRESS Lio/github/maniramezan/kmpcomponents/PageFooterStyle;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/PageFooterStyle;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/PageFooterStyle;
+}
+
+public final class io/github/maniramezan/kmpcomponents/PageTitleAlignment : java/lang/Enum {
+	public static final field CENTER Lio/github/maniramezan/kmpcomponents/PageTitleAlignment;
+	public static final field LEADING Lio/github/maniramezan/kmpcomponents/PageTitleAlignment;
+	public static final field TRAILING Lio/github/maniramezan/kmpcomponents/PageTitleAlignment;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/PageTitleAlignment;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/PageTitleAlignment;
+}
+
+public final class io/github/maniramezan/kmpcomponents/PaginatedContentKt {
+	public static final fun PaginatedContent (Ljava/util/List;Landroidx/compose/foundation/pager/PagerState;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/PageTitleAlignment;Lio/github/maniramezan/kmpcomponents/PageDirection;Lio/github/maniramezan/kmpcomponents/PageFooterStyle;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;III)V
+	public static final fun PaginatedContent (Ljava/util/List;Landroidx/compose/ui/Modifier;ILio/github/maniramezan/kmpcomponents/PageTitleAlignment;Lio/github/maniramezan/kmpcomponents/PageDirection;Lio/github/maniramezan/kmpcomponents/PageFooterStyle;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;III)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/PaginationPage {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/PaginationPage;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/PaginationPage;Ljava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/PaginationPage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/maniramezan/kmpcomponents/PillChipKt {
@@ -429,6 +544,63 @@ public final class io/github/maniramezan/kmpcomponents/SelectionListNode {
 	public fun toString ()Ljava/lang/String;
 }
 
+public abstract interface class io/github/maniramezan/kmpcomponents/ShowcaseFeedScope {
+	public abstract fun customSection (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)V
+	public static synthetic fun customSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public abstract fun section-s1Sihoo (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;)V
+	public static synthetic fun section-s1Sihoo$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
+	public abstract fun verticalSection (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;ZZLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;)V
+	public static synthetic fun verticalSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;ZZLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ShowcaseFeedScope$DefaultImpls {
+	public static synthetic fun customSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static synthetic fun section-s1Sihoo$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
+	public static synthetic fun verticalSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;ZZLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
+}
+
+public abstract interface class io/github/maniramezan/kmpcomponents/ShowcaseItemWidth {
+}
+
+public final class io/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Fixed : io/github/maniramezan/kmpcomponents/ShowcaseItemWidth {
+	public static final field $stable I
+	public synthetic fun <init> (FLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-D9Ej5fM ()F
+	public final fun copy-0680j_4 (F)Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Fixed;
+	public static synthetic fun copy-0680j_4$default (Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Fixed;FILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Fixed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getWidth-D9Ej5fM ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Peek : io/github/maniramezan/kmpcomponents/ShowcaseItemWidth {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (F)V
+	public synthetic fun <init> (FILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun copy (F)Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Peek;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Peek;FILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Peek;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getVisibleFraction ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Wrap : io/github/maniramezan/kmpcomponents/ShowcaseItemWidth {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Wrap;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ShowcaseKt {
+	public static final fun ShowcaseFeed-hGBTI10 (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/layout/PaddingValues;FLkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ShowcaseRow-hcx6QBc (Ljava/util/List;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/lazy/grid/LazyGridState;Landroidx/compose/foundation/layout/PaddingValues;FLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V
+}
+
 public final class io/github/maniramezan/kmpcomponents/SidebarNavigationKt {
 	public static final fun SidebarItem (Ljava/lang/String;ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun SidebarNavigation (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
@@ -487,6 +659,84 @@ public final class io/github/maniramezan/kmpcomponents/StatusTone : java/lang/En
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/StatusTone;
 	public static fun values ()[Lio/github/maniramezan/kmpcomponents/StatusTone;
+}
+
+public final class io/github/maniramezan/kmpcomponents/TabBarArrangement : java/lang/Enum {
+	public static final field CENTERED Lio/github/maniramezan/kmpcomponents/TabBarArrangement;
+	public static final field EQUAL_WEIGHT Lio/github/maniramezan/kmpcomponents/TabBarArrangement;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/TabBarArrangement;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/TabBarArrangement;
+}
+
+public final class io/github/maniramezan/kmpcomponents/TabBarDefaults {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/TabBarDefaults;
+	public final fun getArrangement ()Lio/github/maniramezan/kmpcomponents/TabBarArrangement;
+	public final fun getIndicatorHeight (Landroidx/compose/runtime/Composer;I)F
+	public final fun getIndicatorWidth (Landroidx/compose/runtime/Composer;I)F
+	public final fun getMinHeight (Landroidx/compose/runtime/Composer;I)F
+	public final fun getWindowInsets (Landroidx/compose/runtime/Composer;I)Landroidx/compose/foundation/layout/WindowInsets;
+	public final fun itemColors-69fazGs (JJJJJJJLandroidx/compose/runtime/Composer;II)Lio/github/maniramezan/kmpcomponents/TabBarItemColors;
+}
+
+public final class io/github/maniramezan/kmpcomponents/TabBarItemColors {
+	public static final field $stable I
+	public synthetic fun <init> (JJJJJJJLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-0d7_KjU ()J
+	public final fun component2-0d7_KjU ()J
+	public final fun component3-0d7_KjU ()J
+	public final fun component4-0d7_KjU ()J
+	public final fun component5-0d7_KjU ()J
+	public final fun component6-0d7_KjU ()J
+	public final fun component7-0d7_KjU ()J
+	public final fun copy-4JmcsL4 (JJJJJJJ)Lio/github/maniramezan/kmpcomponents/TabBarItemColors;
+	public static synthetic fun copy-4JmcsL4$default (Lio/github/maniramezan/kmpcomponents/TabBarItemColors;JJJJJJJILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/TabBarItemColors;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisabledIconColor-0d7_KjU ()J
+	public final fun getDisabledTextColor-0d7_KjU ()J
+	public final fun getSelectedIconColor-0d7_KjU ()J
+	public final fun getSelectedIndicatorColor-0d7_KjU ()J
+	public final fun getSelectedTextColor-0d7_KjU ()J
+	public final fun getUnselectedIconColor-0d7_KjU ()J
+	public final fun getUnselectedTextColor-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/TabBarItemData {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLjava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun component2 ()Lkotlin/jvm/functions/Function2;
+	public final fun component3 ()Lkotlin/jvm/functions/Function2;
+	public final fun component4 ()Lkotlin/jvm/functions/Function2;
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLjava/lang/String;)Lio/github/maniramezan/kmpcomponents/TabBarItemData;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/TabBarItemData;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLjava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/TabBarItemData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBadge ()Lkotlin/jvm/functions/Function2;
+	public final fun getContentDescription ()Ljava/lang/String;
+	public final fun getEnabled ()Z
+	public final fun getIcon ()Lkotlin/jvm/functions/Function2;
+	public final fun getLabel ()Lkotlin/jvm/functions/Function2;
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/TabBarScrollBehavior {
+	public static final field $stable I
+	public final fun getCollapsedFraction ()F
+	public final fun getHeightOffset ()F
+	public final fun getHeightOffsetLimit ()F
+	public final fun getNestedScrollConnection ()Landroidx/compose/ui/input/nestedscroll/NestedScrollConnection;
+}
+
+public final class io/github/maniramezan/kmpcomponents/TabBarScrollBehaviorKt {
+	public static final fun rememberTabBarScrollBehavior (Landroidx/compose/runtime/Composer;I)Lio/github/maniramezan/kmpcomponents/TabBarScrollBehavior;
 }
 
 public final class io/github/maniramezan/kmpcomponents/TabChipKt {
