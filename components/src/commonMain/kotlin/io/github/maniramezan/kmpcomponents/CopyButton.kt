@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,8 +41,9 @@ public fun CopyButton(
 ) {
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
-    var copied by remember { mutableStateOf(false) }
-    LaunchedEffect(copied) {
+    var copied by remember(text) { mutableStateOf(false) }
+    var copyCount by remember { mutableIntStateOf(0) }
+    LaunchedEffect(copyCount, text) {
         if (copied) {
             delay(COPIED_FEEDBACK_MILLIS)
             copied = false
@@ -54,6 +56,7 @@ public fun CopyButton(
             scope.launch {
                 clipboard.setClipEntry(plainTextClipEntry(text))
                 copied = true
+                copyCount++
                 onCopied?.invoke()
             }
         },
