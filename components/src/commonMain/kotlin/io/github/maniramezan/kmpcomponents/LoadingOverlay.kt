@@ -5,6 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -16,8 +18,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -37,6 +45,9 @@ import androidx.compose.ui.text.style.TextAlign
  * `showIndicator = false` when the triggering control already shows a spinner. For loads the user
  * can keep working through, prefer [LoadingState], [ProgressIndicator], or a skeleton.
  *
+ * Keyboard focus moves to the scrim while loading and returns to the previously focused child
+ * afterward. Underlying controls cannot receive keyboard input or focus while loading.
+ *
  * The container sizes to [content]; pass `Modifier.fillMaxSize()` to cover a screen.
  */
 @Composable
@@ -48,9 +59,25 @@ public fun LoadingOverlay(
     showIndicator: Boolean = true,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    // propagateMinConstraints lets content fill a caller-sized container, as it would at the root.
+    val contentFocusRequester = remember { FocusRequester() }
+    val overlayFocusRequester = remember { FocusRequester() }
+    LaunchedEffect(loading) {
+        if (loading) {
+            contentFocusRequester.saveFocusedChild()
+            overlayFocusRequester.requestFocus()
+        } else {
+            contentFocusRequester.restoreFocusedChild()
+        }
+    }
     Box(modifier = modifier, propagateMinConstraints = true) {
-        Box(modifier = if (loading) Modifier.clearAndSetSemantics {} else Modifier, content = content)
+        Box(
+            modifier = Modifier
+                .focusRequester(contentFocusRequester)
+                .focusProperties { onEnter = { if (loading) cancelFocusChange() } }
+                .focusGroup()
+                .then(if (loading) Modifier.clearAndSetSemantics {} else Modifier),
+            content = content,
+        )
         AnimatedVisibility(
             visible = loading,
             modifier = Modifier.matchParentSize(),
@@ -60,6 +87,9 @@ public fun LoadingOverlay(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .focusRequester(overlayFocusRequester)
+                    .onPreviewKeyEvent { loading }
+                    .focusable(enabled = loading)
                     .background(MaterialTheme.colorScheme.scrim.copy(alpha = SCRIM_ALPHA))
                     .pointerInput(Unit) {
                         awaitPointerEventScope {

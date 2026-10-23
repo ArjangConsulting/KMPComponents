@@ -6,25 +6,35 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.test.requestFocus
 import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -112,6 +122,82 @@ class NavigationUiTest {
         onNode(stateIs("Back")).assertExists()
         onNodeWithText("Answer").assertExists()
         onNodeWithText("Question").assertDoesNotExist()
+    }
+
+    @Test
+    fun `hidden flip face cannot intercept the visible face action`() = runComposeUiTest {
+        var frontClicks = 0
+        var backClicks = 0
+        setContent {
+            KmpTheme {
+                FlipCard(
+                    front = { PrimaryButton("Front action", onClick = { frontClicks++ }) },
+                    back = { PrimaryButton("Back action", onClick = { backClicks++ }) },
+                    modifier = Modifier.size(200.dp),
+                )
+            }
+        }
+        onNodeWithText("Front action").performTouchInput { click() }
+        runOnIdle {
+            assertEquals(1, frontClicks)
+            assertEquals(0, backClicks)
+        }
+    }
+
+    @Test
+    fun `hidden flip face is excluded from keyboard traversal`() = runComposeUiTest {
+        setContent {
+            KmpTheme {
+                Column {
+                    FlipCard(
+                        front = { PrimaryButton("Front action", onClick = {}) },
+                        back = { PrimaryButton("Back action", onClick = {}) },
+                        modifier = Modifier.size(200.dp),
+                    )
+                    PrimaryButton("After card", onClick = {})
+                }
+            }
+        }
+        onNodeWithText("Front action").requestFocus()
+        onNodeWithText("Front action").performKeyInput { pressKey(Key.Tab) }
+        onNodeWithText("After card").assertIsFocused()
+    }
+
+    @Test
+    fun `page title slot may emit no layout nodes`() = runComposeUiTest {
+        setContent {
+            KmpTheme {
+                PaginatedContent(
+                    pages = listOf(PaginationPage("Intro")),
+                    showScrollHint = false,
+                    pageTitle = { _, _, _ -> },
+                ) { _, item -> Text("Body of ${item.title}") }
+            }
+        }
+        onNodeWithText("Body of Intro").assertExists()
+    }
+
+    @Test
+    fun `forward only pages advance and cannot go back in right to left layouts`() = runComposeUiTest {
+        var page = 0
+        setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                KmpTheme {
+                    PaginatedContent(
+                        pages = listOf(PaginationPage("Intro"), PaginationPage("Setup")),
+                        direction = PageDirection.UNIDIRECTIONAL,
+                        showScrollHint = false,
+                        onPageChanged = { page = it },
+                    ) { _, item -> Box(Modifier.size(300.dp)) { Text("Body of ${item.title}") } }
+                }
+            }
+        }
+        onNodeWithText("Body of Intro").performTouchInput { swipeRight() }
+        waitForIdle()
+        assertEquals(1, page)
+        onNodeWithText("Body of Setup").performTouchInput { swipeLeft() }
+        waitForIdle()
+        assertEquals(1, page)
     }
 
     @Test

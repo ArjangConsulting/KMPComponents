@@ -23,7 +23,7 @@ public class TabBarScrollBehavior internal constructor() {
         internal set
 
     /** The bar's measured height, negated; kept up to date by [TabBar]. */
-    public var heightOffsetLimit: Float = 0f
+    public var heightOffsetLimit: Float by mutableFloatStateOf(0f)
         internal set
 
     /** `0f` when the bar is fully shown, `1f` when fully hidden. */

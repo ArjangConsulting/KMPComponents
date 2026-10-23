@@ -14,12 +14,14 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -53,6 +55,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.LayoutDirection
 
 /** One segment of a [SegmentedContent]. Custom title slots may ignore [title]. */
@@ -125,7 +128,10 @@ public fun SegmentedContent(
     )
 }
 
-/** [SegmentedContent] whose selection the caller owns through [selectedIndex]. */
+/**
+ * [SegmentedContent] whose selection the caller owns through [selectedIndex]. Outgoing content keeps
+ * its item until the crossfade ends, including when that item is removed from [items].
+ */
 @Composable
 public fun SegmentedContent(
     items: List<SegmentedItem>,
@@ -157,11 +163,11 @@ public fun SegmentedContent(
             segmentTitle = segmentTitle,
         )
         AnimatedContent(
-            targetState = safeIndex,
+            targetState = safeIndex to items[safeIndex],
             modifier = fill,
             transitionSpec = { fadeIn(tween(duration)) togetherWith fadeOut(tween(duration)) },
             label = "segmentContent",
-        ) { index -> segmentContent(index, items[index]) }
+        ) { (index, item) -> segmentContent(index, item) }
     }
 }
 
@@ -237,7 +243,7 @@ private fun SegmentBar(
                         segmentTitle(index, item, index == selectedIndex)
                     }
                 }
-            }.map { it.measure(constraints.copy(minWidth = 0)) }
+            }.map { it.measure(constraints.copy(minWidth = 0, maxWidth = Constraints.Infinity)) }
             val gaps = gapPx * (items.size - 1).coerceAtLeast(0)
             val totalWidth = intrinsic.sumOf { it.width } + gaps
             val evenWidth = (intrinsic.maxOfOrNull { it.width } ?: 0) * items.size + gaps
@@ -414,7 +420,7 @@ private fun SegmentSlot(
     )
     val shape = if (style.indicator == SegmentSelectionIndicator.PILL) CircleShape else RectangleShape
     val minSize = minimumTouchTargetSize()
-    val sized = (if (fillWidth) Modifier.fillMaxWidth() else Modifier.widthIn(min = minSize))
+    val sized = (if (fillWidth) Modifier.fillMaxWidth() else Modifier.width(IntrinsicSize.Max).widthIn(min = minSize))
         .then(if (style.density == SegmentDensity.COMPACT) Modifier else Modifier.heightIn(min = minSize))
     val interactionSource = remember { MutableInteractionSource() }
     Box(

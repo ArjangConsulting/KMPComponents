@@ -20,6 +20,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
@@ -62,7 +63,12 @@ public fun AssistantContextCard(
             modifier = Modifier.padding(MaterialTheme.kmpSpacing.medium),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.extraSmall),
         ) {
-            Text(title, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                title,
+                modifier = Modifier.semantics { heading() },
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
             if (!highlight.isNullOrBlank()) {
                 Text(highlight, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
             }

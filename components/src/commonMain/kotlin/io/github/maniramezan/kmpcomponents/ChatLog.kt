@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -53,6 +52,7 @@ public data class ChatMessage(
 )
 
 /** The text and retry action shown in failed [ChatLog] bubbles. */
+@Immutable
 public data class ChatErrorAction(
     public val message: String,
     public val retryLabel: String,
@@ -92,17 +92,11 @@ public fun ChatLog(
         return
     }
     val listState = rememberLazyListState()
-    val atLatest by remember {
-        derivedStateOf {
-            val info = listState.layoutInfo
-            // An appended message briefly leaves the previous last item one behind; still following.
-            info.totalItemsCount == 0 || (info.visibleItemsInfo.lastOrNull()?.index ?: -1) >= info.totalItemsCount - 2
-        }
-    }
+    val followUpdate = remember(messages) { !listState.canScrollForward }
     LaunchedEffect(messages.size, messages.lastOrNull()?.state) {
-        if (atLatest) {
+        if (followUpdate) {
             val lastIndex = messages.lastIndex
-            if (listState.layoutInfo.visibleItemsInfo.none { it.index == lastIndex }) listState.scrollToItem(lastIndex)
+            listState.scrollToItem(lastIndex)
             // Scrolling by the item's height reaches the end of even a very tall reply; the list clamps it.
             listState.layoutInfo.visibleItemsInfo.lastOrNull { it.index == lastIndex }?.let { item ->
                 listState.animateScrollToItem(lastIndex, scrollOffset = item.size)

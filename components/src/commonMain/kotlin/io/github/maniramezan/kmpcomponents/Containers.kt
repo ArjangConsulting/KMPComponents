@@ -16,6 +16,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.material3.Card as MaterialCard
@@ -119,7 +120,7 @@ public fun ThemeDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
-        title = { Text(title) },
+        title = { Text(title, modifier = Modifier.semantics { heading() }) },
         text = { Text(text) },
         confirmButton = { ThemeTextButton(text = confirmText, onClick = onConfirm, destructive = destructive) },
         dismissButton = dismissText?.let { label -> { ThemeTextButton(text = label, onClick = onDismissRequest) } },
