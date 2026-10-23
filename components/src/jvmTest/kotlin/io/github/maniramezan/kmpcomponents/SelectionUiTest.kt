@@ -96,6 +96,24 @@ class SelectionUiTest {
     }
 
     @Test
+    fun `selected parents expand when nodes arrive after initial composition`() = runComposeUiTest {
+        var loadedNodes by mutableStateOf(emptyList<SelectionListNode<String>>())
+        setContent {
+            KmpTheme {
+                SelectionListContent(
+                    title = "Language",
+                    nodes = loadedNodes,
+                    selectedIds = setOf("en-GB"),
+                    onSelect = {},
+                )
+            }
+        }
+        runOnIdle { loadedNodes = nodes }
+        onNodeWithText("English").assert(stateIs("Expanded"))
+        onNodeWithText("United Kingdom").assertIsSelected()
+    }
+
+    @Test
     fun `searching filters across both levels and shows no results`() = runComposeUiTest {
         setContent {
             KmpTheme {
