@@ -144,6 +144,11 @@ sized from the body text so they follow the user's font scale.
 | `TabChipRow` / `TabChip` | Scrolling row of compact tabs with optional close controls. |
 | `SelectableCard` | Card in a pick-one list; the selected card is tinted and reported as selected. |
 | `HorizontalSplitPane` | Two panes with a divider you can drag, move with arrow keys, or adjust with a screen reader. |
+| `VerticalSplitPane` | The same divider between a top and a bottom pane, moved with the Up/Down keys. |
+| `StatusBar` / `StatusBarItem` / `StatusBarSeparator` | Desktop status bar; items share space and ellipsize rather than dropping off. |
+| `ZoomableImage` | Fitted image with wheel, keyboard, and drag zoom/pan and an optional marker ring; announces the zoom level. |
+| `CopyButton` | Copies text to the clipboard, then shows a check and announces "Copied". |
+| `Modifier.focusNextOnTab` | Makes Tab and Shift+Tab move focus out of fields that would otherwise consume the key. |
 | `SectionHeader` | Title (an accessibility heading), optional subtitle, and trailing actions above a list or pane. |
 | `ThemeListItem` / `LazyList` | Material-style list row read as one item, and a padded full-width `LazyColumn`. |
 | `LoadMoreFooter` | Last item of an infinite list; asks for the next page when it scrolls into view and announces loading. |

@@ -103,6 +103,7 @@ fun ComponentCatalog() {
                     ContainersSection()
                     NavigationBarsSection()
                     AssistantSection()
+                    DesktopSection()
                     StatusSection()
                     NavigationSection()
                     SelectionSection()
