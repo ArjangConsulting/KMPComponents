@@ -135,6 +135,11 @@ public final class io/github/maniramezan/kmpcomponents/InfoTooltipKt {
 	public static final fun InfoTooltip (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 }
 
+public final class io/github/maniramezan/kmpcomponents/InputControlsKt {
+	public static final fun RadioGroup (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeSlider (FLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lkotlin/ranges/ClosedFloatingPointRange;IZLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class io/github/maniramezan/kmpcomponents/KeyValueRowKt {
 	public static final fun KeyValueRow (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
@@ -348,6 +353,56 @@ public final class io/github/maniramezan/kmpcomponents/SegmentedControlKt {
 
 public final class io/github/maniramezan/kmpcomponents/SelectableCardKt {
 	public static final fun SelectableCard (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/SelectionListKt {
+	public static final fun SelectionList (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/SelectionListLabels;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SelectionList (Ljava/lang/String;Ljava/util/List;Ljava/util/Set;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/SelectionListLabels;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SelectionListContent (Ljava/lang/String;Ljava/util/List;Ljava/util/Set;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/SelectionListLabels;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/SelectionListLabels {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/SelectionListLabels;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/SelectionListLabels;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/SelectionListLabels;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getClearSearch ()Ljava/lang/String;
+	public final fun getCollapsed ()Ljava/lang/String;
+	public final fun getExpanded ()Ljava/lang/String;
+	public final fun getNoResults ()Ljava/lang/String;
+	public final fun getSearchPlaceholder ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/SelectionListNode {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lio/github/maniramezan/kmpcomponents/SelectionListNode;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/SelectionListNode;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/SelectionListNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChildren ()Ljava/util/List;
+	public final fun getId ()Ljava/lang/Object;
+	public final fun getLeadingGlyph ()Ljava/lang/String;
+	public final fun getSubtitle ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isLeaf ()Z
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/maniramezan/kmpcomponents/SidebarNavigationKt {

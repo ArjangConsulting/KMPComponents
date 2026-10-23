@@ -99,6 +99,7 @@ fun ComponentCatalog() {
                     ProviderSection()
                     EssentialsSection()
                     ActionsSection()
+                    ChoicesSection()
                     StatusSection()
                     NavigationSection()
                     SelectionSection()
