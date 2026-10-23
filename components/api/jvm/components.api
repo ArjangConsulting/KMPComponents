@@ -617,6 +617,23 @@ public final class io/github/maniramezan/kmpcomponents/SegmentDensity : java/lan
 	public static fun values ()[Lio/github/maniramezan/kmpcomponents/SegmentDensity;
 }
 
+public final class io/github/maniramezan/kmpcomponents/SegmentFitMode : java/lang/Enum {
+	public static final field EVEN_WHEN_FITS Lio/github/maniramezan/kmpcomponents/SegmentFitMode;
+	public static final field INTRINSIC Lio/github/maniramezan/kmpcomponents/SegmentFitMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/SegmentFitMode;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/SegmentFitMode;
+}
+
+public final class io/github/maniramezan/kmpcomponents/SegmentSelectionIndicator : java/lang/Enum {
+	public static final field NONE Lio/github/maniramezan/kmpcomponents/SegmentSelectionIndicator;
+	public static final field PILL Lio/github/maniramezan/kmpcomponents/SegmentSelectionIndicator;
+	public static final field UNDERLINE Lio/github/maniramezan/kmpcomponents/SegmentSelectionIndicator;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/SegmentSelectionIndicator;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/SegmentSelectionIndicator;
+}
+
 public final class io/github/maniramezan/kmpcomponents/SegmentWidthMode : java/lang/Enum {
 	public static final field FILL Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;
 	public static final field FIT Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;
@@ -625,9 +642,26 @@ public final class io/github/maniramezan/kmpcomponents/SegmentWidthMode : java/l
 	public static fun values ()[Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;
 }
 
+public final class io/github/maniramezan/kmpcomponents/SegmentedContentKt {
+	public static final fun SegmentedContent-owtK_Bk (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/SegmentSelectionIndicator;Lio/github/maniramezan/kmpcomponents/SegmentFitMode;Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;Lio/github/maniramezan/kmpcomponents/SegmentDensity;JJLkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;III)V
+	public static final fun SegmentedContent-xOHPqjQ (Ljava/util/List;Landroidx/compose/ui/Modifier;ILio/github/maniramezan/kmpcomponents/SegmentSelectionIndicator;Lio/github/maniramezan/kmpcomponents/SegmentFitMode;Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;Lio/github/maniramezan/kmpcomponents/SegmentDensity;JJLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;III)V
+}
+
 public final class io/github/maniramezan/kmpcomponents/SegmentedControlKt {
 	public static final fun SegmentedControl (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/SegmentDensity;Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeSingleChoiceSegmentedButtonRow (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/SegmentedItem {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/SegmentedItem;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/SegmentedItem;Ljava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/SegmentedItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/maniramezan/kmpcomponents/SelectableCardKt {
