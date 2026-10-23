@@ -27,6 +27,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":components"))
+            implementation(project(":components-image"))
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui)
         }
