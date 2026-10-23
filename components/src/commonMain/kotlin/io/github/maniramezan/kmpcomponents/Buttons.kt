@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -35,7 +36,9 @@ public fun PrimaryButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.heightIn(min = minimumTouchTargetSize()),
+        modifier = modifier
+            .keyboardFocusOutline(ButtonDefaults.shape, MaterialTheme.colorScheme.onPrimary)
+            .heightIn(min = minimumTouchTargetSize()),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -57,7 +60,7 @@ public fun SecondaryButton(
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = modifier.heightIn(min = minimumTouchTargetSize()),
+        modifier = modifier.keyboardFocusOutline(ButtonDefaults.outlinedShape).heightIn(min = minimumTouchTargetSize()),
         enabled = enabled,
         colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         contentPadding = buttonPadding(),
@@ -81,7 +84,7 @@ public fun ThemeTextButton(
 ) {
     MaterialTextButton(
         onClick = onClick,
-        modifier = modifier.heightIn(min = minimumTouchTargetSize()),
+        modifier = modifier.keyboardFocusOutline(ButtonDefaults.textShape).heightIn(min = minimumTouchTargetSize()),
         enabled = enabled,
         colors = ButtonDefaults.textButtonColors(
             contentColor = if (destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
@@ -170,7 +173,10 @@ public fun FAB(
 ) {
     FloatingActionButton(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.keyboardFocusOutline(
+            FloatingActionButtonDefaults.shape,
+            MaterialTheme.colorScheme.onPrimary,
+        ),
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
     ) {
@@ -192,7 +198,9 @@ public fun ThemeExtendedFloatingActionButton(
 ) {
     MaterialExtendedFloatingActionButton(
         onClick = onClick,
-        modifier = modifier.semantics { contentDescription = text },
+        modifier = modifier
+            .keyboardFocusOutline(FloatingActionButtonDefaults.extendedFabShape, MaterialTheme.colorScheme.onPrimary)
+            .semantics { contentDescription = text },
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
         icon = { Icon(painter = icon, contentDescription = null, modifier = Modifier.size(glyphSize())) },

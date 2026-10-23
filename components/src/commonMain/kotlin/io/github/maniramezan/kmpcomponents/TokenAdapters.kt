@@ -30,7 +30,7 @@ internal fun ColorToken.toComposeColor(): Color = Color(argb.toInt())
 // Blend fractions used to derive Material roles that kommon has no token for.
 private const val CONTAINER_TINT = 0.16f
 private const val ON_SURFACE_VARIANT_BLEND = 0.25f
-private const val OUTLINE_VARIANT_BLEND = 0.5f
+private const val OUTLINE_VARIANT_BLEND = 0.16f
 private const val INVERSE_PRIMARY_BLEND = 0.6f
 private const val SURFACE_CONTAINER_LOW = 0.03f
 private const val SURFACE_CONTAINER = 0.05f
@@ -89,7 +89,7 @@ internal fun ColorSchemeTokens.toMaterialColorScheme(dark: Boolean): ColorScheme
         errorContainer = lerp(surface, error, CONTAINER_TINT),
         onErrorContainer = onSurface,
         outline = outline,
-        outlineVariant = lerp(outline, surface, OUTLINE_VARIANT_BLEND),
+        outlineVariant = lerp(outline, onSurface, OUTLINE_VARIANT_BLEND),
         surfaceBright = if (dark) surfaceBlend(SURFACE_BRIGHT) else surface,
         surfaceDim = if (dark) surface else surfaceBlend(SURFACE_DIM),
         surfaceContainerLowest = surface,

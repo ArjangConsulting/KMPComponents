@@ -80,7 +80,12 @@ public fun SegmentedControl(
             val segmentModifier = if (widthMode == SegmentWidthMode.FILL) sized.weight(1f) else sized
             Button(
                 onClick = { onOptionSelected(index) },
-                modifier = segmentModifier.semantics { this.selected = selected },
+                modifier = segmentModifier
+                    .keyboardFocusOutline(
+                        ButtonDefaults.shape,
+                        if (selected) colors.onPrimary else colors.onSurfaceVariant,
+                    )
+                    .semantics { this.selected = selected },
                 enabled = enabled,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selected) colors.primary else colors.surfaceVariant,
@@ -113,7 +118,9 @@ public fun ThemeSingleChoiceSegmentedButtonRow(
                 selected = index == selectedIndex,
                 onClick = { onOptionSelected(index) },
                 shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-                modifier = Modifier.heightIn(min = minimumTouchTargetSize()),
+                modifier = Modifier
+                    .keyboardFocusOutline(SegmentedButtonDefaults.itemShape(index = index, count = options.size))
+                    .heightIn(min = minimumTouchTargetSize()),
                 enabled = enabled,
                 icon = { SegmentedButtonDefaults.Icon(active = index == selectedIndex) },
                 label = { Text(option) },

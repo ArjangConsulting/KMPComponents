@@ -57,6 +57,10 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     (`typingDotAlpha` is the pure wave function), `LoadingOverlay.kt`.
   - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
     `CopyButton.kt`, `FocusTraversal.kt` (`Modifier.focusNextOnTab`, a `Modifier.Node`).
+  - Accessibility: `KeyboardFocus.kt` adds token-derived focus outlines; `ReduceMotion.kt` exposes
+    `LocalReduceMotionEnabled` for host overrides and observes Android/iOS setting changes.
+    `AccessibilityRegressionTest.kt` covers rendered focus across themes and font scales;
+    `FocusScreenshotTest.kt` records focused controls.
   - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`, `CompactWindowMaxWidth`), `TooltipIconButton.kt`
     (`TooltipIconButton`, `GlyphIconButton`: icon-only buttons with a tooltip).
   - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy) so the library needs no icon font.
@@ -85,7 +89,7 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   `build/dokka/html`, which CI uploads for GitHub Pages.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
-  `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, and `DesktopCatalog.kt`, plus the sample's own `SampleIcons.kt`);
+  `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
   `sample/ios` (XcodeGen spec and Swift host).
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).

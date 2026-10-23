@@ -268,6 +268,7 @@ private fun SelectionListRow(
     }
     Row(
         modifier = Modifier
+            .keyboardFocusOutline()
             .fillMaxWidth()
             .heightIn(min = minimumTouchTargetSize())
             .then(interaction)

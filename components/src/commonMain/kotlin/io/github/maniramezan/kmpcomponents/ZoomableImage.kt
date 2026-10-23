@@ -76,6 +76,7 @@ public fun ZoomableImage(
     val markerSize = glyphSize()
     BoxWithConstraints(
         modifier = modifier
+            .keyboardFocusOutline(MaterialTheme.shapes.medium)
             .clip(MaterialTheme.shapes.medium)
             .pointerInput(maxZoom) {
                 awaitPointerEventScope {

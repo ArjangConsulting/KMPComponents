@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -47,7 +48,9 @@ public fun ThemeCard(
     if (onClick != null) {
         MaterialCard(
             onClick = onClick,
-            modifier = modifier.fillMaxWidth().heightIn(min = minimumTouchTargetSize()),
+            modifier = modifier.keyboardFocusOutline(
+                CardDefaults.shape,
+            ).fillMaxWidth().heightIn(min = minimumTouchTargetSize()),
             content = column,
         )
     } else {
@@ -143,7 +146,10 @@ public fun ThemeSnackbar(
         modifier = modifier.semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
         action = if (actionLabel != null && onAction != null) {
             {
-                MaterialTextButton(onClick = onAction) {
+                MaterialTextButton(
+                    onClick = onAction,
+                    modifier = Modifier.keyboardFocusOutline(color = MaterialTheme.colorScheme.inverseOnSurface),
+                ) {
                     Text(actionLabel, color = MaterialTheme.colorScheme.inversePrimary)
                 }
             }

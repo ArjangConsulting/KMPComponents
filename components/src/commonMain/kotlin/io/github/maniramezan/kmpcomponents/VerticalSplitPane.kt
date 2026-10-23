@@ -44,8 +44,9 @@ import kotlin.math.roundToInt
  * [split] is the top pane's share of the height, kept between [minSplit] and [maxSplit].
  *
  * The divider can be dragged, moved with the Up/Down arrow keys by [keyboardStep] when focused,
- * and adjusted by screen readers like a slider. The drag position is internal state until the
- * gesture ends. On desktop it shows a vertical resize cursor.
+ * and adjusted by screen readers like a slider. Drag deltas accumulate locally so callbacks stay
+ * consistent when the caller applies updates late; the visible panes follow [split]. On desktop it
+ * shows a vertical resize cursor.
  */
 @Composable
 public fun VerticalSplitPane(

@@ -337,6 +337,7 @@ public fun <T> RowScope.TabBarItem(
     }
     Column(
         modifier = weighted
+            .keyboardFocusOutline()
             .selectable(selected = selected, enabled = enabled, role = Role.Tab) { onSelectionChange(value) }
             .heightIn(min = minimumTouchTargetSize())
             .then(
@@ -418,7 +419,7 @@ public fun ThemeTabRow(
             Tab(
                 selected = index == selectedIndex,
                 onClick = { onItemSelected(index) },
-                modifier = Modifier.heightIn(min = minimumTouchTargetSize()),
+                modifier = Modifier.keyboardFocusOutline().heightIn(min = minimumTouchTargetSize()),
                 text = { Text(tab) },
             )
         }
@@ -443,11 +444,13 @@ public fun <T> NavRail(
                 selected = item.value == selection,
                 onClick = { onSelectionChange(item.value) },
                 icon = { BadgedIcon(item.icon, item.badge) },
-                modifier = if (item.label == null && item.contentDescription.isNotBlank()) {
-                    Modifier.semantics { contentDescription = item.contentDescription }
-                } else {
-                    Modifier
-                },
+                modifier = (
+                    if (item.label == null && item.contentDescription.isNotBlank()) {
+                        Modifier.semantics { contentDescription = item.contentDescription }
+                    } else {
+                        Modifier
+                    }
+                    ).keyboardFocusOutline(),
                 enabled = item.enabled,
                 label = item.label,
                 colors = NavigationRailItemDefaults.colors(

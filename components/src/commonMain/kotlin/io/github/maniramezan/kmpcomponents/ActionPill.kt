@@ -43,6 +43,7 @@ public fun ActionPill(
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         Row(
             modifier = modifier
+                .keyboardFocusOutline(CircleShape, contentColor)
                 .heightIn(min = minimumTouchTargetSize())
                 .clip(CircleShape)
                 .background(containerColor)

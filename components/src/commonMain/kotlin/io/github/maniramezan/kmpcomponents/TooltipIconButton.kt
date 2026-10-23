@@ -3,6 +3,7 @@ package io.github.maniramezan.kmpcomponents
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
@@ -33,7 +34,7 @@ internal fun TooltipIconButton(
     extraSemantics: SemanticsPropertyReceiver.() -> Unit = {},
     icon: @Composable () -> Unit,
 ) {
-    val buttonSize = iconSize + MaterialTheme.kmpSpacing.small * 2
+    val buttonSize = (iconSize + MaterialTheme.kmpSpacing.small * 2).coerceAtLeast(minimumTouchTargetSize())
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = { PlainTooltip { Text(label) } },
@@ -44,6 +45,7 @@ internal fun TooltipIconButton(
             onClick = onClick,
             enabled = enabled,
             modifier = Modifier
+                .keyboardFocusOutline(IconButtonDefaults.standardShape)
                 .sizeIn(minWidth = buttonSize, minHeight = buttonSize)
                 .semantics {
                     contentDescription = label

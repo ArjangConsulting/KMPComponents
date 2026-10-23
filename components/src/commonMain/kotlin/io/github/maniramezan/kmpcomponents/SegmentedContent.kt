@@ -425,6 +425,14 @@ private fun SegmentSlot(
     val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
+            .keyboardFocusOutline(
+                shape,
+                if (style.indicator == SegmentSelectionIndicator.PILL && isSelected) {
+                    colors.onPrimary
+                } else {
+                    colors.onSurfaceVariant
+                },
+            )
             .selectable(
                 isSelected,
                 interactionSource = interactionSource,

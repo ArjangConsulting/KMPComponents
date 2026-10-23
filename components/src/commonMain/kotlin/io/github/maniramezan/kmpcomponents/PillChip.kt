@@ -36,6 +36,7 @@ public fun PillChip(
 ) {
     val interactive = if (onClick != null) {
         Modifier
+            .keyboardFocusOutline(CircleShape, if (isSelected) selectedLabel else unselectedLabel)
             .heightIn(min = minimumTouchTargetSize())
             .selectable(selected = isSelected, role = Role.Button, onClick = onClick)
     } else {
