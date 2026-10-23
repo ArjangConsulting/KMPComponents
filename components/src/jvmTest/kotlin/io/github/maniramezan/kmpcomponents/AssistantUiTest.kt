@@ -8,16 +8,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.isHeading
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.test.requestFocus
+import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import kotlin.test.Test
@@ -103,6 +115,7 @@ class AssistantUiTest {
                 }
             }
         }
+        onNodeWithText("Login screen").assert(isHeading())
         onNodeWithText("“Tap fails”").assertExists()
         onNodeWithText("Provider offline").assert(politeLiveRegion)
         onNodeWithText("Upgrade").performClick()
@@ -129,6 +142,60 @@ class AssistantUiTest {
         waitForIdle()
         onNodeWithText("Sign in").performClick()
         assertEquals(1, clicks)
+    }
+
+    @Test
+    fun `loading overlay blocks keyboard activation and restores focus afterward`() = runComposeUiTest {
+        var loading by mutableStateOf(false)
+        var clicks = 0
+        setContent {
+            KmpTheme {
+                LoadingOverlay(loading = loading, contentDescription = "Signing in") {
+                    Button(onClick = { clicks++ }) { Text("Sign in") }
+                }
+            }
+        }
+        onNodeWithText("Sign in").requestFocus()
+        runOnIdle { loading = true }
+        onRoot().performKeyInput {
+            pressKey(Key.Enter)
+            pressKey(Key.Tab)
+            pressKey(Key.Enter)
+        }
+        runOnIdle { assertEquals(0, clicks) }
+        onNodeWithContentDescription("Signing in").assertIsFocused()
+        runOnIdle { loading = false }
+        onNodeWithText("Sign in").assertIsFocused()
+    }
+
+    @Test
+    fun `appending a message preserves the reader position inside a tall reply`() = runComposeUiTest {
+        var messages by mutableStateOf(
+            listOf(
+                ChatMessage("1", ChatMessageSender.USER, ChatMessageState.Content("First")),
+                ChatMessage("2", ChatMessageSender.ASSISTANT, ChatMessageState.Content("Latest")),
+            ),
+        )
+        setContent {
+            KmpTheme {
+                ChatLog(
+                    messages = messages,
+                    idleHint = "",
+                    errorAction = ChatErrorAction("Failed", "Retry") {},
+                    modifier = Modifier.height(300.dp).testTag("chat"),
+                    messageContent = { _, text -> Text(text, modifier = Modifier.height(900.dp)) },
+                )
+            }
+        }
+        onNodeWithTag("chat").performTouchInput { swipeDown() }
+        waitForIdle()
+        val before = onNodeWithText("Latest").fetchSemanticsNode().boundsInRoot
+        runOnIdle {
+            messages = messages + ChatMessage("3", ChatMessageSender.ASSISTANT, ChatMessageState.Content("New reply"))
+        }
+        waitForIdle()
+        onNodeWithText("Latest").assertIsDisplayed()
+        assertEquals(before, onNodeWithText("Latest").fetchSemanticsNode().boundsInRoot)
     }
 
     @Test
