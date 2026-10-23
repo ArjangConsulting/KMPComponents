@@ -1,9 +1,23 @@
+public final class io/github/maniramezan/kmpcomponents/ActionPillKt {
+	public static final fun ActionPill-vRFhKjU (Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZJJLandroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class io/github/maniramezan/kmpcomponents/BadgesKt {
 	public static final fun CountBadge-T042LqI (ILandroidx/compose/ui/Modifier;JILjava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun TonalBadge (Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/StatusTone;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public static final fun TonalBadge-FNF3uiM (Ljava/lang/String;Landroidx/compose/ui/Modifier;JLandroidx/compose/runtime/Composer;II)V
 	public static final fun badgeCountText (II)Ljava/lang/String;
 	public static synthetic fun badgeCountText$default (IIILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ButtonsKt {
+	public static final fun FAB (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun LoadingIconButton (ZLandroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun PrimaryButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun SecondaryButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeExtendedFloatingActionButton (Ljava/lang/String;Landroidx/compose/ui/graphics/painter/Painter;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeIconButton (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeTextButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZZLandroidx/compose/runtime/Composer;II)V
 }
 
 public abstract interface class io/github/maniramezan/kmpcomponents/CheckStatus {
@@ -187,6 +201,10 @@ public final class io/github/maniramezan/kmpcomponents/NoticeCardKt {
 	public static final fun NoticeCard (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/StatusTone;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 }
 
+public final class io/github/maniramezan/kmpcomponents/PillChipKt {
+	public static final fun PillChip-DZNDmhg (Ljava/lang/String;ZLandroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function0;JJJJLandroidx/compose/runtime/Composer;II)V
+}
+
 public final class io/github/maniramezan/kmpcomponents/ProgressIndicatorKt {
 	public static final fun InlineProgressIndicator-ww6aTOc (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/text/TextStyle;JLandroidx/compose/runtime/Composer;II)V
 	public static final fun ProgressIndicator (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/Float;Landroidx/compose/runtime/Composer;II)V
@@ -305,6 +323,27 @@ public final class io/github/maniramezan/kmpcomponents/SectionCardKt {
 
 public final class io/github/maniramezan/kmpcomponents/SectionHeaderKt {
 	public static final fun SectionHeader (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/SegmentDensity : java/lang/Enum {
+	public static final field COMPACT Lio/github/maniramezan/kmpcomponents/SegmentDensity;
+	public static final field REGULAR Lio/github/maniramezan/kmpcomponents/SegmentDensity;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/SegmentDensity;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/SegmentDensity;
+}
+
+public final class io/github/maniramezan/kmpcomponents/SegmentWidthMode : java/lang/Enum {
+	public static final field FILL Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;
+	public static final field FIT Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;
+}
+
+public final class io/github/maniramezan/kmpcomponents/SegmentedControlKt {
+	public static final fun SegmentedControl (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/SegmentDensity;Lio/github/maniramezan/kmpcomponents/SegmentWidthMode;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ThemeSingleChoiceSegmentedButtonRow (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/maniramezan/kmpcomponents/SelectableCardKt {
