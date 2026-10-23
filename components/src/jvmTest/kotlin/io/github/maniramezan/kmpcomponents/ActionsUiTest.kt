@@ -11,6 +11,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -82,6 +83,7 @@ class ActionsUiTest {
         waitForIdle()
         onNodeWithContentDescription("Refresh")
             .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Loading"))
+            .assertIsNotEnabled()
             .performClick()
         assertEquals(1, clicks)
     }

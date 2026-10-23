@@ -133,7 +133,7 @@ public fun <ID : Any> SelectionList(
  * Leaves are selectable and show a check when their id is in [selectedIds]. Parents expand inline;
  * a collapsed parent lists its selected children as its subtitle, and parents containing a
  * selection start expanded. While searching, every matching parent is expanded. The search query
- * and expansion are internal UI state. A blank [title] without [confirmButton] draws no header.
+ * and expansion are internal UI state. Expansion resets when [nodes] changes. A blank [title] without [confirmButton] draws no header.
  */
 @Composable
 public fun <ID : Any> SelectionListContent(
@@ -147,7 +147,7 @@ public fun <ID : Any> SelectionListContent(
     confirmButton: (@Composable () -> Unit)? = null,
 ) {
     var query by remember { mutableStateOf("") }
-    var expandedIds by remember { mutableStateOf(parentsWithSelection(nodes, selectedIds)) }
+    var expandedIds by remember(nodes) { mutableStateOf(parentsWithSelection(nodes, selectedIds)) }
     val isSearching = isSearchable && query.isNotBlank()
     val visibleNodes = remember(nodes, query, isSearchable) {
         filterSelectionListNodes(nodes, if (isSearchable) query else "")
