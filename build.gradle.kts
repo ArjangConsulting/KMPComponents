@@ -14,6 +14,18 @@ plugins {
 allprojects {
     group = "io.github.maniramezan.kmpcomponents"
     version = providers.gradleProperty("VERSION_NAME").orElse("0.0.0-SNAPSHOT").get()
+
+    // The Node.js, Yarn, and Binaryen repositories live in settings.gradle.kts (see the note there); a null base
+    // URL stops the Kotlin plugin from adding them to the project, which FAIL_ON_PROJECT_REPOS rejects.
+    plugins.withType<org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsPlugin> {
+        the<org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsEnvSpec>().downloadBaseUrl.set(null as String?)
+    }
+    plugins.withType<org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnPlugin> {
+        the<org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnRootEnvSpec>().downloadBaseUrl.set(null as String?)
+    }
+    plugins.withType<org.jetbrains.kotlin.gradle.targets.wasm.binaryen.BinaryenPlugin> {
+        the<org.jetbrains.kotlin.gradle.targets.wasm.binaryen.BinaryenEnvSpec>().downloadBaseUrl.set(null as String?)
+    }
 }
 
 val ktlintVersion = libs.versions.ktlint.get()

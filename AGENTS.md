@@ -6,7 +6,8 @@ When this file and the checked-in build disagree, trust `settings.gradle.kts`,
 
 ## Purpose
 
-Reusable, product-agnostic Compose Multiplatform components for Android, desktop (JVM), and iOS.
+Reusable, product-agnostic Compose Multiplatform components for Android, desktop (JVM), iOS, and web
+(Wasm).
 Visual values come from `io.github.maniramezan.kommon:design-system` (`ThemeTokens`); this repo
 only *adapts* them to Compose/Material 3 and builds components on top.
 
@@ -37,7 +38,8 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`), `GlyphIconButton.kt`
     (icon-only button with tooltip).
   - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search) so the library needs no icon font.
-  - `jvmMain`/`androidMain`/`iosMain` — only `resizeHorizontalPointerIcon`.
+  - `jvmMain`/`androidMain`/`iosMain`/`wasmJsMain` — only `resizeHorizontalPointerIcon`. Compose for
+    Web keeps its CSS cursors internal, so web falls back to the hand cursor, as iOS does.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
     `ScreenshotTest.kt` renders a gallery of the original components into golden images in
@@ -100,7 +102,7 @@ typography (`glyphSize(style)`) so it follows the user's font scale.
 
 ```bash
 ./gradlew :components:jvmTest                       # fastest: common + desktop UI tests
-./gradlew :components:allTests                      # all targets (iOS needs macOS + Xcode)
+./gradlew :components:allTests                      # all targets (iOS needs macOS + Xcode; web needs Chrome)
 ./gradlew ktlintCheck                               # style; ktlintFormat fixes most findings
 ./gradlew :components:verifyRoborazziJvm            # desktop tests + screenshot comparison
 ./gradlew :components:recordRoborazziJvm            # re-record goldens after an intended change
@@ -118,7 +120,12 @@ golden before committing it; an API dump change means a public API change (see R
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin; sandboxes without it
 cannot configure the project, so say so rather than claiming a change was verified.
 
-- `-PuseLocalKommon=true` substitutes a sibling `../kommon` checkout via composite build.
+- `-PuseLocalKommon=true` substitutes a sibling `../kommon` checkout via composite build; add
+  `-PkommonDir=<path>` to use another checkout, such as a git worktree.
+- The `wasmJs` target runs `commonTest` in headless Chrome. It declares `binaries.executable()` only
+  so webpack bundles Skiko for those tests (CMP-4906). The Node.js, Yarn and Binaryen downloads the Kotlin
+  plugin needs are declared in `settings.gradle.kts`, because `FAIL_ON_PROJECT_REPOS` rejects the
+  repositories the plugin would otherwise add.
 - Versions live in `gradle/libs.versions.toml` only. Declare Compose libraries through catalog
   entries (`libs.compose.*`); the plugin's `compose.runtime`/`compose.material3`/... accessors are
   deprecated at error level in Compose Multiplatform 1.12. Material 3 has its own version
