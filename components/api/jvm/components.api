@@ -606,6 +606,7 @@ public final class io/github/maniramezan/kmpcomponents/ProviderConfigurationStat
 
 public final class io/github/maniramezan/kmpcomponents/ReduceMotionKt {
 	public static final fun getLocalReduceMotionEnabled ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun rememberReduceMotionEnabled (Landroidx/compose/runtime/Composer;I)Z
 }
 
 public final class io/github/maniramezan/kmpcomponents/SearchFieldKt {
