@@ -58,7 +58,7 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
     `CopyButton.kt`, `FocusTraversal.kt` (`Modifier.focusNextOnTab`, a `Modifier.Node`).
   - Accessibility: `KeyboardFocus.kt` adds token-derived focus outlines; `ReduceMotion.kt` exposes
-    `LocalReduceMotionEnabled` for host overrides and observes Android/iOS setting changes.
+    `LocalReduceMotionEnabled` for host overrides, `rememberReduceMotionEnabled()` for the effective value, and observes Android/iOS setting changes.
     `AccessibilityRegressionTest.kt` covers rendered focus across themes and font scales;
     `FocusScreenshotTest.kt` records focused controls.
   - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`, `CompactWindowMaxWidth`), `TooltipIconButton.kt`

@@ -105,6 +105,7 @@ or browse the copy that CI publishes from `main` to
 | `NoticeCard` | Full-width `StatusTone` notice with an optional action ("Retry") and dismiss button. |
 | `ProgressIndicator` | Centered spinner or determinate bar with an announced label, for a loading pane. |
 | `LocalReduceMotionEnabled` | Optional override for decorative animations and page hints; null follows live system settings. |
+| `rememberReduceMotionEnabled` | Returns the effective reduced-motion preference (the override if set, else the system), so app animations can follow it. |
 | `InlineProgressIndicator` | Text-sized spinner and label for work in progress inside a row or toolbar. |
 
 ### Actions
@@ -276,7 +277,8 @@ same size when focus moves.
 
 Decorative animations follow live Android and iOS reduced-motion settings. Desktop hosts can
 provide their own setting with `CompositionLocalProvider(LocalReduceMotionEnabled provides true)`;
-`null` follows the platform preference. The sample's Appearance controls include an override.
+`null` follows the platform preference. Read the effective value with `rememberReduceMotionEnabled()`
+to make your own animations follow it. The sample's Appearance controls include an override.
 
 ## Security notes
 
