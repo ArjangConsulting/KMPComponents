@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import io.github.maniramezan.kmpcomponents.AdaptiveNavScaffold
 import io.github.maniramezan.kmpcomponents.AppText
 import io.github.maniramezan.kmpcomponents.AppTextStyle
 import io.github.maniramezan.kmpcomponents.CountBadge
@@ -37,12 +38,16 @@ import io.github.maniramezan.kmpcomponents.PaginationPage
 import io.github.maniramezan.kmpcomponents.SectionCard
 import io.github.maniramezan.kmpcomponents.ShowcaseFeed
 import io.github.maniramezan.kmpcomponents.ShowcaseItemWidth
+import io.github.maniramezan.kmpcomponents.ShowcaseRow
 import io.github.maniramezan.kmpcomponents.TabBar
+import io.github.maniramezan.kmpcomponents.TabBarItem
 import io.github.maniramezan.kmpcomponents.TabBarItemData
 import io.github.maniramezan.kmpcomponents.ThemeCard
+import io.github.maniramezan.kmpcomponents.ThemeLargeTopAppBar
 import io.github.maniramezan.kmpcomponents.ThemeListItem
 import io.github.maniramezan.kmpcomponents.ThemeMediumTopAppBar
 import io.github.maniramezan.kmpcomponents.ThemeTabRow
+import io.github.maniramezan.kmpcomponents.ThemeTopAppBar
 import io.github.maniramezan.kmpcomponents.kmpSpacing
 import io.github.maniramezan.kmpcomponents.rememberTabBarScrollBehavior
 import kotlinx.coroutines.delay
@@ -72,7 +77,9 @@ private fun BarsDemo() {
     }
     val scrollBehavior = rememberTabBarScrollBehavior()
     SectionCard(title = "App bars and navigation", description = "Scroll the list to hide the tab bar.") {
-        ThemeMediumTopAppBar(title = selected)
+        ThemeTopAppBar(title = "Small app bar")
+        ThemeMediumTopAppBar(title = "Medium app bar")
+        ThemeLargeTopAppBar(title = "Large app bar")
         ThemeTabRow(tabs = listOf("All", "Unread", "Flagged"), selectedIndex = tab, onItemSelected = { tab = it })
         Column(Modifier.height(LIST_HEIGHT)) {
             Column(
@@ -93,6 +100,27 @@ private fun BarsDemo() {
                 selected = it
             }, modifier = Modifier.fillMaxSize())
         }
+        TabBar {
+            destinations.forEach { name ->
+                TabBarItem(
+                    value = name,
+                    selection = selected,
+                    onSelectionChange = { selected = it },
+                    icon = { Icon(plus, null) },
+                    label = { Text(name) },
+                )
+            }
+        }
+        AdaptiveNavScaffold(
+            items = items,
+            selection = selected,
+            onSelectionChange = { selected = it },
+            modifier = Modifier.fillMaxWidth().height(ADAPTIVE_HEIGHT),
+        ) { padding ->
+            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+                Text("$selected example. Resize the window to switch navigation layout.")
+            }
+        }
         AppText("AppText in the TITLE role", style = AppTextStyle.TITLE)
         AppText("AppText in the LABEL_MEDIUM_SEMIBOLD role", style = AppTextStyle.LABEL_MEDIUM_SEMIBOLD)
     }
@@ -107,7 +135,7 @@ private fun PagingDemo() {
     var page by remember { mutableIntStateOf(0) }
     SectionCard(title = "Paging and flip card", description = "Settled on page ${page + 1}.") {
         PaginatedContent(
-            pages = listOf(PaginationPage("Welcome"), PaginationPage("Connect"), PaginationPage("Record")),
+            pages = listOf(PaginationPage("Welcome"), PaginationPage("Explore"), PaginationPage("Finish")),
             titleAlignment = PageTitleAlignment.CENTER,
             footerStyle = PageFooterStyle.PROGRESS,
             onPageChanged = { page = it },
@@ -118,8 +146,8 @@ private fun PagingDemo() {
             }
         }
         FlipCard(
-            front = { Text("What does 404 mean?", Modifier.align(Alignment.Center)) },
-            back = { Text("Not found", Modifier.align(Alignment.Center)) },
+            front = { Text("What is on the other side?", Modifier.align(Alignment.Center)) },
+            back = { Text("An example answer", Modifier.align(Alignment.Center)) },
             modifier = Modifier.fillMaxWidth().height(PAGE_HEIGHT),
             frontLabel = "Question",
             backLabel = "Answer",
@@ -135,6 +163,7 @@ private fun FeedDemo() {
     val loaded = remember { mutableStateListOf(*Array(PAGE_SIZE) { "Report ${it + 1}" }) }
     var loading by remember { mutableStateOf(false) }
     var requested by remember { mutableIntStateOf(0) }
+    var showAll by remember { mutableStateOf(false) }
     LaunchedLoad(requested) {
         loading = true
         delay(LOAD_MILLIS)
@@ -142,16 +171,19 @@ private fun FeedDemo() {
         loading = false
     }
     SectionCard(title = "Showcase feed", description = "Horizontal rows plus a vertical section that loads more.") {
+        ShowcaseRow(items = listOf("First", "Second", "Third")) { name ->
+            ThemeCard { Text(name) }
+        }
         ShowcaseFeed(Modifier.heightIn(max = FEED_HEIGHT)) {
-            section(title = "Recent projects", items = listOf("Payments", "Orders", "Users", "Webhooks")) { name ->
+            section(title = "Featured items", items = listOf("Alpha", "Beta", "Gamma", "Delta")) { name ->
                 ThemeCard { Text(name) }
             }
             section(
-                title = "Devices",
-                items = listOf("iPhone 16", "Pixel 9", "iPad Air", "Galaxy Tab"),
-                itemWidth = ShowcaseItemWidth.Fixed(DEVICE_WIDTH),
-                actionLabel = "See all",
-                onAction = {},
+                title = "Collections",
+                items = if (showAll) listOf("Spring", "Summer", "Autumn", "Winter") else listOf("Spring", "Summer"),
+                itemWidth = ShowcaseItemWidth.Fixed(COLLECTION_WIDTH),
+                actionLabel = if (showAll) "Show fewer" else "See all",
+                onAction = { showAll = !showAll },
             ) { name -> ThemeCard { Text(name) } }
             verticalSection(
                 title = "Reports",
@@ -176,4 +208,6 @@ private const val PAGE_SIZE = 8
 private const val MAX_REPORTS = 40
 private const val LOAD_MILLIS = 800L
 private val FEED_HEIGHT = 480.dp
-private val DEVICE_WIDTH = 160.dp
+private val COLLECTION_WIDTH = 160.dp
+
+private val ADAPTIVE_HEIGHT = 320.dp

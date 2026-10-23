@@ -33,7 +33,7 @@ jobs:
         run: >-
           ./gradlew :components:allTests :components:verifyRoborazziJvm :components:checkKotlinAbi
           :components:koverXmlReport :components:koverLog
-          :components-image:allTests :components-image:checkKotlinAbi
+          :components-image:allTests :components-image:checkKotlinAbi :sample:jvmTest
 
       - name: Build library, API docs, and samples
         run: >-
@@ -57,3 +57,4 @@ jobs:
             components/build/reports/**
             components/build/outputs/roborazzi/**
             components-image/build/reports/**
+            sample/build/reports/**

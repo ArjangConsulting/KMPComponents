@@ -92,6 +92,13 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
   `sample/ios` (XcodeGen spec and Swift host).
+- The catalog's section picker opens each component family. `PickerAvailabilityControls.kt` lets
+  testers disable a popup while it is open. `sample/src/jvmTest/.../CatalogUiTest.kt` renders all
+  sections at 100%/200% text in LTR/RTL and checks section navigation.
+- Catalog examples use generic copy and temporary local UI state. Do not copy consuming apps'
+  workflows, business rules, storage, credentials, or backend integrations into the sample.
+  Simulations must be labeled; image examples default to embedded data and load a URL only after
+  an explicit action.
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).
 - `.run/` — shared IntelliJ run configurations (sample catalog, JVM tests, all-target tests, CI
   check). Keep them in sync with the CI task list.
@@ -144,6 +151,7 @@ typography (`glyphSize(style)`) so it follows the user's font scale.
 
 ```bash
 ./gradlew :components:jvmTest                       # fastest: common + desktop UI tests
+./gradlew :sample:jvmTest
 ./gradlew :components:allTests                      # all targets (iOS needs macOS + Xcode; web needs Chrome)
 ./gradlew ktlintCheck                               # style; ktlintFormat fixes most findings
 ./gradlew :components:verifyRoborazziJvm            # desktop tests + screenshot comparison
@@ -158,8 +166,8 @@ typography (`glyphSize(style)`) so it follows the user's font scale.
 
 CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests` and `checkKotlinAbi` for both modules,
 `verifyRoborazziJvm`, Kover, `assemble`, the root `dokkaGenerate`, and builds the desktop, Android, and iOS
-samples. A screenshot failure uploads the diff images in the `reports` artifact. Review a changed
-golden before committing it; an API dump change means a public API change (see Releases).
+samples. It also runs `:sample:jvmTest`. A screenshot failure uploads the diff images in the
+`reports` artifact. Review a changed golden before committing it; an API dump change means a public API change (see Releases).
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin; sandboxes without it
 cannot configure the project, so say so rather than claiming a change was verified.
 

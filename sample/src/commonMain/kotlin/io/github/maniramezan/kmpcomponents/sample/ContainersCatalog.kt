@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,6 +39,7 @@ import io.github.maniramezan.kmpcomponents.ThemeHorizontalDivider
 import io.github.maniramezan.kmpcomponents.ThemeSnackbar
 import io.github.maniramezan.kmpcomponents.ThemeSurface
 import io.github.maniramezan.kmpcomponents.ThemeTextButton
+import io.github.maniramezan.kmpcomponents.ThemeVerticalDivider
 import io.github.maniramezan.kmpcomponents.Toast
 import io.github.maniramezan.kmpcomponents.ToastHost
 import io.github.maniramezan.kmpcomponents.TonalBadge
@@ -68,11 +70,16 @@ private fun CardsDemo() {
             expanded = expanded,
             onExpandedChange = { expanded = it },
             summary = { Text("Advanced settings") },
-            detail = { Text("Proxy, timeouts, and retries live here.") },
+            detail = { Text("Additional example content appears here.") },
         )
         ThemeHorizontalDivider()
+        Row(Modifier.height(DIVIDER_HEIGHT)) {
+            Text("Start")
+            ThemeVerticalDivider(Modifier.padding(horizontal = MaterialTheme.kmpSpacing.small))
+            Text("End")
+        }
         FlowLayout {
-            listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD").forEach { TonalBadge(it) }
+            listOf("One", "Two", "Three", "Four", "Five", "Six", "Seven").forEach { TonalBadge(it) }
         }
         AdaptiveContentContainer(Modifier.background(MaterialTheme.colorScheme.surfaceVariant)) {
             Text(
@@ -108,19 +115,25 @@ private fun OverlaysDemo() {
                 onClick = {
                     scope.launch {
                         toastResult =
-                            "Toast: ${toasts.showToast("Copied to clipboard", actionLabel = "Undo")}"
+                            "Toast: ${toasts.showToast("Example toast", actionLabel = "Undo")}"
                     }
                 },
             )
         }
-        Toast(message = "Toast placed inline", actionLabel = "Undo", onAction = {})
-        ThemeSnackbar(message = "Endpoint deleted", actionLabel = "Undo", onAction = {})
+        Toast(message = "Toast placed inline", actionLabel = "Undo", onAction = {
+            toastResult =
+                "Inline toast action selected"
+        })
+        ThemeSnackbar(message = "Example item removed", actionLabel = "Undo", onAction = {
+            toastResult =
+                "Snackbar action selected"
+        })
         Box(Modifier.fillMaxWidth().height(TOAST_AREA_HEIGHT)) { ToastHost(hostState = toasts) }
     }
     if (showDialog) {
         ThemeDialog(
             title = "Export finished",
-            text = "Saved 12 endpoints to openapi.yaml.",
+            text = "The example operation has finished.",
             confirmText = "OK",
             onConfirm = { showDialog = false },
             onDismissRequest = { showDialog = false },
@@ -173,3 +186,5 @@ private fun PlaceholdersDemo() {
 private const val SKELETON_ROWS = 3
 private val SKELETON_HEADER_HEIGHT = 24.dp
 private val SKELETON_HEADER_WIDTH = 160.dp
+
+private val DIVIDER_HEIGHT = 40.dp

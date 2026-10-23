@@ -61,7 +61,7 @@ private fun ButtonsDemo() {
             itemVerticalAlignment = Alignment.CenterVertically,
         ) {
             PrimaryButton(text = "Save", onClick = { lastAction = "Save" })
-            SecondaryButton(text = "Test connection", onClick = { lastAction = "Test connection" })
+            SecondaryButton(text = "Secondary action", onClick = { lastAction = "Secondary action" })
             ThemeTextButton(text = "Cancel", onClick = { lastAction = "Cancel" })
             ThemeTextButton(text = "Delete all", onClick = { lastAction = "Delete all" }, destructive = true)
         }
@@ -74,7 +74,7 @@ private fun ButtonsDemo() {
             LoadingIconButton(
                 loading = refreshing,
                 icon = rememberVectorPainter(RefreshIcon),
-                contentDescription = "Refresh providers",
+                contentDescription = "Refresh example",
                 onClick = {
                     refreshing = true
                     scope.launch {
@@ -84,8 +84,8 @@ private fun ButtonsDemo() {
                     }
                 },
             )
-            FAB(icon = plus, contentDescription = "New project", onClick = { lastAction = "New project" })
-            ThemeExtendedFloatingActionButton(text = "Record", icon = plus, onClick = { lastAction = "Record" })
+            FAB(icon = plus, contentDescription = "Add item", onClick = { lastAction = "Add item" })
+            ThemeExtendedFloatingActionButton(text = "Create", icon = plus, onClick = { lastAction = "Create" })
         }
     }
 }
@@ -104,25 +104,25 @@ private fun SegmentsDemo() {
             onOptionSelected = { range = it },
         )
         SegmentedControl(
-            options = listOf("Headers", "Body", "Cookies", "Query"),
+            options = listOf("First", "Second", "Third", "Fourth"),
             selectedIndex = tab,
             onOptionSelected = { tab = it },
             density = SegmentDensity.COMPACT,
             widthMode = SegmentWidthMode.FIT,
         )
         ThemeSingleChoiceSegmentedButtonRow(
-            options = listOf("JSON", "YAML", "XML"),
+            options = listOf("Small", "Medium", "Large"),
             selectedIndex = format,
             onOptionSelected = { format = it },
             modifier = Modifier.fillMaxWidth(),
         )
         SegmentedContent(
-            items = listOf("Headers", "Body", "Cookies", "Query parameters", "Timeline").map(::SegmentedItem),
+            items = listOf("Overview", "Details", "Activity", "More information", "History").map(::SegmentedItem),
             indicator = SegmentSelectionIndicator.UNDERLINE,
             backgroundColor = MaterialTheme.colorScheme.surface,
         ) { _, item -> Text("${item.title} panel", Modifier.padding(MaterialTheme.kmpSpacing.small)) }
-        SegmentedContent(items = listOf("Request", "Response").map(::SegmentedItem)) { _, item ->
-            Text("${item.title} body", Modifier.padding(MaterialTheme.kmpSpacing.small))
+        SegmentedContent(items = listOf("First", "Second").map(::SegmentedItem)) { _, item ->
+            Text("${item.title} panel", Modifier.padding(MaterialTheme.kmpSpacing.small))
         }
     }
 }

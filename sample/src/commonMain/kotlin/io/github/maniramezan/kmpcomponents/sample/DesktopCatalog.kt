@@ -40,7 +40,10 @@ fun DesktopSection() {
     var title by remember { mutableStateOf("") }
     var split by remember { mutableFloatStateOf(DEFAULT_SPLIT) }
     var dirty by remember { mutableStateOf(true) }
-    val image = remember { sampleScreenshot() }
+    val colors = MaterialTheme.colorScheme
+    val image = remember(colors.surfaceVariant, colors.primary, colors.secondaryContainer) {
+        sampleScreenshot(colors.surfaceVariant, colors.primary, colors.secondaryContainer)
+    }
     SectionCard(
         title = "Desktop helpers",
         description = "Tab out of the multi-line notes field; zoom the image with the wheel or +/-.",
@@ -56,12 +59,12 @@ fun DesktopSection() {
             title = it
         }, modifier = Modifier.fillMaxWidth(), label = { Text("Title") })
         Row(verticalAlignment = Alignment.CenterVertically) {
-            KeyValueRow(key = "Base URL", value = BASE_URL, modifier = Modifier.weight(1f))
-            CopyButton(text = BASE_URL)
+            KeyValueRow(key = "Example text", value = COPY_TEXT, modifier = Modifier.weight(1f))
+            CopyButton(text = COPY_TEXT)
         }
         ZoomableImage(
             image = image,
-            contentDescription = "Device screenshot",
+            contentDescription = "Generated example illustration",
             modifier = Modifier.fillMaxWidth().height(IMAGE_HEIGHT),
             marker = Offset(MARKER_X, MARKER_Y),
         )
@@ -74,11 +77,11 @@ fun DesktopSection() {
         )
         ThemeSwitch(checked = dirty, onCheckedChange = { dirty = it }, label = "Unsaved changes")
         StatusBar(
-            start = { StatusBarItem("AI: Ollama") },
+            start = { StatusBarItem("Ready") },
             end = {
                 StatusBarItem("v1.2.0")
                 StatusBarSeparator()
-                StatusBarItem("12 endpoints")
+                StatusBarItem("12 items")
                 StatusBarSeparator()
                 StatusBarItem(
                     text = if (dirty) "Unsaved changes" else "Saved",
@@ -89,7 +92,7 @@ fun DesktopSection() {
     }
 }
 
-private const val BASE_URL = "https://api.example.com"
+private const val COPY_TEXT = "Text copied from the component catalog"
 private const val DEFAULT_SPLIT = 0.6f
 private const val MARKER_X = 150f
 private const val MARKER_Y = 90f
@@ -97,12 +100,12 @@ private val IMAGE_HEIGHT = 200.dp
 private val SPLIT_HEIGHT = 220.dp
 
 /** A drawn stand-in for a screenshot, so the sample needs no image resources. */
-private fun sampleScreenshot(): ImageBitmap {
+private fun sampleScreenshot(backgroundColor: Color, barColor: Color, rowColor: Color): ImageBitmap {
     val image = ImageBitmap(SCREEN_WIDTH, SCREEN_HEIGHT)
     val canvas = Canvas(image)
-    val background = Paint().apply { color = Color(0xFFE8ECF2) }
-    val bar = Paint().apply { color = Color(0xFF3F51B5) }
-    val row = Paint().apply { color = Color(0xFFB8C2D0) }
+    val background = Paint().apply { color = backgroundColor }
+    val bar = Paint().apply { color = barColor }
+    val row = Paint().apply { color = rowColor }
     canvas.drawRect(0f, 0f, SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat(), background)
     canvas.drawRect(0f, 0f, SCREEN_WIDTH.toFloat(), BAR_HEIGHT, bar)
     repeat(ROWS) { index ->
