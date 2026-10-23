@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,7 +23,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -42,7 +42,8 @@ public enum class FlipAxis {
  *
  * Pass [flipped] to control it, or leave it `null` and the card keeps its own state (saved across
  * recreation). Either way a tap requests the other face through [onFlippedChange]. The face turned
- * away is hidden from screen readers and the back is never mirrored. [frontLabel] and [backLabel]
+ * away leaves composition and keyboard traversal; its saveable state is restored when shown again.
+ * The back is never mirrored. [frontLabel] and [backLabel]
  * are announced as the state, and [flipLabel] names the tap action.
  */
 @Composable
@@ -63,6 +64,7 @@ public fun FlipCard(
 ) {
     var internalFlipped by rememberSaveable { mutableStateOf(false) }
     val isFlipped = flipped ?: internalFlipped
+    val faceStateHolder = rememberSaveableStateHolder()
     // Read only in the faces' graphics layers, so the flip animates without recomposing the card.
     val rotation = animateFloatAsState(if (isFlipped) HALF_TURN else 0f, animationSpec, label = "flip")
     val density = LocalDensity.current.density
@@ -85,8 +87,13 @@ public fun FlipCard(
                 if (enabled && flipLabel != null) onClick(label = flipLabel, action = null)
             },
     ) {
-        FlipFace({ rotation.value }, axis, density, frontVisible, shape, containerColor, front)
-        FlipFace({ rotation.value - HALF_TURN }, axis, density, !frontVisible, shape, containerColor, back)
+        faceStateHolder.SaveableStateProvider(frontVisible) {
+            if (frontVisible) {
+                FlipFace({ rotation.value }, axis, density, shape, containerColor, front)
+            } else {
+                FlipFace({ rotation.value - HALF_TURN }, axis, density, shape, containerColor, back)
+            }
+        }
     }
 }
 
@@ -95,7 +102,6 @@ private fun BoxScope.FlipFace(
     rotation: () -> Float,
     axis: FlipAxis,
     density: Float,
-    visible: Boolean,
     shape: Shape,
     containerColor: Color,
     content: @Composable BoxScope.() -> Unit,
@@ -109,11 +115,9 @@ private fun BoxScope.FlipFace(
                     FlipAxis.VERTICAL -> rotationX = rotation()
                 }
                 cameraDistance = CAMERA_DISTANCE_MULTIPLIER * density
-                alpha = if (visible) 1f else 0f
             }
             .clip(shape)
-            .background(containerColor)
-            .then(if (visible) Modifier else Modifier.clearAndSetSemantics {}),
+            .background(containerColor),
         content = content,
     )
 }

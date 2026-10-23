@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +50,8 @@ public data class ZoomableImageLabels(
  * Shows [image] fitted to the space, for screenshots and previews. Zoom with the mouse wheel or the
  * plus and minus keys when focused, drag to pan while zoomed, and double-click or press 0 to reset.
  * [marker], in image pixels, draws a ring where something happened, such as a tap. The zoom level is
- * internal UI state; it resets when the image size changes while not zoomed.
+ * internal UI state; it resets when the image size changes while not zoomed. [maxZoom] must be
+ * finite and at least 1; lowering it clamps the current zoom.
  */
 @Composable
 public fun ZoomableImage(
@@ -60,13 +62,16 @@ public fun ZoomableImage(
     maxZoom: Float = DEFAULT_MAX_ZOOM,
     labels: ZoomableImageLabels = ZoomableImageLabels(),
 ) {
+    require(maxZoom.isFinite() && maxZoom >= 1f) { "maxZoom must be finite and at least 1" }
+    val currentMaxZoom by rememberUpdatedState(maxZoom)
     var zoom by remember { mutableFloatStateOf(1f) }
     var pan by remember { mutableStateOf(Offset.Zero) }
     LaunchedEffect(image.width, image.height) { if (zoom == 1f) pan = Offset.Zero }
     fun zoomTo(next: Float) {
-        zoom = next.coerceIn(1f, maxZoom)
+        zoom = next.coerceIn(1f, currentMaxZoom)
         if (zoom == 1f) pan = Offset.Zero
     }
+    LaunchedEffect(maxZoom) { zoomTo(zoom) }
     val markerColor = MaterialTheme.colorScheme.primary
     val markerSize = glyphSize()
     BoxWithConstraints(
@@ -107,7 +112,17 @@ public fun ZoomableImage(
             .focusable(),
         contentAlignment = Alignment.Center,
     ) {
-        val fit = minOf(constraints.maxWidth.toFloat() / image.width, constraints.maxHeight.toFloat() / image.height)
+        val widthScale = if (constraints.hasBoundedWidth) {
+            constraints.maxWidth.toFloat() / image.width
+        } else {
+            Float.POSITIVE_INFINITY
+        }
+        val heightScale = if (constraints.hasBoundedHeight) {
+            constraints.maxHeight.toFloat() / image.height
+        } else {
+            Float.POSITIVE_INFINITY
+        }
+        val fit = minOf(widthScale, heightScale).takeIf { it.isFinite() } ?: 1f
         val shown = with(LocalDensity.current) { DpSize((image.width * fit).toDp(), (image.height * fit).toDp()) }
         Box(
             modifier = Modifier.graphicsLayer {

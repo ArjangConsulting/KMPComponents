@@ -3,6 +3,7 @@ package io.github.maniramezan.kmpcomponents
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
@@ -23,7 +24,9 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -120,6 +123,62 @@ class DesktopExtrasUiTest {
         onNodeWithTag("image").performKeyInput { pressKey(Key.Zero) }
         waitForIdle()
         onNodeWithTag("image").assert(stateIs("Zoom 100%"))
+    }
+
+    @Test
+    fun `lowering the zoom limit clamps the current zoom`() = runComposeUiTest {
+        var maxZoom by mutableFloatStateOf(4f)
+        setContent {
+            KmpTheme {
+                ZoomableImage(
+                    ImageBitmap(100, 50),
+                    contentDescription = "Screenshot",
+                    modifier = Modifier.size(200.dp).testTag("image"),
+                    maxZoom = maxZoom,
+                )
+            }
+        }
+        onNodeWithTag("image").requestFocus()
+        onNodeWithTag("image").performKeyInput { pressKey(Key.Equals) }
+        onNodeWithTag("image").assert(stateIs("Zoom 110%"))
+        runOnIdle { maxZoom = 1.05f }
+        onNodeWithTag("image").assert(stateIs("Zoom 105%"))
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun `each copy restarts the copied feedback interval`() = runComposeUiTest {
+        val clipboard = RecordingClipboard()
+        setContent {
+            CompositionLocalProvider(LocalClipboard provides clipboard) {
+                KmpTheme { CopyButton(text = "Example") }
+            }
+        }
+        mainClock.autoAdvance = false
+        onNodeWithContentDescription("Copy").performClick()
+        mainClock.advanceTimeByFrame()
+        mainClock.advanceTimeBy(1_000L)
+        onNodeWithContentDescription("Copy").performClick()
+        mainClock.advanceTimeByFrame()
+        mainClock.advanceTimeBy(1_000L)
+        onNodeWithContentDescription("Copy").assert(stateIs("Copied"))
+        mainClock.advanceTimeBy(1_000L)
+        onNodeWithContentDescription(
+            "Copy",
+        ).assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.StateDescription))
+        mainClock.autoAdvance = true
+    }
+
+    @Test
+    fun `unbounded image containers use the image intrinsic dimensions`() = runComposeUiTest {
+        setContent {
+            KmpTheme {
+                Box(Modifier.size(200.dp).wrapContentSize(unbounded = true)) {
+                    ZoomableImage(ImageBitmap(100, 50), "Screenshot", modifier = Modifier.testTag("image"))
+                }
+            }
+        }
+        onNodeWithTag("image").assertWidthIsEqualTo(100.dp).assertHeightIsEqualTo(50.dp)
     }
 
     @Test
