@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Dp
 
@@ -77,7 +76,7 @@ public val LocalSkeletonShimmerEnabled: ProvidableCompositionLocal<Boolean> = st
  */
 @Composable
 public fun Modifier.skeletonShimmer(highlight: Color = MaterialTheme.colorScheme.shimmerHighlight()): Modifier {
-    val animate = LocalSkeletonShimmerEnabled.current && !LocalInspectionMode.current && !isReduceMotionEnabled()
+    val animate = LocalSkeletonShimmerEnabled.current && decorativeAnimationsEnabled()
     val sweep by produceState(initialValue = 0f, animate) {
         if (!animate) {
             value = 0f

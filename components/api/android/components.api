@@ -32,6 +32,61 @@ public final class io/github/maniramezan/kmpcomponents/AppTextStyle : java/lang/
 	public static fun values ()[Lio/github/maniramezan/kmpcomponents/AppTextStyle;
 }
 
+public final class io/github/maniramezan/kmpcomponents/AssistantComponentsKt {
+	public static final fun AssistantContextCard (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/AssistantContextBody;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AssistantDisclaimerFooter (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AssistantLimitPromptCard (Lio/github/maniramezan/kmpcomponents/AssistantLimitPromptCopy;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AssistantQuickActionChips (Ljava/util/List;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AssistantStatusBanner (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/AssistantContextBody {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun copy (Ljava/lang/String;Z)Lio/github/maniramezan/kmpcomponents/AssistantContextBody;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/AssistantContextBody;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/AssistantContextBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isQuoted ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/AssistantLimitPromptCopy {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/AssistantLimitPromptCopy;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/AssistantLimitPromptCopy;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/AssistantLimitPromptCopy;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getPrimaryActionLabel ()Ljava/lang/String;
+	public final fun getSecondaryActionLabel ()Ljava/lang/String;
+	public final fun getSupportingText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/AssistantQuickActionState {
+	public static final field $stable I
+	public fun <init> (ZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun copy (ZZ)Lio/github/maniramezan/kmpcomponents/AssistantQuickActionState;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/AssistantQuickActionState;ZZILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/AssistantQuickActionState;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun isEnabled ()Z
+	public final fun isSelected ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/maniramezan/kmpcomponents/BadgesKt {
 	public static final fun CountBadge-T042LqI (ILandroidx/compose/ui/Modifier;JILjava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun TonalBadge (Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/StatusTone;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
@@ -48,6 +103,81 @@ public final class io/github/maniramezan/kmpcomponents/ButtonsKt {
 	public static final fun ThemeExtendedFloatingActionButton (Ljava/lang/String;Landroidx/compose/ui/graphics/painter/Painter;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeIconButton (Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeTextButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZZLandroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatErrorAction {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lkotlin/jvm/functions/Function0;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Lio/github/maniramezan/kmpcomponents/ChatErrorAction;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/ChatErrorAction;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ChatErrorAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getOnRetry ()Lkotlin/jvm/functions/Function0;
+	public final fun getRetryLabel ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatLogKt {
+	public static final fun ChatLog (Ljava/util/List;Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/ChatErrorAction;Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/layout/PaddingValues;Ljava/lang/String;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatMessage {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/ChatMessageSender;Lio/github/maniramezan/kmpcomponents/ChatMessageState;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/maniramezan/kmpcomponents/ChatMessageSender;
+	public final fun component3 ()Lio/github/maniramezan/kmpcomponents/ChatMessageState;
+	public final fun copy (Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/ChatMessageSender;Lio/github/maniramezan/kmpcomponents/ChatMessageState;)Lio/github/maniramezan/kmpcomponents/ChatMessage;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/ChatMessage;Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/ChatMessageSender;Lio/github/maniramezan/kmpcomponents/ChatMessageState;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ChatMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getSender ()Lio/github/maniramezan/kmpcomponents/ChatMessageSender;
+	public final fun getState ()Lio/github/maniramezan/kmpcomponents/ChatMessageState;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatMessageSender : java/lang/Enum {
+	public static final field ASSISTANT Lio/github/maniramezan/kmpcomponents/ChatMessageSender;
+	public static final field USER Lio/github/maniramezan/kmpcomponents/ChatMessageSender;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/ChatMessageSender;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/ChatMessageSender;
+}
+
+public abstract interface class io/github/maniramezan/kmpcomponents/ChatMessageState {
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatMessageState$Content : io/github/maniramezan/kmpcomponents/ChatMessageState {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/ChatMessageState$Content;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/ChatMessageState$Content;Ljava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ChatMessageState$Content;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatMessageState$Error : io/github/maniramezan/kmpcomponents/ChatMessageState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ChatMessageState$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatMessageState$Typing : io/github/maniramezan/kmpcomponents/ChatMessageState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ChatMessageState$Typing;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/github/maniramezan/kmpcomponents/CheckStatus {
@@ -114,6 +244,12 @@ public final class io/github/maniramezan/kmpcomponents/CheckStatusLabels {
 	public final fun getIdle ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ComposableSingletons$ChatLogKt {
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ComposableSingletons$ChatLogKt;
+	public fun <init> ()V
+	public final fun getLambda$1671834258$io_github_maniramezan_kmpcomponents_components ()Lkotlin/jvm/functions/Function4;
 }
 
 public final class io/github/maniramezan/kmpcomponents/ComposableSingletons$NavigationKt {
@@ -280,6 +416,10 @@ public final class io/github/maniramezan/kmpcomponents/ListsKt {
 	public static final fun LazyList (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 	public static final fun LoadMoreFooter (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeListItem (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/LoadingOverlayKt {
+	public static final fun LoadingOverlay (ZLjava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;ZLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/maniramezan/kmpcomponents/MenuPickerKt {
@@ -836,5 +976,9 @@ public final class io/github/maniramezan/kmpcomponents/ToggleRowsKt {
 	public static final fun ThemeCheckbox (ZLkotlin/jvm/functions/Function1;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeSwitch (ZLkotlin/jvm/functions/Function1;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeTriStateCheckbox (Landroidx/compose/ui/state/ToggleableState;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/TypingIndicatorKt {
+	public static final fun TypingIndicator-FNF3uiM (Landroidx/compose/ui/Modifier;Ljava/lang/String;JLandroidx/compose/runtime/Composer;II)V
 }
 

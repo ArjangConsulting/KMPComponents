@@ -13,7 +13,7 @@ import androidx.compose.ui.text.input.ImeAction
 /** Localizable labels for [SearchField]. */
 @Immutable
 public data class SearchFieldLabels(
-    /** Placeholder shown while the field is empty. */
+    /** Placeholder shown while the field is empty; blank shows none. */
     public val placeholder: String = "Search",
     /** Accessible name and tooltip of the clear button. */
     public val clear: String = "Clear search",
@@ -41,7 +41,7 @@ public fun SearchField(
         modifier = modifier,
         enabled = enabled,
         singleLine = true,
-        placeholder = { Text(labels.placeholder) },
+        placeholder = labels.placeholder.takeIf { it.isNotBlank() }?.let { text -> { Text(text) } },
         leadingIcon = {
             GlyphIcon(glyph = Glyph.SEARCH, color = MaterialTheme.colorScheme.onSurfaceVariant)
         },
