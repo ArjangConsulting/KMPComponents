@@ -36,10 +36,12 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -155,8 +157,9 @@ public fun PaginatedContent(
             }
         }
     }
-    val forwardOnly = remember(direction) {
-        if (direction == PageDirection.UNIDIRECTIONAL) ForwardOnlyNestedScrollConnection() else null
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val forwardOnly = remember(direction, isRtl) {
+        if (direction == PageDirection.UNIDIRECTIONAL) ForwardOnlyNestedScrollConnection(isRtl) else null
     }
     val spacing = MaterialTheme.kmpSpacing
     Column(modifier = modifier.fillMaxWidth()) {
@@ -194,13 +197,15 @@ public fun PaginatedContent(
 private const val SCROLL_HINT_FRACTION = 0.25f
 
 /** Swallows backward drags and flings so a unidirectional pager can only move forward. */
-private class ForwardOnlyNestedScrollConnection : NestedScrollConnection {
+private class ForwardOnlyNestedScrollConnection(private val isRtl: Boolean) : NestedScrollConnection {
+    private fun isBackward(deltaX: Float): Boolean = if (isRtl) deltaX < 0f else deltaX > 0f
+
     // The pager's own settle animation is not user input, so a cancelled swipe still snaps back.
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset =
-        if (available.x > 0f && source == NestedScrollSource.UserInput) Offset(available.x, 0f) else Offset.Zero
+        if (isBackward(available.x) && source == NestedScrollSource.UserInput) Offset(available.x, 0f) else Offset.Zero
 
     override suspend fun onPreFling(available: Velocity): Velocity =
-        if (available.x > 0f) Velocity(available.x, 0f) else Velocity.Zero
+        if (isBackward(available.x)) Velocity(available.x, 0f) else Velocity.Zero
 }
 
 /**
@@ -231,7 +236,7 @@ private fun ScrollingTitleRow(
             state.floatValue = progress
             subcompose("title_$index") {
                 val value by state
-                pageTitle(index, pages[index], value)
+                Box { pageTitle(index, pages[index], value) }
             }.first().measure(constraints.copy(minWidth = 0))
         }
         val height = measured.values.maxOfOrNull { it.height } ?: 0
