@@ -1,6 +1,7 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +36,17 @@ class NavigationLogicTest {
         assertEquals(typography.bodyLarge, AppTextStyle.BODY.resolve(typography))
         assertEquals(FontWeight.Bold, AppTextStyle.LABEL_LARGE_BOLD.resolve(typography).fontWeight)
         assertEquals(typography.labelLarge.fontSize, AppTextStyle.LABEL_LARGE_BOLD.resolve(typography).fontSize)
+    }
+
+    @Test
+    fun `collapsed fraction updates when the bar resizes without changing its offset`() {
+        val behavior = TabBarScrollBehavior()
+        behavior.updateHeightOffsetLimit(-100f)
+        behavior.heightOffset = -50f
+        val fraction = derivedStateOf { behavior.collapsedFraction }
+        assertEquals(0.5f, fraction.value)
+        behavior.updateHeightOffsetLimit(-200f)
+        assertEquals(0.25f, fraction.value)
     }
 
     @Test

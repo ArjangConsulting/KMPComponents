@@ -141,10 +141,10 @@ public fun LoadingIconButton(
     val iconSize = glyphSize()
     TooltipIconButton(
         label = contentDescription,
-        onClick = { if (!loading) onClick() },
+        onClick = onClick,
         iconSize = iconSize,
         modifier = modifier,
-        enabled = enabled,
+        enabled = enabled && !loading,
         extraSemantics = { if (loading) stateDescription = loadingLabel },
     ) {
         if (loading) {
