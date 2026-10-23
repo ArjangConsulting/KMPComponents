@@ -12,6 +12,8 @@
         <list>
           <option value=":components:allTests" />
           <option value=":components:assemble" />
+          <option value=":components-image:allTests" />
+          <option value=":components-image:assemble" />
           <option value=":sample:compileKotlinJvm" />
         </list>
       </option>

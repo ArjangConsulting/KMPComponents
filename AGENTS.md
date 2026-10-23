@@ -17,7 +17,7 @@ only *adapts* them to Compose/Material 3 and builds components on top.
 
 ## Repository map
 
-- `components/` — the only published module (`io.github.maniramezan.kmpcomponents:components`).
+- `components/` — the main published module (`io.github.maniramezan.kmpcomponents:components`).
   - `commonMain/.../KmpTheme.kt` — `KmpTheme`, composition locals, `MaterialTheme.kmp*` accessors
     and their data classes (`ComposeSpacing`, `KmpColors`, `KmpTypography`, `KmpMotion`).
   - `TokenAdapters.kt` — pure, non-composable token -> Compose conversions. All mapping decisions
@@ -32,22 +32,60 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `TabChip.kt` (`TabChipRow`, `TabChip`), `SelectableCard.kt`, `SplitPane.kt`
     (`HorizontalSplitPane`), `SectionHeader.kt`, `ContentRow.kt`, `KeyValueRow.kt`.
   - Inputs: `MenuPicker.kt`, `SearchField.kt`, `ToggleRows.kt` (`ThemeSwitch`, `ThemeCheckbox`,
-    `ThemeTriStateCheckbox`).
+    `ThemeTriStateCheckbox`), `InputControls.kt` (`RadioGroup`, `ThemeSlider`),
+    `SelectionList.kt` (`SelectionList`, `SelectionListContent`, `SelectionListLabels`) with its
+    model and filtering logic in `SelectionListNode.kt`.
   - More feedback: `NoticeCard.kt`, `ProgressIndicator.kt` (`ProgressIndicator`,
     `InlineProgressIndicator`, internal `InlineSpinner`).
-  - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`), `GlyphIconButton.kt`
-    (icon-only button with tooltip).
-  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search) so the library needs no icon font.
-  - `jvmMain`/`androidMain`/`iosMain`/`wasmJsMain` — only `resizeHorizontalPointerIcon`. Compose for
-    Web keeps its CSS cursors internal, so web falls back to the hand cursor, as iOS does.
+  - Actions: `Buttons.kt` (`PrimaryButton`, `SecondaryButton`, `ThemeTextButton`,
+    `ThemeIconButton`, `LoadingIconButton`, `FAB`, `ThemeExtendedFloatingActionButton`),
+    `SegmentedControl.kt` (`SegmentedControl`, `ThemeSingleChoiceSegmentedButtonRow`,
+    `SegmentDensity`, `SegmentWidthMode`), `SegmentedContent.kt` (layout choice in
+    `segmentLayout`), `PillChip.kt`, `ActionPill.kt`. Icons are
+    caller-supplied `Painter`s sized with `glyphSize()`.
+  - Containers and feedback: `Containers.kt` (`ThemeCard`, `ThemeSurface`, `BottomSheet`,
+    `ThemeDialog`, `ThemeSnackbar`), `Toast.kt` (`Toast`, `ToastHost`, `ToastHostState`),
+    `StateViews.kt` (`LoadingState`, `ErrorState`), `Skeleton.kt` (`Skeleton`, `SkeletonBlock`,
+    `Modifier.skeletonShimmer`), `Layout.kt` (`AdaptiveContentContainer`, `OverlayCard`,
+    `DisclosureCard`, dividers, `FlowLayout`). `ConfirmDialog` delegates to `ThemeDialog`.
+  - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`),
+    `Navigation.kt` (top app bars, `TabBar`, `TabBarItem`, `ThemeTabRow`, `NavRail`,
+    `AdaptiveNavScaffold`, `TabBarDefaults`), `TabBarScrollBehavior.kt`, `PaginatedContent.kt`
+    (title layout math in `titleProgress` / `titleOffset`), `Showcase.kt` (`ShowcaseRow`,
+    `ShowcaseFeed`), `FlipCard.kt`, `AppText.kt`.
+  - Chat and assistant: `ChatLog.kt`, `AssistantComponents.kt`, `TypingIndicator.kt`
+    (`typingDotAlpha` is the pure wave function), `LoadingOverlay.kt`.
+  - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
+    `CopyButton.kt`, `FocusTraversal.kt` (`Modifier.focusNextOnTab`, a `Modifier.Node`).
+  - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`, `CompactWindowMaxWidth`), `TooltipIconButton.kt`
+    (`TooltipIconButton`, `GlyphIconButton`: icon-only buttons with a tooltip).
+  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy) so the library needs no icon font.
+  - `jvmMain`/`androidMain`/`iosMain`/`wasmJsMain` — only `resizeHorizontalPointerIcon` and
+    `isReduceMotionEnabled` (`ReduceMotion.kt`; desktop always returns `false`). Decorative,
+    looping animations check `decorativeAnimationsEnabled()`, which also turns them off in previews.
+    Also `resizeVerticalPointerIcon` and `plainTextClipEntry` (`Clipboard.kt`), since each platform
+    builds clipboard entries differently. The browser reduced-motion adapter subscribes to
+    `prefers-reduced-motion` changes, and browser clipboard entries use Compose's plain-text helper.
+    Web resize cursors fall back to the hand cursor because CSS resize cursors are internal.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
     `ScreenshotTest.kt` renders a gallery of the original components into golden images in
-    `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`)
+    `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
+    `ActionsScreenshotTest.kt`, `SelectionScreenshotTest.kt`,
+    `ContainersScreenshotTest.kt`, `NavigationScreenshotTest.kt`,
+    `AssistantScreenshotTest.kt`, `DesktopExtrasScreenshotTest.kt`; `SegmentedContentTest.kt` holds both its interaction test and goldens)
     so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
+- `components-image/` — the second published module (`...:components-image`, package
+  `io.github.maniramezan.kmpcomponents.image`): `CachedAsyncImage` and `ImageCachePolicy`, backed by
+  Coil 3 with Ktor (one engine per platform). It is separate so `components` stays free of an image
+  loader; keep Coil types out of its public API (they are `implementation` dependencies). It has
+  its own `api/` dump, common tests, and a desktop UI test, and shares the version with `components`.
+- Root `build.gradle.kts` aggregates Dokka for both modules: `./gradlew :dokkaGenerate` writes
+  `build/dokka/html`, which CI uploads for GitHub Pages.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
-  (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`);
+  (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
+  `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, and `DesktopCatalog.kt`, plus the sample's own `SampleIcons.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
   `sample/ios` (XcodeGen spec and Swift host).
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).
@@ -55,7 +93,7 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
 - `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on
-  main), `release-please.yml` -> `release.yml` (Maven Central publish on release).
+  main), `release-please.yml` -> `release.yml` (Maven Central publish of both modules on release).
 
 ## Component API rules
 
@@ -109,12 +147,13 @@ typography (`glyphSize(style)`) so it follows the user's font scale.
 ./gradlew :components:checkKotlinAbi                # public API vs components/api
 ./gradlew :components:updateKotlinAbi               # accept an intended API change
 ./gradlew :components:koverHtmlReport               # coverage (build/reports/kover)
-./gradlew :components:dokkaGenerate                 # API docs (build/dokka/html)
+./gradlew :components-image:allTests :components-image:checkKotlinAbi  # the image module
+./gradlew :dokkaGenerate                            # API docs for both modules (build/dokka/html)
 ./gradlew :components:assemble :sample:compileKotlinJvm :sample-android:assembleDebug
 ```
 
-CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests`, `verifyRoborazziJvm`,
-`checkKotlinAbi`, Kover, `assemble`, `dokkaGenerate`, and builds the desktop, Android, and iOS
+CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests` and `checkKotlinAbi` for both modules,
+`verifyRoborazziJvm`, Kover, `assemble`, the root `dokkaGenerate`, and builds the desktop, Android, and iOS
 samples. A screenshot failure uploads the diff images in the `reports` artifact. Review a changed
 golden before committing it; an API dump change means a public API change (see Releases).
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin; sandboxes without it

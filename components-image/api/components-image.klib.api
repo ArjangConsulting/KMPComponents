@@ -1,0 +1,22 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.maniramezan.kmpcomponents:components-image>
+final enum class io.github.maniramezan.kmpcomponents.image/ImageCachePolicy : kotlin/Enum<io.github.maniramezan.kmpcomponents.image/ImageCachePolicy> { // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy|null[0]
+    enum entry DISABLED // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.DISABLED|null[0]
+    enum entry ENABLED // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.ENABLED|null[0]
+    enum entry READ_ONLY // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.READ_ONLY|null[0]
+    enum entry WRITE_ONLY // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.WRITE_ONLY|null[0]
+
+    final val entries // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.maniramezan.kmpcomponents.image/ImageCachePolicy> // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.maniramezan.kmpcomponents.image/ImageCachePolicy // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.maniramezan.kmpcomponents.image/ImageCachePolicy> // io.github.maniramezan.kmpcomponents.image/ImageCachePolicy.values|values#static(){}[0]
+}
+
+final fun io.github.maniramezan.kmpcomponents.image/CachedAsyncImage(kotlin/Any?, kotlin/String?, androidx.compose.ui/Modifier?, io.github.maniramezan.kmpcomponents.image/ImageCachePolicy?, io.github.maniramezan.kmpcomponents.image/ImageCachePolicy?, io.github.maniramezan.kmpcomponents.image/ImageCachePolicy?, kotlin/String?, kotlin/String?, kotlin/Boolean, androidx.compose.ui.graphics.painter/Painter?, androidx.compose.ui.graphics.painter/Painter?, androidx.compose.ui.graphics.painter/Painter?, androidx.compose.ui/Alignment?, androidx.compose.ui.layout/ContentScale?, kotlin/Float, androidx.compose.ui.graphics/ColorFilter?, kotlin/Boolean, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents.image/CachedAsyncImage|CachedAsyncImage(kotlin.Any?;kotlin.String?;androidx.compose.ui.Modifier?;io.github.maniramezan.kmpcomponents.image.ImageCachePolicy?;io.github.maniramezan.kmpcomponents.image.ImageCachePolicy?;io.github.maniramezan.kmpcomponents.image.ImageCachePolicy?;kotlin.String?;kotlin.String?;kotlin.Boolean;androidx.compose.ui.graphics.painter.Painter?;androidx.compose.ui.graphics.painter.Painter?;androidx.compose.ui.graphics.painter.Painter?;androidx.compose.ui.Alignment?;androidx.compose.ui.layout.ContentScale?;kotlin.Float;androidx.compose.ui.graphics.ColorFilter?;kotlin.Boolean;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int;kotlin.Int){}[0]

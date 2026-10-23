@@ -12,25 +12,27 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 
 /**
- * An icon-only button drawing [glyph], with [label] as its accessible name and hover/focus tooltip.
- * The glyph follows [style]'s line height, so the button grows with the user's font scale.
+ * An icon-only button with [label] as its accessible name and hover/focus tooltip. The button grows
+ * with [iconSize], so icons sized from text follow the user's font scale.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun GlyphIconButton(
-    glyph: Glyph,
+internal fun TooltipIconButton(
     label: String,
     onClick: () -> Unit,
+    iconSize: Dp,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    style: TextStyle = MaterialTheme.typography.bodyLarge,
+    extraSemantics: SemanticsPropertyReceiver.() -> Unit = {},
+    icon: @Composable () -> Unit,
 ) {
-    val iconSize = glyphSize(style)
     val buttonSize = iconSize + MaterialTheme.kmpSpacing.small * 2
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
@@ -43,9 +45,27 @@ internal fun GlyphIconButton(
             enabled = enabled,
             modifier = Modifier
                 .sizeIn(minWidth = buttonSize, minHeight = buttonSize)
-                .semantics { contentDescription = label },
-        ) {
-            GlyphIcon(glyph = glyph, size = iconSize)
-        }
+                .semantics {
+                    contentDescription = label
+                    extraSemantics()
+                },
+            content = icon,
+        )
+    }
+}
+
+/** A [TooltipIconButton] drawing [glyph], sized from [style]'s line height. */
+@Composable
+internal fun GlyphIconButton(
+    glyph: Glyph,
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    style: TextStyle = MaterialTheme.typography.bodyLarge,
+) {
+    val iconSize = glyphSize(style)
+    TooltipIconButton(label = label, onClick = onClick, iconSize = iconSize, modifier = modifier, enabled = enabled) {
+        GlyphIcon(glyph = glyph, size = iconSize)
     }
 }

@@ -1,3 +1,5 @@
+@file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.android.application) apply false
@@ -5,7 +7,7 @@ plugins {
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.maven.publish) apply false
-    alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.dokka)
     alias(libs.plugins.kover) apply false
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.roborazzi) apply false
@@ -26,6 +28,17 @@ allprojects {
     plugins.withType<org.jetbrains.kotlin.gradle.targets.wasm.binaryen.BinaryenPlugin> {
         the<org.jetbrains.kotlin.gradle.targets.wasm.binaryen.BinaryenEnvSpec>().downloadBaseUrl.set(null as String?)
     }
+}
+
+// One API reference site for every published module: `./gradlew :dokkaGenerate` writes
+// build/dokka/html.
+dependencies {
+    dokka(project(":components"))
+    dokka(project(":components-image"))
+}
+
+dokka {
+    moduleName = "KMPComponents"
 }
 
 val ktlintVersion = libs.versions.ktlint.get()

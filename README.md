@@ -33,6 +33,21 @@ that includes its merged Wasm support:
 
 This substitution verifies the source build; it does not verify the published dependency graph.
 
+### Optional: async images
+
+`CachedAsyncImage` lives in a separate artifact so the main library does not pull in an image
+loader. It is backed by [Coil 3](https://coil-kt.github.io/coil/) with Ktor networking and
+brings each platform's Ktor engine (Android, Darwin, Java); no Coil types appear in its API.
+
+```kotlin
+implementation("io.github.maniramezan.kmpcomponents:components-image:<version>")
+```
+
+The image artifact targets `android`, `jvm`, `iosArm64`, and `iosSimulatorArm64`.
+
+On Android, network images need `<uses-permission android:name="android.permission.INTERNET" />`
+in the app manifest. Both artifacts share one version.
+
 ## Quick start
 
 ```kotlin
@@ -60,7 +75,7 @@ KmpTheme(mode = themeMode) {
 
 ## Catalog
 
-API reference: run `./gradlew :components:dokkaGenerate` (output in `components/build/dokka/html`),
+API reference for both artifacts: run `./gradlew :dokkaGenerate` (output in `build/dokka/html`),
 or browse the copy that CI publishes from `main` to
 [GitHub Pages](https://arjangconsulting.github.io/KMPComponents/).
 
@@ -78,9 +93,12 @@ or browse the copy that CI publishes from `main` to
 | `ProviderConfigurationForm` | Provider name, base URL, model, and API key fields with validation, built from the fields above. |
 | `CheckStatus` / `CheckStatusRow` | State and one-line display of an on-demand check such as "Test connection" (idle, spinner, success, failure). Results are announced. |
 | `MenuPicker` | Labeled dropdown field for picking one item of any type, for forms where a segmented control does not fit. |
-| `SearchField` | Single-line search field with a search glyph, a clear button, and a keyboard Search action. |
+| `SearchField` | Single-line search field with a search glyph, a clear button, and a keyboard Search action. A blank placeholder draws none. |
 | `ThemeSwitch` | Setting row with a label, optional supporting text and tooltip, and a trailing switch. The whole row toggles. |
 | `ThemeCheckbox` / `ThemeTriStateCheckbox` | Checkbox rows with a label; the tri-state one is for "select all" over a group. |
+| `RadioGroup` | Vertical radio list; each full-width row is the tap target. |
+| `ThemeSlider` | Full-width slider with an optional spoken label, value description, and steps. |
+| `SelectionList` / `SelectionListContent` / `SelectionListNode` | Searchable one- or two-level picker, single or multiple choice, in a bottom sheet or inline. Parents expand inline and summarize their selected children when collapsed. |
 
 ### Feedback
 
@@ -96,6 +114,60 @@ or browse the copy that CI publishes from `main` to
 | `ProgressIndicator` | Centered spinner or determinate bar with an announced label, for a loading pane. |
 | `InlineProgressIndicator` | Text-sized spinner and label for work in progress inside a row or toolbar. |
 
+### Actions
+
+Icons are `Painter`s you supply (for an `ImageVector`, `rememberVectorPainter(icon)`); they are
+sized from the body text so they follow the user's font scale.
+
+| Component | Purpose |
+| --- | --- |
+| `PrimaryButton` / `SecondaryButton` | Filled and outlined text buttons for the primary and secondary action. |
+| `ThemeTextButton` | Low-emphasis text button, optionally `destructive` (error-colored). |
+| `ThemeIconButton` | Icon-only button; its description is also shown as a tooltip. |
+| `LoadingIconButton` | Icon button that shows a spinner and ignores clicks while loading. |
+| `FAB` / `ThemeExtendedFloatingActionButton` | Floating action buttons; the extended one is named by its visible label. |
+| `SegmentedControl` | Pill-shaped segments for one choice, with `SegmentDensity` and `SegmentWidthMode`. |
+| `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark. |
+| `SegmentedContent` | Segment bar (pill, underline, or bare) above content that crossfades; scrolls with edge fades instead of truncating titles. |
+| `PillChip` | Capsule chip with selected and unselected looks; selectable when clickable, static otherwise. |
+| `ActionPill` | Capsule command with arbitrary content and no selected state. |
+
+### Containers, feedback, and layout
+
+| Component | Purpose |
+| --- | --- |
+| `ThemeCard` / `ThemeSurface` | Elevated (optionally clickable) and flat full-width containers that stack their content. |
+| `DisclosureCard` | Card with an always-visible summary that reveals detail; announces expanded or collapsed. |
+| `OverlayCard` | Translucent rounded container for labels over images or video. |
+| `ThemeDialog` | Alert dialog with a confirm action and an optional dismiss action; `ConfirmDialog` is built on it. |
+| `BottomSheet` | Modal bottom sheet that always opens fully expanded. |
+| `Toast` / `ToastHost` / `ToastHostState` | Transient messages with optional icon and action, shown one at a time like snackbars. `showToast` suspends and returns a `ToastResult`. |
+| `ThemeSnackbar` | Snackbar with an optional action, announced when shown standalone. |
+| `LoadingState` / `ErrorState` | Pane placeholders for loading and failure, announced by screen readers; siblings of `EmptyState`. |
+| `Skeleton` / `SkeletonBlock` / `Modifier.skeletonShimmer` | Decorative loading placeholders and a sweep that stays still when the system reduces motion. |
+| `ThemeHorizontalDivider` / `ThemeVerticalDivider` | Rules in the outline variant color. |
+| `FlowLayout` | Wrapping row with the standard gaps, for chips and button groups. |
+| `AdaptiveContentContainer` | Centers content and caps its width on wide windows. |
+
+### Chat and assistant
+
+| Component | Purpose |
+| --- | --- |
+| `ChatLog` / `ChatMessage` / `ChatMessageState` | Conversation with user and assistant bubbles, typing and retryable error states; follows new messages only while the reader is at the bottom. |
+| `TypingIndicator` | Three-dot "reply is being written" wave; still when the system reduces motion. |
+| `LoadingOverlay` | Scrim that blocks interaction with its content during work the user must wait for, and announces it. |
+| `AssistantContextCard` | Title, highlighted value, optional quote, and footnote describing what the assistant sees. |
+| `AssistantQuickActionChips` | Scrolling filter chips for quick actions, with caller-owned state. |
+| `AssistantStatusBanner` | Announced error banner for an unavailable provider or blocking failure. |
+| `AssistantLimitPromptCard` | Quota or upgrade prompt with primary and secondary actions. |
+| `AssistantDisclaimerFooter` | Low-emphasis disclaimer line. |
+
+### Images (`components-image`)
+
+| Component | Purpose |
+| --- | --- |
+| `CachedAsyncImage` / `ImageCachePolicy` | Loads a URL, file, or bytes with explicit memory, disk, and network cache policies, plus placeholder, error, and fallback painters. Package `io.github.maniramezan.kmpcomponents.image`. |
+
 ### Navigation and layout
 
 | Component | Purpose |
@@ -104,30 +176,64 @@ or browse the copy that CI publishes from `main` to
 | `TabChipRow` / `TabChip` | Scrolling row of compact tabs with optional close controls. |
 | `SelectableCard` | Card in a pick-one list; the selected card is tinted and reported as selected. |
 | `HorizontalSplitPane` | Two panes with a divider you can drag, move with arrow keys, or adjust with a screen reader. |
+| `VerticalSplitPane` | The same divider between a top and a bottom pane, moved with the Up/Down keys. |
+| `StatusBar` / `StatusBarItem` / `StatusBarSeparator` | Desktop status bar; items share space and ellipsize rather than dropping off. |
+| `ZoomableImage` | Fitted image with wheel, keyboard, and drag zoom/pan and an optional marker ring; announces the zoom level. |
+| `CopyButton` | Copies text to the clipboard, then shows a check and announces "Copied". |
+| `Modifier.focusNextOnTab` | Makes Tab and Shift+Tab move focus out of fields that would otherwise consume the key. |
 | `SectionHeader` | Title (an accessibility heading), optional subtitle, and trailing actions above a list or pane. |
+| `ThemeListItem` / `LazyList` | Material-style list row read as one item, and a padded full-width `LazyColumn`. |
+| `LoadMoreFooter` | Last item of an infinite list; asks for the next page when it scrolls into view and announces loading. |
+| `ThemeTopAppBar` / `ThemeMediumTopAppBar` / `ThemeLargeTopAppBar` | Top app bars on the surface color with primary-tinted icons. |
+| `ThemeTabRow` | Material primary tab row for peers at one level. |
+| `TabBar` / `TabBarItem` / `TabBarScrollBehavior` | Bottom navigation with badges, a selected pill, and optional hide-on-scroll. |
+| `NavRail` | Side rail sharing `TabBarItemData` and colors with `TabBar`. |
+| `AdaptiveNavScaffold` | `TabBar` in compact windows, `NavRail` from 600 dp up. |
+| `PaginatedContent` | Swipeable pages with a synced title row, dots or progress footer, and an optional forward-only mode. |
+| `ShowcaseRow` / `ShowcaseFeed` | Peeking horizontal carousels and an app-store style feed of them. |
+| `FlipCard` | Two-sided card that turns in 3D; only the visible face is read by screen readers. |
+| `AppText` / `AppTextStyle` | Text in a semantic role, including heavier weight variants of Material slots. |
 | `ContentRow` | List row with title, secondary and supporting text, leading/trailing slots, and optional click and selection. |
 | `KeyValueRow` | Read-only label/value pair for details panels, read as one item. |
 
 ### Names shared with the sibling libraries
 
 Components that also exist in [ComposeUIComponents](https://github.com/maniramezan/ComposeUIComponents)
-or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here (`SectionHeader`, `ContentRow`, `SearchField`,
-`ProgressIndicator`, `NoticeCard`, `MenuPicker`, `EmptyState`). Where that name would collide
-with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
-`ThemeCheckbox`), like SwiftUIComponents' `ThemeButton`. Some ComposeUIComponents names map to an
+or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here,
+for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
+`BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, `Skeleton`, `TabBar`, `NavRail`,
+`PaginatedContent`, `SegmentedContent`, `ShowcaseFeed`, `FlipCard`, `ChatLog`, `TypingIndicator`, `LoadingOverlay`,
+and the `Assistant*` components. Where that name would
+collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
+`ThemeCard`), like SwiftUIComponents' `ThemeButton`. Enum entries use SCREAMING_CASE
+(`ToastDuration.SHORT`, not `Short`). Some ComposeUIComponents names map to a different or
 existing component here:
 
 | ComposeUIComponents | KMPComponents |
 | --- | --- |
 | `Switch` | `ThemeSwitch` |
 | `Checkbox` | `ThemeCheckbox` |
+| `Card` | `ThemeCard` |
+| `Surface` | `ThemeSurface` |
+| `Dialog` | `ThemeDialog` |
+| `Snackbar` | `ThemeSnackbar` |
+| `HorizontalDivider` / `VerticalDivider` | `ThemeHorizontalDivider` / `ThemeVerticalDivider` |
+| `ListItem` | `ThemeListItem` |
+| `TopAppBar` / `MediumTopAppBar` / `LargeTopAppBar` | `ThemeTopAppBar` / `ThemeMediumTopAppBar` / `ThemeLargeTopAppBar` |
+| `TabRow` | `ThemeTabRow` |
+| `Slider` | `ThemeSlider` |
+| `TextButton` | `ThemeTextButton` |
+| `IconButton` | `ThemeIconButton` |
+| `ExtendedFloatingActionButton` | `ThemeExtendedFloatingActionButton` |
+| `SingleChoiceSegmentedButtonRow` | `ThemeSingleChoiceSegmentedButtonRow` |
 | `TextField` | `FormTextField` |
 | `PasswordField` | `SecretTextField` |
 | `Section` | `SectionCard` |
 
 All components are stateless unless noted, take a `Modifier` as their first optional parameter,
 and accept user-visible strings as parameters (or a `*Labels` data class) so apps can localize
-them. Icons are drawn by the library, so there is no icon-font dependency.
+them. Built-in glyphs (search, close, check, chevron) are drawn by the library and other icons
+are `Painter`s you pass in, so there is no icon-font dependency.
 
 ### Sample app
 

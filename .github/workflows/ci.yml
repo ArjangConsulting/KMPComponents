@@ -33,10 +33,11 @@ jobs:
         run: >-
           ./gradlew :components:allTests :components:verifyRoborazziJvm :components:checkKotlinAbi
           :components:koverXmlReport :components:koverLog
+          :components-image:allTests :components-image:checkKotlinAbi
 
       - name: Build library, API docs, and samples
         run: >-
-          ./gradlew :components:assemble :components:dokkaGenerate :sample:compileKotlinJvm
+          ./gradlew :components:assemble :components-image:assemble :dokkaGenerate :sample:compileKotlinJvm
           :sample-android:assembleDebug :sample:linkDebugFrameworkIosSimulatorArm64
 
       - name: Upload API docs for Pages
@@ -44,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: docs-site
-          path: components/build/dokka/html/
+          path: build/dokka/html/
           if-no-files-found: error
 
       # Test reports, Kover coverage, and Roborazzi diff images when a screenshot changes.
@@ -55,3 +56,4 @@ jobs:
           path: |
             components/build/reports/**
             components/build/outputs/roborazzi/**
+            components-image/build/reports/**

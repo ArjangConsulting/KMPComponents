@@ -47,5 +47,6 @@ if (providers.gradleProperty("useLocalKommon").orNull.toBoolean()) {
 
 rootProject.name = "KMPComponents"
 include(":components")
+include(":components-image")
 include(":sample")
 include(":sample-android")
