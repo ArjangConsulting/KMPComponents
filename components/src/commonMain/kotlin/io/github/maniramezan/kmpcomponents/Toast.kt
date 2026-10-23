@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalAccessibilityManager
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -216,7 +217,7 @@ public fun rememberToastHostState(): ToastHostState = remember { ToastHostState(
 
 /**
  * Shows the toast held by [hostState] over the screen, sliding it in from [position], dismissing
- * it after its [ToastDuration], and keeping it inside the safe drawing area. Place it as the last
+ * it after its [ToastDuration] adjusted for the user's accessibility timeout, and keeping it inside the safe drawing area. Place it as the last
  * child of the screen so it floats above the content.
  *
  * An [ToastDuration.INDEFINITE] toast without an action is tap-to-dismiss, so it can always be
@@ -231,10 +232,17 @@ public fun ToastHost(
     toast: @Composable (ToastData) -> Unit = { data -> DefaultToast(data, dismissLabel) },
 ) {
     val current = hostState.currentToastData
-    LaunchedEffect(current) {
+    val accessibilityManager = LocalAccessibilityManager.current
+    LaunchedEffect(current, accessibilityManager) {
         val timeout = current?.duration?.timeoutMillis
         if (current != null && timeout != null) {
-            delay(timeout)
+            val recommendedTimeout = accessibilityManager?.calculateRecommendedTimeoutMillis(
+                originalTimeoutMillis = timeout,
+                containsIcons = current.icon != null,
+                containsText = true,
+                containsControls = current.actionLabel != null,
+            ) ?: timeout
+            delay(recommendedTimeout)
             current.dismiss()
         }
     }
