@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
@@ -32,6 +33,16 @@ kotlin {
     }
     iosArm64()
     iosSimulatorArm64()
+
+    // Browser rather than Node: Compose for Web renders through Skiko's Wasm runtime, which the
+    // common tests load too. Running them needs a local Chrome, which the macOS CI runner provides.
+    // The executable binary only exists so webpack bundles that runtime for the tests (CMP-4906);
+    // consumers still get an ordinary klib.
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
 
     sourceSets {
         commonMain.dependencies {

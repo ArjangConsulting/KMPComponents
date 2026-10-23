@@ -1,6 +1,6 @@
 # KMPComponents
 
-Reusable Compose Multiplatform components for Android, desktop (JVM), and iOS. The library adapts
+Reusable Compose Multiplatform components for Android, desktop (JVM), iOS, and web (Wasm). The library adapts
 the platform-neutral tokens from [`kommon`](https://github.com/maniramezan/kommon)'s
 `design-system` module; it does not define a competing design system.
 
@@ -20,7 +20,10 @@ kotlin {
 `kommon`'s `design-system`, Compose `runtime`, and `material3` are exposed as `api` dependencies,
 so token types and Material components are available without extra declarations.
 
-Targets: `android` (minSdk 26), `jvm`, `iosArm64`, `iosSimulatorArm64`.
+Targets: `android` (minSdk 26), `jvm`, `iosArm64`, `iosSimulatorArm64`, `wasmJs` (browser).
+
+Wasm builds use the `wasmJs` variant published by kommon `0.3.0` or later. The default build
+resolves it from Maven Central; no local dependency substitution is required.
 
 ### Optional: async images
 
@@ -31,6 +34,8 @@ brings each platform's Ktor engine (Android, Darwin, Java); no Coil types appear
 ```kotlin
 implementation("io.github.maniramezan.kmpcomponents:components-image:<version>")
 ```
+
+The image artifact targets `android`, `jvm`, `iosArm64`, and `iosSimulatorArm64`.
 
 On Android, network images need `<uses-permission android:name="android.permission.INTERNET" />`
 in the app manifest. Both artifacts share one version.
@@ -286,10 +291,12 @@ KmpTheme(tokens = brand) { /* ... */ }
 ./gradlew :components:assemble :sample:compileKotlinJvm :sample-android:assembleDebug
 ```
 
-iOS tests need macOS with Xcode. The build needs access to Google Maven for the Android plugin.
+iOS tests need macOS with Xcode, and web tests need Chrome. The build needs access to Google Maven
+for the Android plugin.
 
 To build against a local checkout of `kommon` next to this repo, pass `-PuseLocalKommon=true`;
-Gradle substitutes `io.github.maniramezan.kommon:design-system` with the included build.
+Gradle substitutes `io.github.maniramezan.kommon:design-system` with the included build. Add
+`-PkommonDir=<path>` when that checkout lives somewhere else.
 
 Releases are automated by Release Please from Conventional Commit messages (`feat:`, `fix:`,
 `feat!:`). Contributor and AI-agent conventions live in [`AGENTS.md`](AGENTS.md).
