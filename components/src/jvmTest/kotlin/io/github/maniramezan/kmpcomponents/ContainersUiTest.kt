@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.AccessibilityManager
+import androidx.compose.ui.platform.LocalAccessibilityManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -25,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 // Interaction tests for containers, dialogs, toasts, state placeholders, and layout helpers.
@@ -52,6 +56,7 @@ class ContainersUiTest {
                 }, onDismissRequest = {})
             }
         }
+        onNodeWithText("Saved").assert(isHeading())
         onNodeWithText("Cancel").assertDoesNotExist()
         onNodeWithText("OK").performClick()
         assertEquals(1, confirmed)
@@ -96,6 +101,44 @@ class ContainersUiTest {
         mainClock.autoAdvance = true
         waitForIdle()
         assertEquals(ToastResult.DISMISSED, result)
+    }
+
+    @Test
+    fun `toast host honors the accessibility timeout and action flag`() = runComposeUiTest {
+        val host = ToastHostState()
+        var hasControls = false
+        val accessibilityManager = object : AccessibilityManager {
+            override fun calculateRecommendedTimeoutMillis(
+                originalTimeoutMillis: Long,
+                containsIcons: Boolean,
+                containsText: Boolean,
+                containsControls: Boolean,
+            ): Long {
+                hasControls = containsControls
+                return 30_000L
+            }
+        }
+        lateinit var show: () -> Unit
+        setContent {
+            KmpTheme {
+                val scope = rememberCoroutineScope()
+                show = { scope.launch { host.showToast("Deleted", actionLabel = "Undo") } }
+                CompositionLocalProvider(LocalAccessibilityManager provides accessibilityManager) {
+                    ToastHost(hostState = host)
+                }
+            }
+        }
+        mainClock.autoAdvance = false
+        runOnIdle { show() }
+        mainClock.advanceTimeByFrame()
+        mainClock.advanceTimeBy(11_000L)
+        runOnIdle {
+            assertEquals(true, hasControls)
+            assertNotNull(host.currentToastData)
+        }
+        mainClock.advanceTimeBy(20_000L)
+        runOnIdle { assertNull(host.currentToastData) }
+        mainClock.autoAdvance = true
     }
 
     @Test
