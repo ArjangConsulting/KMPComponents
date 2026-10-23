@@ -1,6 +1,8 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -12,6 +14,7 @@ import io.github.maniramezan.kommon.designsystem.SpacingTokens
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class TokenAdaptersTest {
     private val tokens = KommonDesignTokens.default
@@ -40,6 +43,27 @@ class TokenAdaptersTest {
         assertEquals(scheme.primary, scheme.surfaceTint)
         assertNotEquals(baseline.primaryContainer, scheme.primaryContainer)
         assertNotEquals(baseline.surfaceContainerHighest, scheme.surfaceContainerHighest)
+    }
+
+    @Test
+    fun `enabled outline roles contrast with page card and container surfaces`() {
+        listOf(false to tokens.lightColors, true to tokens.darkColors).forEach { (dark, colors) ->
+            val scheme = colors.toMaterialColorScheme(dark)
+            val surfaces = listOf(
+                scheme.surface,
+                scheme.surfaceVariant,
+                scheme.surfaceContainerLowest,
+                scheme.surfaceContainerLow,
+                scheme.surfaceContainer,
+                scheme.surfaceContainerHigh,
+                scheme.surfaceContainerHighest,
+            )
+            listOf(scheme.outline, scheme.outlineVariant).forEach { outline ->
+                surfaces.forEach { surface ->
+                    assertTrue(contrastRatio(outline, surface) >= 3f, "$outline on $surface in dark=$dark")
+                }
+            }
+        }
     }
 
     @Test
@@ -78,4 +102,10 @@ class TokenAdaptersTest {
 
         assertEquals(KmpMotion(1, 2, 3), MotionTokens(1, 2, 3).toKmpMotion())
     }
+}
+
+private fun contrastRatio(first: Color, second: Color): Float {
+    val firstLuminance = first.luminance()
+    val secondLuminance = second.luminance()
+    return (maxOf(firstLuminance, secondLuminance) + 0.05f) / (minOf(firstLuminance, secondLuminance) + 0.05f)
 }

@@ -44,6 +44,7 @@ import io.github.maniramezan.kmpcomponents.EmptyState
 import io.github.maniramezan.kmpcomponents.HorizontalSplitPane
 import io.github.maniramezan.kmpcomponents.InfoTooltip
 import io.github.maniramezan.kmpcomponents.KmpTheme
+import io.github.maniramezan.kmpcomponents.LocalReduceMotionEnabled
 import io.github.maniramezan.kmpcomponents.ProviderConfigurationForm
 import io.github.maniramezan.kmpcomponents.ProviderConfigurationState
 import io.github.maniramezan.kmpcomponents.SecretRevealToggle
@@ -59,6 +60,7 @@ import io.github.maniramezan.kmpcomponents.TabChipRow
 import io.github.maniramezan.kmpcomponents.ThemeMode
 import io.github.maniramezan.kmpcomponents.ThemeModeDropdown
 import io.github.maniramezan.kmpcomponents.ThemeModeSelector
+import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TonalBadge
 import io.github.maniramezan.kmpcomponents.isChecking
 import io.github.maniramezan.kmpcomponents.isValid
@@ -77,8 +79,12 @@ fun ComponentCatalog() {
     var themeMode by remember { mutableStateOf(ThemeMode.SYSTEM) }
     var brand by remember { mutableStateOf(Brand.DEFAULT) }
     var fontScale by remember { mutableStateOf(FontScale.DEFAULT) }
+    var reduceMotion by remember { mutableStateOf(false) }
     val density = LocalDensity.current
-    CompositionLocalProvider(LocalDensity provides Density(density.density, density.fontScale * fontScale.factor)) {
+    CompositionLocalProvider(
+        LocalDensity provides Density(density.density, density.fontScale * fontScale.factor),
+        LocalReduceMotionEnabled provides if (reduceMotion) true else null,
+    ) {
         KmpTheme(mode = themeMode, tokens = brand.tokens) {
             Surface(modifier = Modifier.fillMaxSize()) {
                 Column(
@@ -95,6 +101,11 @@ fun ComponentCatalog() {
                         onBrandChange = { brand = it },
                         fontScale = fontScale,
                         onFontScaleChange = { fontScale = it },
+                    )
+                    ThemeSwitch(
+                        checked = reduceMotion,
+                        onCheckedChange = { reduceMotion = it },
+                        label = "Reduce decorative motion",
                     )
                     ProviderSection()
                     EssentialsSection()

@@ -117,7 +117,12 @@ public fun <T> AssistantQuickActionChips(
                 selected = state.isSelected,
                 onClick = { onAction(action) },
                 label = { Text(label(action)) },
-                modifier = Modifier.heightIn(min = minimumTouchTargetSize()),
+                modifier = Modifier
+                    .keyboardFocusOutline(
+                        FilterChipDefaults.shape,
+                        if (state.isSelected) colors.onPrimaryContainer else colors.onSurfaceVariant,
+                    )
+                    .heightIn(min = minimumTouchTargetSize()),
                 enabled = state.isEnabled,
                 leadingIcon = painter?.let { { Icon(it, contentDescription = null, Modifier.size(glyphSize())) } },
                 colors = FilterChipDefaults.filterChipColors(

@@ -116,6 +116,7 @@ public fun DisclosureCard(
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
             Row(
                 modifier = Modifier
+                    .keyboardFocusOutline(color = MaterialTheme.colorScheme.onSurfaceVariant)
                     .fillMaxWidth()
                     .heightIn(min = minimumTouchTargetSize())
                     .clickable(role = Role.Button) { onExpandedChange(!expanded) }

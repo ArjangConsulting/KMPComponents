@@ -81,6 +81,7 @@ public fun FlipCard(
     }
     Box(
         modifier = modifier
+            .keyboardFocusOutline(shape)
             .then(toggle)
             .semantics {
                 if (state != null) stateDescription = state

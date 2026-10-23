@@ -604,6 +604,10 @@ public final class io/github/maniramezan/kmpcomponents/ProviderConfigurationStat
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/maniramezan/kmpcomponents/ReduceMotionKt {
+	public static final fun getLocalReduceMotionEnabled ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
 public final class io/github/maniramezan/kmpcomponents/SearchFieldKt {
 	public static final fun SearchField (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function1;Lio/github/maniramezan/kmpcomponents/SearchFieldLabels;Landroidx/compose/runtime/Composer;II)V
 }

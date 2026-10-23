@@ -35,6 +35,7 @@ public fun RadioGroup(
         options.forEachIndexed { index, option ->
             Row(
                 modifier = Modifier
+                    .keyboardFocusOutline()
                     .fillMaxWidth()
                     .heightIn(min = minimumTouchTargetSize())
                     .selectable(
@@ -77,6 +78,7 @@ public fun ThemeSlider(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
+            .keyboardFocusOutline()
             .fillMaxWidth()
             .semantics {
                 label?.let { contentDescription = it }

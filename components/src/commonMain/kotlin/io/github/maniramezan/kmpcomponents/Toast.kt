@@ -91,7 +91,10 @@ public fun Toast(
             color = colors.inverseOnSurface,
         )
         if (actionLabel != null && onAction != null) {
-            TextButton(onClick = onAction) { Text(actionLabel, color = colors.inversePrimary) }
+            TextButton(
+                onClick = onAction,
+                modifier = Modifier.keyboardFocusOutline(color = colors.inverseOnSurface),
+            ) { Text(actionLabel, color = colors.inversePrimary) }
         }
     }
 }

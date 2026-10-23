@@ -99,6 +99,7 @@ or browse the copy that CI publishes from `main` to
 | `InfoTooltip` | Info glyph showing an explanation on hover, long-press, or focus; screen readers read it directly. |
 | `NoticeCard` | Full-width `StatusTone` notice with an optional action ("Retry") and dismiss button. |
 | `ProgressIndicator` | Centered spinner or determinate bar with an announced label, for a loading pane. |
+| `LocalReduceMotionEnabled` | Optional override for decorative animations and page hints; null follows live system settings. |
 | `InlineProgressIndicator` | Text-sized spinner and label for work in progress inside a row or toolbar. |
 
 ### Actions
@@ -263,6 +264,14 @@ val brand = KommonDesignTokens.default.copy(
 )
 KmpTheme(tokens = brand) { /* ... */ }
 ```
+
+Keyboard focus uses a visible outline in addition to Material's state colors. Outlined control
+boundaries use contrast-preserving theme roles on page and card surfaces. Components keep the
+same size when focus moves.
+
+Decorative animations follow live Android and iOS reduced-motion settings. Desktop hosts can
+provide their own setting with `CompositionLocalProvider(LocalReduceMotionEnabled provides true)`;
+`null` follows the platform preference. The sample's Appearance controls include an override.
 
 ## Security notes
 
