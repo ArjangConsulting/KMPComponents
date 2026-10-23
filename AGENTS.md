@@ -46,7 +46,12 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `StateViews.kt` (`LoadingState`, `ErrorState`), `Skeleton.kt` (`Skeleton`, `SkeletonBlock`,
     `Modifier.skeletonShimmer`), `Layout.kt` (`AdaptiveContentContainer`, `OverlayCard`,
     `DisclosureCard`, dividers, `FlowLayout`). `ConfirmDialog` delegates to `ThemeDialog`.
-  - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`), `TooltipIconButton.kt`
+  - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`),
+    `Navigation.kt` (top app bars, `TabBar`, `TabBarItem`, `ThemeTabRow`, `NavRail`,
+    `AdaptiveNavScaffold`, `TabBarDefaults`), `TabBarScrollBehavior.kt`, `PaginatedContent.kt`
+    (title layout math in `titleProgress` / `titleOffset`), `Showcase.kt` (`ShowcaseRow`,
+    `ShowcaseFeed`), `FlipCard.kt`, `AppText.kt`.
+  - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`, `CompactWindowMaxWidth`), `TooltipIconButton.kt`
     (`TooltipIconButton`, `GlyphIconButton`: icon-only buttons with a tooltip).
   - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron) so the library needs no icon font.
   - `jvmMain`/`androidMain`/`iosMain` — only `resizeHorizontalPointerIcon` and
@@ -56,12 +61,12 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `ScreenshotTest.kt` renders a gallery of the original components into golden images in
     `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
     `ActionsScreenshotTest.kt`, `SelectionScreenshotTest.kt`,
-    `ContainersScreenshotTest.kt`)
+    `ContainersScreenshotTest.kt`, `NavigationScreenshotTest.kt`)
     so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
-  `ActionsCatalog.kt`, `ChoicesCatalog.kt`, and `ContainersCatalog.kt`, plus the sample's own `SampleIcons.kt`);
+  `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, and `NavigationBarsCatalog.kt`, plus the sample's own `SampleIcons.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
   `sample/ios` (XcodeGen spec and Swift host).
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).

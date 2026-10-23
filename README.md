@@ -131,6 +131,17 @@ sized from the body text so they follow the user's font scale.
 | `SelectableCard` | Card in a pick-one list; the selected card is tinted and reported as selected. |
 | `HorizontalSplitPane` | Two panes with a divider you can drag, move with arrow keys, or adjust with a screen reader. |
 | `SectionHeader` | Title (an accessibility heading), optional subtitle, and trailing actions above a list or pane. |
+| `ThemeListItem` / `LazyList` | Material-style list row read as one item, and a padded full-width `LazyColumn`. |
+| `LoadMoreFooter` | Last item of an infinite list; asks for the next page when it scrolls into view and announces loading. |
+| `ThemeTopAppBar` / `ThemeMediumTopAppBar` / `ThemeLargeTopAppBar` | Top app bars on the surface color with primary-tinted icons. |
+| `ThemeTabRow` | Material primary tab row for peers at one level. |
+| `TabBar` / `TabBarItem` / `TabBarScrollBehavior` | Bottom navigation with badges, a selected pill, and optional hide-on-scroll. |
+| `NavRail` | Side rail sharing `TabBarItemData` and colors with `TabBar`. |
+| `AdaptiveNavScaffold` | `TabBar` in compact windows, `NavRail` from 600 dp up. |
+| `PaginatedContent` | Swipeable pages with a synced title row, dots or progress footer, and an optional forward-only mode. |
+| `ShowcaseRow` / `ShowcaseFeed` | Peeking horizontal carousels and an app-store style feed of them. |
+| `FlipCard` | Two-sided card that turns in 3D; only the visible face is read by screen readers. |
+| `AppText` / `AppTextStyle` | Text in a semantic role, including heavier weight variants of Material slots. |
 | `ContentRow` | List row with title, secondary and supporting text, leading/trailing slots, and optional click and selection. |
 | `KeyValueRow` | Read-only label/value pair for details panels, read as one item. |
 
@@ -139,7 +150,8 @@ sized from the body text so they follow the user's font scale.
 Components that also exist in [ComposeUIComponents](https://github.com/maniramezan/ComposeUIComponents)
 or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here,
 for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
-`BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, and `Skeleton`. Where that name would
+`BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, `Skeleton`, `TabBar`, `NavRail`,
+`PaginatedContent`, `ShowcaseFeed`, and `FlipCard`. Where that name would
 collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
 `ThemeCard`), like SwiftUIComponents' `ThemeButton`. Enum entries use SCREAMING_CASE
 (`ToastDuration.SHORT`, not `Short`). Some ComposeUIComponents names map to a different or
@@ -154,6 +166,9 @@ existing component here:
 | `Dialog` | `ThemeDialog` |
 | `Snackbar` | `ThemeSnackbar` |
 | `HorizontalDivider` / `VerticalDivider` | `ThemeHorizontalDivider` / `ThemeVerticalDivider` |
+| `ListItem` | `ThemeListItem` |
+| `TopAppBar` / `MediumTopAppBar` / `LargeTopAppBar` | `ThemeTopAppBar` / `ThemeMediumTopAppBar` / `ThemeLargeTopAppBar` |
+| `TabRow` | `ThemeTabRow` |
 | `Slider` | `ThemeSlider` |
 | `TextButton` | `ThemeTextButton` |
 | `IconButton` | `ThemeIconButton` |
