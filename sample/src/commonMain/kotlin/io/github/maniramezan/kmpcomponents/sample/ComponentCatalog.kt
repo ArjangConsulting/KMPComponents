@@ -100,6 +100,7 @@ fun ComponentCatalog() {
                     EssentialsSection()
                     ActionsSection()
                     ChoicesSection()
+                    ContainersSection()
                     StatusSection()
                     NavigationSection()
                     SelectionSection()

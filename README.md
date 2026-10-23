@@ -105,6 +105,23 @@ sized from the body text so they follow the user's font scale.
 | `PillChip` | Capsule chip with selected and unselected looks; selectable when clickable, static otherwise. |
 | `ActionPill` | Capsule command with arbitrary content and no selected state. |
 
+### Containers, feedback, and layout
+
+| Component | Purpose |
+| --- | --- |
+| `ThemeCard` / `ThemeSurface` | Elevated (optionally clickable) and flat full-width containers that stack their content. |
+| `DisclosureCard` | Card with an always-visible summary that reveals detail; announces expanded or collapsed. |
+| `OverlayCard` | Translucent rounded container for labels over images or video. |
+| `ThemeDialog` | Alert dialog with a confirm action and an optional dismiss action; `ConfirmDialog` is built on it. |
+| `BottomSheet` | Modal bottom sheet that always opens fully expanded. |
+| `Toast` / `ToastHost` / `ToastHostState` | Transient messages with optional icon and action, shown one at a time like snackbars. `showToast` suspends and returns a `ToastResult`. |
+| `ThemeSnackbar` | Snackbar with an optional action, announced when shown standalone. |
+| `LoadingState` / `ErrorState` | Pane placeholders for loading and failure, announced by screen readers; siblings of `EmptyState`. |
+| `Skeleton` / `SkeletonBlock` / `Modifier.skeletonShimmer` | Decorative loading placeholders and a sweep that stays still when the system reduces motion. |
+| `ThemeHorizontalDivider` / `ThemeVerticalDivider` | Rules in the outline variant color. |
+| `FlowLayout` | Wrapping row with the standard gaps, for chips and button groups. |
+| `AdaptiveContentContainer` | Centers content and caps its width on wide windows. |
+
 ### Navigation and layout
 
 | Component | Purpose |
@@ -120,17 +137,23 @@ sized from the body text so they follow the user's font scale.
 ### Names shared with the sibling libraries
 
 Components that also exist in [ComposeUIComponents](https://github.com/maniramezan/ComposeUIComponents)
-or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here (`SectionHeader`, `ContentRow`, `SearchField`,
-`ProgressIndicator`, `NoticeCard`, `MenuPicker`, `EmptyState`, `PrimaryButton`, `SecondaryButton`,
-`FAB`, `SegmentedControl`, `PillChip`, `ActionPill`, `RadioGroup`, `SelectionList`). Where that name would collide
-with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
-`ThemeCheckbox`), like SwiftUIComponents' `ThemeButton`. Some ComposeUIComponents names map to an
+or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here,
+for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
+`BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, and `Skeleton`. Where that name would
+collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
+`ThemeCard`), like SwiftUIComponents' `ThemeButton`. Enum entries use SCREAMING_CASE
+(`ToastDuration.SHORT`, not `Short`). Some ComposeUIComponents names map to a different or
 existing component here:
 
 | ComposeUIComponents | KMPComponents |
 | --- | --- |
 | `Switch` | `ThemeSwitch` |
 | `Checkbox` | `ThemeCheckbox` |
+| `Card` | `ThemeCard` |
+| `Surface` | `ThemeSurface` |
+| `Dialog` | `ThemeDialog` |
+| `Snackbar` | `ThemeSnackbar` |
+| `HorizontalDivider` / `VerticalDivider` | `ThemeHorizontalDivider` / `ThemeVerticalDivider` |
 | `Slider` | `ThemeSlider` |
 | `TextButton` | `ThemeTextButton` |
 | `IconButton` | `ThemeIconButton` |
@@ -142,7 +165,8 @@ existing component here:
 
 All components are stateless unless noted, take a `Modifier` as their first optional parameter,
 and accept user-visible strings as parameters (or a `*Labels` data class) so apps can localize
-them. Icons are drawn by the library, so there is no icon-font dependency.
+them. Built-in glyphs (search, close, check, chevron) are drawn by the library and other icons
+are `Painter`s you pass in, so there is no icon-font dependency.
 
 ### Sample app
 
