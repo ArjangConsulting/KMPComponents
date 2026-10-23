@@ -10,11 +10,21 @@
       </option>
       <option name="taskNames">
         <list>
+          <option value="ktlintCheck" />
           <option value=":components:allTests" />
-          <option value=":components:assemble" />
+          <option value=":components:verifyRoborazziJvm" />
+          <option value=":components:checkKotlinAbi" />
+          <option value=":components:koverXmlReport" />
+          <option value=":components:koverLog" />
           <option value=":components-image:allTests" />
+          <option value=":components-image:checkKotlinAbi" />
+          <option value=":sample:jvmTest" />
+          <option value=":components:assemble" />
           <option value=":components-image:assemble" />
+          <option value=":dokkaGenerate" />
           <option value=":sample:compileKotlinJvm" />
+          <option value=":sample-android:assembleDebug" />
+          <option value=":sample:linkDebugFrameworkIosSimulatorArm64" />
         </list>
       </option>
       <option name="vmOptions" />

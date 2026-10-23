@@ -48,7 +48,7 @@ fun AssistantSection() {
     OverlayDemo()
 }
 
-private enum class QuickAction(val label: String) { SUMMARIZE("Summarize"), EXPLAIN("Explain"), TEST("Write a test") }
+private enum class QuickAction(val label: String) { SUMMARIZE("Summarize"), EXPLAIN("Explain"), REPHRASE("Rephrase") }
 
 @Composable
 private fun ChatDemo() {
@@ -74,11 +74,14 @@ private fun ChatDemo() {
         draft = ""
         reply(replyId, text)
     }
-    SectionCard(title = "Chat log", description = "Send a message; the reply types, then answers or fails.") {
+    SectionCard(
+        title = "Chat log",
+        description = "Local echo simulation: send text to preview pending, success, and error messages.",
+    ) {
         ChatLog(
             messages = messages.toList(),
-            idleHint = "Ask anything about this screen.",
-            errorAction = ChatErrorAction("The model did not respond.", "Retry") {
+            idleHint = "Type an example message below.",
+            errorAction = ChatErrorAction("The example reply failed.", "Retry") {
                 val failed = messages.lastOrNull { it.state == ChatMessageState.Error } ?: return@ChatErrorAction
                 failNext = false
                 val index = messages.indexOf(failed)
@@ -98,7 +101,7 @@ private fun ChatDemo() {
             PrimaryButton(text = "Send", onClick = { send(draft) })
         }
         ThemeSwitch(checked = failNext, onCheckedChange = { failNext = it }, label = "Fail the next reply")
-        AssistantDisclaimerFooter(text = "AI answers can be wrong. Check important results.")
+        AssistantDisclaimerFooter(text = "Sample disclaimer text. Replies in this catalog are simulated locally.")
     }
 }
 
@@ -108,31 +111,34 @@ private val CHAT_HEIGHT = 320.dp
 @Composable
 private fun AssistantCardsDemo() {
     var selected by remember { mutableStateOf(QuickAction.EXPLAIN) }
-    var providerOnline by remember { mutableStateOf(true) }
-    SectionCard(title = "Assistant cards") {
+    var actionsEnabled by remember { mutableStateOf(true) }
+    var lastAction by remember { mutableStateOf("No card action selected") }
+    SectionCard(title = "Assistant cards", description = lastAction) {
         AssistantContextCard(
-            title = "Login screen",
-            highlight = "Sign in button",
-            body = AssistantContextBody("Nothing happens when I tap it", isQuoted = true),
-            footnote = "Captured 2 minutes ago",
+            title = "Example context",
+            highlight = "Highlighted text",
+            body = AssistantContextBody("An example quotation", isQuoted = true),
+            footnote = "Example footnote",
         )
         AssistantQuickActionChips(
             actions = QuickAction.entries,
-            actionState = { AssistantQuickActionState(isSelected = it == selected, isEnabled = providerOnline) },
+            actionState = { AssistantQuickActionState(isSelected = it == selected, isEnabled = actionsEnabled) },
             label = { it.label },
             onAction = { selected = it },
         )
-        ThemeSwitch(checked = providerOnline, onCheckedChange = { providerOnline = it }, label = "Provider online")
-        if (!providerOnline) AssistantStatusBanner(message = "The AI provider is offline.")
+        ThemeSwitch(checked = actionsEnabled, onCheckedChange = {
+            actionsEnabled = it
+        }, label = "Quick actions enabled")
+        if (!actionsEnabled) AssistantStatusBanner(message = "Example status: actions are disabled.")
         AssistantLimitPromptCard(
             copy = AssistantLimitPromptCopy(
-                "You've used today's runs",
-                "Runs reset at midnight.",
-                "Upgrade",
-                "Not now",
+                "Example limit reached",
+                "This card previews two available actions.",
+                "Primary action",
+                "Secondary action",
             ),
-            onPrimaryAction = {},
-            onSecondaryAction = {},
+            onPrimaryAction = { lastAction = "Primary action selected" },
+            onSecondaryAction = { lastAction = "Secondary action selected" },
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("TypingIndicator ", style = MaterialTheme.typography.bodyMedium)

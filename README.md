@@ -230,8 +230,18 @@ are `Painter`s you pass in, so there is no icon-font dependency.
 
 ### Sample app
 
-The same catalog runs on every platform. It also switches between the default and a rebranded
-token set and between 100%, 130%, and 200% font scale.
+The shared catalog runs on desktop, Android, and iOS. Use **Catalog section** to jump between
+component families. Every public component has an example, including standalone list and
+navigation primitives. Examples use generic copy and temporary local state; switching sections
+resets their state. Forms keep local state; chat replies, progress, and loading are UI simulations.
+Image examples use embedded illustrations by default; only **Load URL** requests a remote image.
+
+Expand **Appearance and accessibility** to switch the light/dark theme, token set, and
+100%, 130%, or 200% font scale.
+Use **Right-to-left layout** to test RTL rendering and splitter movement. To test a dropdown being
+disabled while open, press **Disable picker in 3 seconds**, then open that picker. Re-enable it
+with **Picker enabled**. The horizontal split-pane example also shows its fraction and a reset
+button.
 
 ```bash
 ./gradlew :sample:run                          # desktop

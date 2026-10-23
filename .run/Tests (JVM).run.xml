@@ -11,6 +11,8 @@
       <option name="taskNames">
         <list>
           <option value=":components:jvmTest" />
+          <option value=":components-image:jvmTest" />
+          <option value=":sample:jvmTest" />
         </list>
       </option>
       <option name="vmOptions" />

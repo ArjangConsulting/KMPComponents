@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -24,27 +23,31 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.github.maniramezan.kmpcomponents.CheckStatus
 import io.github.maniramezan.kmpcomponents.CheckStatusRow
 import io.github.maniramezan.kmpcomponents.ConfirmDialog
 import io.github.maniramezan.kmpcomponents.CountBadge
+import io.github.maniramezan.kmpcomponents.DisclosureCard
 import io.github.maniramezan.kmpcomponents.EmptyState
 import io.github.maniramezan.kmpcomponents.HorizontalSplitPane
 import io.github.maniramezan.kmpcomponents.InfoTooltip
 import io.github.maniramezan.kmpcomponents.KmpTheme
 import io.github.maniramezan.kmpcomponents.LocalReduceMotionEnabled
+import io.github.maniramezan.kmpcomponents.MenuPicker
 import io.github.maniramezan.kmpcomponents.ProviderConfigurationForm
 import io.github.maniramezan.kmpcomponents.ProviderConfigurationState
 import io.github.maniramezan.kmpcomponents.SecretRevealToggle
@@ -62,27 +65,28 @@ import io.github.maniramezan.kmpcomponents.ThemeModeDropdown
 import io.github.maniramezan.kmpcomponents.ThemeModeSelector
 import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TonalBadge
-import io.github.maniramezan.kmpcomponents.isChecking
-import io.github.maniramezan.kmpcomponents.isValid
 import io.github.maniramezan.kmpcomponents.kmpSpacing
-import io.github.maniramezan.kmpcomponents.kmpTypography
 import io.github.maniramezan.kommon.designsystem.ColorToken
 import io.github.maniramezan.kommon.designsystem.KommonDesignTokens
 import io.github.maniramezan.kommon.designsystem.ShapeTokens
 import io.github.maniramezan.kommon.designsystem.ThemeTokens
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-/** Every public component in one scrollable screen. Add new components here when you add them. */
+/** A sectioned catalog shared by the desktop, Android, and iOS sample apps. */
 @Composable
 fun ComponentCatalog() {
     var themeMode by remember { mutableStateOf(ThemeMode.SYSTEM) }
     var brand by remember { mutableStateOf(Brand.DEFAULT) }
     var fontScale by remember { mutableStateOf(FontScale.DEFAULT) }
     var reduceMotion by remember { mutableStateOf(false) }
+    var controlsExpanded by remember { mutableStateOf(false) }
+    var rightToLeft by remember { mutableStateOf(false) }
+    var section by remember { mutableStateOf(CatalogSection.FORMS) }
+    val scrollState = rememberScrollState()
+    LaunchedEffect(section) { scrollState.scrollTo(0) }
     val density = LocalDensity.current
     CompositionLocalProvider(
         LocalDensity provides Density(density.density, density.fontScale * fontScale.factor),
+        LocalLayoutDirection provides if (rightToLeft) LayoutDirection.Rtl else LayoutDirection.Ltr,
         LocalReduceMotionEnabled provides if (reduceMotion) true else null,
     ) {
         KmpTheme(mode = themeMode, tokens = brand.tokens) {
@@ -90,40 +94,87 @@ fun ComponentCatalog() {
                 Column(
                     modifier = Modifier
                         .safeDrawingPadding()
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(scrollState)
                         .padding(MaterialTheme.kmpSpacing.large),
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.medium),
                 ) {
-                    AppearanceSection(
-                        themeMode = themeMode,
-                        onThemeModeChange = { themeMode = it },
-                        brand = brand,
-                        onBrandChange = { brand = it },
-                        fontScale = fontScale,
-                        onFontScaleChange = { fontScale = it },
+                    MenuPicker(
+                        items = CatalogSection.entries,
+                        selected = section,
+                        onSelect = { section = it },
+                        label = "Catalog section",
+                        itemLabel = CatalogSection::label,
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                    ThemeSwitch(
-                        checked = reduceMotion,
-                        onCheckedChange = { reduceMotion = it },
-                        label = "Reduce decorative motion",
+                    DisclosureCard(
+                        expanded = controlsExpanded,
+                        onExpandedChange = { controlsExpanded = it },
+                        summary = { Text("Appearance and accessibility") },
+                        detail = {
+                            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small)) {
+                                AppearanceSection(
+                                    themeMode = themeMode,
+                                    onThemeModeChange = { themeMode = it },
+                                    brand = brand,
+                                    onBrandChange = { brand = it },
+                                    fontScale = fontScale,
+                                    onFontScaleChange = { fontScale = it },
+                                )
+                                ThemeSwitch(
+                                    checked = reduceMotion,
+                                    onCheckedChange = { reduceMotion = it },
+                                    label = "Reduce decorative motion",
+                                )
+                                ThemeSwitch(
+                                    checked = rightToLeft,
+                                    onCheckedChange = { rightToLeft = it },
+                                    label = "Right-to-left layout",
+                                )
+                            }
+                        },
                     )
-                    ProviderSection()
-                    EssentialsSection()
-                    ActionsSection()
-                    ChoicesSection()
-                    ContainersSection()
-                    NavigationBarsSection()
-                    AssistantSection()
-                    DesktopSection()
-                    ImageSection()
-                    StatusSection()
-                    NavigationSection()
-                    SelectionSection()
-                    SplitPaneSection()
-                    DialogSection()
+                    Text("Examples use temporary local state. Choose another section to reset them.")
+                    CatalogExamples(section)
                 }
             }
         }
+    }
+}
+
+internal enum class CatalogSection(val label: String) {
+    FORMS("Forms"),
+    ESSENTIALS("Lists, pickers, and feedback"),
+    ACTIONS("Buttons and segments"),
+    CHOICES("Radio, slider, and selection"),
+    CONTAINERS("Containers and overlays"),
+    NAVIGATION_BARS("App bars, paging, and feeds"),
+    ASSISTANT("Chat and assistant cards"),
+    DESKTOP("Copy, zoom, and status bar"),
+    IMAGES("Image loading"),
+    STATUS("Messages and badges"),
+    NAVIGATION("Sidebar and tabs"),
+    SELECTION("Selectable cards"),
+    SPLIT_PANE("Horizontal split pane"),
+    DIALOG("Confirmation dialog"),
+}
+
+@Composable
+internal fun CatalogExamples(section: CatalogSection) {
+    when (section) {
+        CatalogSection.FORMS -> ProviderSection()
+        CatalogSection.ESSENTIALS -> EssentialsSection()
+        CatalogSection.ACTIONS -> ActionsSection()
+        CatalogSection.CHOICES -> ChoicesSection()
+        CatalogSection.CONTAINERS -> ContainersSection()
+        CatalogSection.NAVIGATION_BARS -> NavigationBarsSection()
+        CatalogSection.ASSISTANT -> AssistantSection()
+        CatalogSection.DESKTOP -> DesktopSection()
+        CatalogSection.IMAGES -> ImageSection()
+        CatalogSection.STATUS -> StatusSection()
+        CatalogSection.NAVIGATION -> NavigationSection()
+        CatalogSection.SELECTION -> SelectionSection()
+        CatalogSection.SPLIT_PANE -> SplitPaneSection()
+        CatalogSection.DIALOG -> DialogSection()
     }
 }
 
@@ -170,6 +221,7 @@ private fun AppearanceSection(
     fontScale: FontScale,
     onFontScaleChange: (FontScale) -> Unit,
 ) {
+    var pickerEnabled by remember { mutableStateOf(true) }
     SectionCard(
         title = "Appearance",
         description = "ThemeModeSelector and ThemeModeDropdown drive KmpTheme. Tokens and font scale are " +
@@ -180,8 +232,10 @@ private fun AppearanceSection(
             selected = themeMode,
             onSelect = onThemeModeChange,
             label = "Color scheme",
+            enabled = pickerEnabled,
             modifier = Modifier.fillMaxWidth(),
         )
+        PickerAvailabilityControls(enabled = pickerEnabled, onEnabledChange = { pickerEnabled = it })
         Segmented(Brand.entries, brand, Brand::label, onBrandChange)
         Segmented(FontScale.entries, fontScale, FontScale::label, onFontScaleChange)
     }
@@ -190,76 +244,56 @@ private fun AppearanceSection(
 @Composable
 private fun ProviderSection() {
     var provider by remember { mutableStateOf(ProviderConfigurationState()) }
-    var submitted by remember { mutableStateOf(false) }
-    var saved by remember { mutableStateOf<ProviderConfigurationState?>(null) }
-    var check by remember { mutableStateOf<CheckStatus>(CheckStatus.Idle) }
-    val scope = rememberCoroutineScope()
-    fun submit() {
-        submitted = true
-        if (provider.isValid()) saved = provider
-    }
-
+    var showValidation by remember { mutableStateOf(false) }
+    var feedback by remember { mutableStateOf("Idle") }
+    var token by remember { mutableStateOf("") }
     SectionCard(
-        title = "Provider",
-        description = "ProviderConfigurationForm built from FormTextField and SecretTextField, with a " +
-            "CheckStatusRow for the connection test.",
+        title = "Provider configuration",
+        description = "Editable example fields with local validation and selectable feedback states.",
         action = {
             TextButton(onClick = {
                 provider = ProviderConfigurationState()
-                submitted = false
-                check = CheckStatus.Idle
+                showValidation = false
+                feedback = "Idle"
             }) { Text("Reset") }
         },
     ) {
         ProviderConfigurationForm(
             state = provider,
-            onStateChange = {
-                provider = it
-                check = CheckStatus.Idle
-            },
-            showValidationErrors = submitted,
-            onDone = ::submit,
+            onStateChange = { provider = it },
+            showValidationErrors = showValidation,
+            onDone = { showValidation = true },
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
-        ) {
-            Button(onClick = ::submit) { Text("Save") }
-            OutlinedButton(
-                onClick = {
-                    check = CheckStatus.Checking
-                    scope.launch {
-                        delay(FAKE_CHECK_MILLIS)
-                        check = if (provider.isValid()) {
-                            CheckStatus.Success("Connected to ${provider.model}")
-                        } else {
-                            CheckStatus.Failure("Fill in every field first")
-                        }
-                    }
-                },
-                enabled = !check.isChecking,
-            ) { Text("Test connection") }
-        }
-        CheckStatusRow(check)
-        saved?.let {
-            // toString() redacts the API key, so this is safe to display or log.
-            Text(it.toString(), style = MaterialTheme.kmpTypography.code)
-        }
-        var token by remember { mutableStateOf("") }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            SecretTextField(
-                value = token,
-                onValueChange = { token = it },
-                label = "Access token (icon toggle)",
-                modifier = Modifier.weight(1f),
-                revealToggle = SecretRevealToggle.ICON,
-            )
-            InfoTooltip("SecretRevealToggle.ICON shows an eye instead of Show/Hide text.")
-        }
+        ThemeSwitch(
+            checked = showValidation,
+            onCheckedChange = { showValidation = it },
+            label = "Show validation errors",
+        )
+        MenuPicker(
+            items = listOf("Idle", "Checking", "Success", "Failure"),
+            selected = feedback,
+            onSelect = { feedback = it },
+            label = "Example status",
+            itemLabel = { it },
+        )
+        CheckStatusRow(
+            when (feedback) {
+                "Checking" -> CheckStatus.Checking
+                "Success" -> CheckStatus.Success("Example check succeeded")
+                "Failure" -> CheckStatus.Failure("Example check failed")
+                else -> CheckStatus.Idle
+            },
+        )
+        SecretTextField(
+            value = token,
+            onValueChange = { token = it },
+            label = "Example secret (icon toggle)",
+            modifier = Modifier.fillMaxWidth(),
+            revealToggle = SecretRevealToggle.ICON,
+        )
+        InfoTooltip("Use the eye button to show or hide the example secret.")
     }
 }
-
-private const val FAKE_CHECK_MILLIS = 1_200L
 
 @Composable
 private fun StatusSection() {
@@ -273,11 +307,11 @@ private fun StatusSection() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
         ) {
-            TonalBadge("GET")
-            TonalBadge("DELETE", color = MaterialTheme.colorScheme.error)
-            TonalBadge("200", tone = StatusTone.SUCCESS)
-            TonalBadge("404", tone = StatusTone.WARNING)
-            CountBadge(3, contentDescription = "3 variants")
+            TonalBadge("Info")
+            TonalBadge("Remove", color = MaterialTheme.colorScheme.error)
+            TonalBadge("Ready", tone = StatusTone.SUCCESS)
+            TonalBadge("Review", tone = StatusTone.WARNING)
+            CountBadge(3, contentDescription = "3 items")
             CountBadge(250)
         }
     }
@@ -286,15 +320,15 @@ private fun StatusSection() {
 @Composable
 private fun NavigationSection() {
     var section by remember { mutableStateOf("General") }
-    val tabs = remember { mutableStateListOf("Success", "Not found", "Server error") }
-    var selectedTab by remember { mutableStateOf("Success") }
+    val tabs = remember { mutableStateListOf("First", "Second", "Third") }
+    var selectedTab by remember { mutableStateOf("First") }
     SectionCard(title = "Navigation", description = "SidebarNavigation, SidebarItem, TabChipRow, and EmptyState.") {
         Row(Modifier.fillMaxWidth().height(SIDEBAR_DEMO_HEIGHT)) {
             SidebarNavigation(
                 modifier = Modifier.width(SIDEBAR_DEMO_WIDTH),
                 header = { Text("Settings", style = MaterialTheme.typography.titleMedium) },
             ) {
-                listOf("General", "AI", "Advanced").forEach { name ->
+                listOf("General", "Appearance", "Advanced").forEach { name ->
                     SidebarItem(label = name, selected = section == name, onClick = { section = name })
                 }
             }
@@ -329,9 +363,12 @@ private val SIDEBAR_DEMO_WIDTH = 160.dp
 
 @Composable
 private fun SelectionSection() {
-    var selected by remember { mutableStateOf("Ollama") }
+    var selected by remember { mutableStateOf("First option") }
     SectionCard(title = "Selectable cards") {
-        listOf("Ollama" to "llama3 · local", "OpenAI" to "gpt · API key in keychain").forEach { (name, detail) ->
+        listOf(
+            "First option" to "Example description",
+            "Second option" to "Another description",
+        ).forEach { (name, detail) ->
             SelectableCard(selected = selected == name, onClick = {
                 selected = name
             }, modifier = Modifier.fillMaxWidth()) {
@@ -345,13 +382,18 @@ private fun SelectionSection() {
 @Composable
 private fun SplitPaneSection() {
     var split by remember { mutableFloatStateOf(0.5f) }
-    SectionCard(title = "Split pane", description = "Drag the divider, or focus it and use the arrow keys.") {
+    SectionCard(
+        title = "Split pane",
+        description = "Drag the divider or use Left/Right when focused. Try the right-to-left layout switch above.",
+    ) {
+        Text("Leading pane: ${(split * 100).toInt()}%")
+        TextButton(onClick = { split = 0.5f }) { Text("Reset split") }
         HorizontalSplitPane(
             split = split,
             onSplitChange = { split = it },
             modifier = Modifier.fillMaxWidth().height(SPLIT_DEMO_HEIGHT),
-            leading = { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Console") } },
-            trailing = { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Device") } },
+            leading = { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Leading pane") } },
+            trailing = { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Trailing pane") } },
         )
     }
 }
@@ -363,13 +405,13 @@ private fun DialogSection() {
     var showDialog by remember { mutableStateOf(false) }
     var result by remember { mutableStateOf<String?>(null) }
     SectionCard(title = "Confirm dialog") {
-        OutlinedButton(onClick = { showDialog = true }) { Text("Delete all variants…") }
+        OutlinedButton(onClick = { showDialog = true }) { Text("Delete example item…") }
         result?.let { Text(it) }
     }
     if (showDialog) {
         ConfirmDialog(
-            title = "Delete all variants?",
-            message = "This removes every response variant for the endpoint.",
+            title = "Delete example item?",
+            message = "Confirm or cancel to see the callback result.",
             onConfirm = {
                 showDialog = false
                 result = "Deleted"
@@ -378,7 +420,7 @@ private fun DialogSection() {
                 showDialog = false
                 result = "Cancelled"
             },
-            confirmLabel = "Delete all",
+            confirmLabel = "Delete",
             destructive = true,
         )
     }

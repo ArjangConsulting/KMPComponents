@@ -33,26 +33,30 @@ fun ChoicesSection() {
 
 @Composable
 private fun ControlsDemo() {
-    var scheme by remember { mutableIntStateOf(1) }
-    var timeout by remember { mutableFloatStateOf(DEFAULT_TIMEOUT) }
+    var orientation by remember { mutableIntStateOf(1) }
+    var level by remember { mutableFloatStateOf(DEFAULT_LEVEL) }
     SectionCard(title = "Radio group and slider") {
-        RadioGroup(options = listOf("HTTP", "HTTPS"), selectedIndex = scheme, onOptionSelected = { scheme = it })
-        val seconds = timeout.roundToInt()
-        ThemeSlider(
-            value = timeout,
-            onValueChange = { timeout = it },
-            valueRange = 0f..MAX_TIMEOUT,
-            steps = TIMEOUT_STEPS,
-            label = "Timeout",
-            valueDescription = "$seconds seconds",
+        RadioGroup(
+            options = listOf("Portrait", "Landscape"),
+            selectedIndex = orientation,
+            onOptionSelected = { orientation = it },
         )
-        Text("Timeout: $seconds s", style = MaterialTheme.typography.bodyMedium)
+        val percentage = level.roundToInt()
+        ThemeSlider(
+            value = level,
+            onValueChange = { level = it },
+            valueRange = 0f..MAX_LEVEL,
+            steps = LEVEL_STEPS,
+            label = "Level",
+            valueDescription = "$percentage percent",
+        )
+        Text("Level: $percentage%", style = MaterialTheme.typography.bodyMedium)
     }
 }
 
-private const val DEFAULT_TIMEOUT = 30f
-private const val MAX_TIMEOUT = 60f
-private const val TIMEOUT_STEPS = 11
+private const val DEFAULT_LEVEL = 40f
+private const val MAX_LEVEL = 100f
+private const val LEVEL_STEPS = 9
 
 private val languages = listOf(
     SelectionListNode(
