@@ -22,6 +22,17 @@ so token types and Material components are available without extra declarations.
 
 Targets: `android` (minSdk 26), `jvm`, `iosArm64`, `iosSimulatorArm64`, `wasmJs` (browser).
 
+Wasm builds require a kommon release with a `wasmJs` variant. The currently pinned `0.2.0`
+does not publish that variant, so the default Web build remains blocked until a compatible release
+is available and the dependency catalog is updated. For local verification, use a kommon checkout
+that includes its merged Wasm support:
+
+```bash
+./gradlew :components:allTests :components:checkKotlinAbi -PuseLocalKommon=true -PkommonDir=/path/to/kommon
+```
+
+This substitution verifies the source build; it does not verify the published dependency graph.
+
 ## Quick start
 
 ```kotlin
