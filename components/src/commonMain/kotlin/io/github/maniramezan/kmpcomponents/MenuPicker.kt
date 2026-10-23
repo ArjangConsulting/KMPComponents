@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
  *
  * [itemLabel] supplies each item's visible text; [selected] does not have to be in [items] (for
  * example a value that is no longer offered), and is shown with the same label. Whether the menu
- * is open is internal UI state.
+ * is open is internal UI state; disabling the picker closes the menu.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +33,7 @@ public fun <T> MenuPicker(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember(enabled) { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { if (enabled) expanded = it },
@@ -55,8 +55,9 @@ public fun <T> MenuPicker(
                     text = { Text(itemLabel(item)) },
                     onClick = {
                         expanded = false
-                        onSelect(item)
+                        if (enabled) onSelect(item)
                     },
+                    enabled = enabled,
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
             }

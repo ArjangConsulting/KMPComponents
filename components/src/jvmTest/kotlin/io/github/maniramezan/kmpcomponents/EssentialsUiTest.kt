@@ -13,6 +13,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
@@ -155,6 +156,43 @@ class EssentialsUiTest {
         assertEquals("Swift", language)
         onNodeWithText("Swift").assertIsDisplayed()
         onNodeWithText("Kotlin").assertDoesNotExist()
+    }
+
+    @Test
+    fun `disabling an open menu picker closes it and requires reopening before selection`() = runComposeUiTest {
+        var enabled by mutableStateOf(true)
+        var language by mutableStateOf("Kotlin")
+        var selections = 0
+        setContent {
+            KmpTheme {
+                MenuPicker(
+                    items = listOf("Kotlin", "Swift"),
+                    selected = language,
+                    onSelect = {
+                        language = it
+                        selections++
+                    },
+                    label = "Language",
+                    itemLabel = { it },
+                    enabled = enabled,
+                )
+            }
+        }
+        onNodeWithText("Kotlin").performClick()
+        onNodeWithText("Swift").assertIsDisplayed()
+        enabled = false
+        onNodeWithText("Swift").assertDoesNotExist()
+        onNodeWithText("Kotlin").assertIsNotEnabled()
+        onNodeWithText("Kotlin").performClick()
+        onNodeWithText("Swift").assertDoesNotExist()
+        assertEquals(0, selections)
+        enabled = true
+        onNodeWithText("Swift").assertDoesNotExist()
+        onNodeWithText("Kotlin").performClick()
+        onNodeWithText("Swift").performClick()
+        waitForIdle()
+        assertEquals("Swift", language)
+        assertEquals(1, selections)
     }
 
     @Test

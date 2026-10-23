@@ -17,8 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
@@ -29,12 +31,14 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
@@ -57,7 +61,10 @@ public object SplitPaneDefaults {
  * width, kept between [minSplit] and [maxSplit]; persist it if the layout should survive restarts.
  *
  * The divider can be dragged, moved with the Left/Right arrow keys by [keyboardStep] when focused,
- * and adjusted by screen readers like a slider. On desktop it shows a resize cursor.
+ * and adjusted by screen readers like a slider. Dragging and arrow keys move the divider in the
+ * indicated direction in both left-to-right and right-to-left layouts. Drag deltas accumulate
+ * locally so callbacks stay consistent when the caller applies updates late; the visible panes
+ * follow [split]. On desktop it shows a resize cursor.
  */
 @Composable
 public fun HorizontalSplitPane(
@@ -75,6 +82,7 @@ public fun HorizontalSplitPane(
     val shown = coerceSplit(split, minSplit, maxSplit)
     val currentSplit by rememberUpdatedState(shown)
     val currentOnSplitChange by rememberUpdatedState(onSplitChange)
+    val reverseDirection = LocalLayoutDirection.current == LayoutDirection.Rtl
     fun change(value: Float) {
         val next = coerceSplit(value, minSplit, maxSplit)
         if (next != currentSplit) currentOnSplitChange(next)
@@ -85,17 +93,31 @@ public fun HorizontalSplitPane(
 
     BoxWithConstraints(modifier) {
         val totalWidth = maxWidth
-        val totalPx = with(LocalDensity.current) { totalWidth.toPx() }.coerceAtLeast(1f)
-        val dragState = rememberDraggableState { delta -> change(currentSplit + delta / totalPx) }
         val handleWidth = MaterialTheme.kmpSpacing.small
+        val paneWidth = totalWidth - handleWidth
+        val paneWidthPx = with(LocalDensity.current) { paneWidth.toPx() }.coerceAtLeast(1f)
+        var dragSplit by remember { mutableFloatStateOf(shown) }
+        val dragState = rememberDraggableState { delta ->
+            val next = coerceSplit(dragSplit + delta / paneWidthPx, minSplit, maxSplit)
+            if (next != dragSplit) {
+                dragSplit = next
+                currentOnSplitChange(next)
+            }
+        }
         Row {
-            Box(Modifier.width((totalWidth - handleWidth) * shown).fillMaxHeight()) { leading() }
+            Box(Modifier.width(paneWidth * shown).fillMaxHeight()) { leading() }
             Box(
                 modifier = Modifier
                     .width(handleWidth)
                     .fillMaxHeight()
                     .pointerHoverIcon(resizeHorizontalPointerIcon)
-                    .draggable(dragState, Orientation.Horizontal, interactionSource = interactionSource)
+                    .draggable(
+                        state = dragState,
+                        orientation = Orientation.Horizontal,
+                        interactionSource = interactionSource,
+                        reverseDirection = reverseDirection,
+                        onDragStarted = { dragSplit = currentSplit },
+                    )
                     .onKeyEvent { event ->
                         val direction = when (event.key) {
                             Key.DirectionLeft -> -1
@@ -103,7 +125,8 @@ public fun HorizontalSplitPane(
                             else -> 0
                         }
                         if (event.type != KeyEventType.KeyDown || direction == 0) return@onKeyEvent false
-                        change(currentSplit + direction * keyboardStep)
+                        val layoutDirectionMultiplier = if (reverseDirection) -1 else 1
+                        change(currentSplit + direction * layoutDirectionMultiplier * keyboardStep)
                         true
                     }
                     .semantics {
