@@ -1,0 +1,14 @@
+public final class io/github/maniramezan/kmpcomponents/image/CachedAsyncImageKt {
+	public static final fun CachedAsyncImage (Ljava/lang/Object;Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;Ljava/lang/String;Ljava/lang/String;ZLandroidx/compose/ui/graphics/painter/Painter;Landroidx/compose/ui/graphics/painter/Painter;Landroidx/compose/ui/graphics/painter/Painter;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;FLandroidx/compose/ui/graphics/ColorFilter;ZLandroidx/compose/runtime/Composer;III)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/image/ImageCachePolicy : java/lang/Enum {
+	public static final field DISABLED Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;
+	public static final field ENABLED Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;
+	public static final field READ_ONLY Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;
+	public static final field WRITE_ONLY Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/image/ImageCachePolicy;
+}
+

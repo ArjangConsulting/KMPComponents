@@ -104,6 +104,7 @@ fun ComponentCatalog() {
                     NavigationBarsSection()
                     AssistantSection()
                     DesktopSection()
+                    ImageSection()
                     StatusSection()
                     NavigationSection()
                     SelectionSection()

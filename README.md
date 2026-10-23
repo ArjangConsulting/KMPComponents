@@ -22,6 +22,19 @@ so token types and Material components are available without extra declarations.
 
 Targets: `android` (minSdk 26), `jvm`, `iosArm64`, `iosSimulatorArm64`.
 
+### Optional: async images
+
+`CachedAsyncImage` lives in a separate artifact so the main library does not pull in an image
+loader. It is backed by [Coil 3](https://coil-kt.github.io/coil/) with Ktor networking and
+brings each platform's Ktor engine (Android, Darwin, Java); no Coil types appear in its API.
+
+```kotlin
+implementation("io.github.maniramezan.kmpcomponents:components-image:<version>")
+```
+
+On Android, network images need `<uses-permission android:name="android.permission.INTERNET" />`
+in the app manifest. Both artifacts share one version.
+
 ## Quick start
 
 ```kotlin
@@ -49,7 +62,7 @@ KmpTheme(mode = themeMode) {
 
 ## Catalog
 
-API reference: run `./gradlew :components:dokkaGenerate` (output in `components/build/dokka/html`),
+API reference for both artifacts: run `./gradlew :dokkaGenerate` (output in `build/dokka/html`),
 or browse the copy that CI publishes from `main` to
 [GitHub Pages](https://arjangconsulting.github.io/KMPComponents/).
 
@@ -135,6 +148,12 @@ sized from the body text so they follow the user's font scale.
 | `AssistantStatusBanner` | Announced error banner for an unavailable provider or blocking failure. |
 | `AssistantLimitPromptCard` | Quota or upgrade prompt with primary and secondary actions. |
 | `AssistantDisclaimerFooter` | Low-emphasis disclaimer line. |
+
+### Images (`components-image`)
+
+| Component | Purpose |
+| --- | --- |
+| `CachedAsyncImage` / `ImageCachePolicy` | Loads a URL, file, or bytes with explicit memory, disk, and network cache policies, plus placeholder, error, and fallback painters. Package `io.github.maniramezan.kmpcomponents.image`. |
 
 ### Navigation and layout
 

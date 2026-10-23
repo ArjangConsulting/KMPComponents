@@ -16,7 +16,7 @@ only *adapts* them to Compose/Material 3 and builds components on top.
 
 ## Repository map
 
-- `components/` — the only published module (`io.github.maniramezan.kmpcomponents:components`).
+- `components/` — the main published module (`io.github.maniramezan.kmpcomponents:components`).
   - `commonMain/.../KmpTheme.kt` — `KmpTheme`, composition locals, `MaterialTheme.kmp*` accessors
     and their data classes (`ComposeSpacing`, `KmpColors`, `KmpTypography`, `KmpMotion`).
   - `TokenAdapters.kt` — pure, non-composable token -> Compose conversions. All mapping decisions
@@ -73,6 +73,13 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `AssistantScreenshotTest.kt`, `DesktopExtrasScreenshotTest.kt`; `SegmentedContentTest.kt` holds both its interaction test and goldens)
     so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
+- `components-image/` — the second published module (`...:components-image`, package
+  `io.github.maniramezan.kmpcomponents.image`): `CachedAsyncImage` and `ImageCachePolicy`, backed by
+  Coil 3 with Ktor (one engine per platform). It is separate so `components` stays free of an image
+  loader; keep Coil types out of its public API (they are `implementation` dependencies). It has
+  its own `api/` dump, common tests, and a desktop UI test, and shares the version with `components`.
+- Root `build.gradle.kts` aggregates Dokka for both modules: `./gradlew :dokkaGenerate` writes
+  `build/dokka/html`, which CI uploads for GitHub Pages.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, and `DesktopCatalog.kt`, plus the sample's own `SampleIcons.kt`);
@@ -83,7 +90,7 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
 - `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on
-  main), `release-please.yml` -> `release.yml` (Maven Central publish on release).
+  main), `release-please.yml` -> `release.yml` (Maven Central publish of both modules on release).
 
 ## Component API rules
 
@@ -137,12 +144,13 @@ typography (`glyphSize(style)`) so it follows the user's font scale.
 ./gradlew :components:checkKotlinAbi                # public API vs components/api
 ./gradlew :components:updateKotlinAbi               # accept an intended API change
 ./gradlew :components:koverHtmlReport               # coverage (build/reports/kover)
-./gradlew :components:dokkaGenerate                 # API docs (build/dokka/html)
+./gradlew :components-image:allTests :components-image:checkKotlinAbi  # the image module
+./gradlew :dokkaGenerate                            # API docs for both modules (build/dokka/html)
 ./gradlew :components:assemble :sample:compileKotlinJvm :sample-android:assembleDebug
 ```
 
-CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests`, `verifyRoborazziJvm`,
-`checkKotlinAbi`, Kover, `assemble`, `dokkaGenerate`, and builds the desktop, Android, and iOS
+CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests` and `checkKotlinAbi` for both modules,
+`verifyRoborazziJvm`, Kover, `assemble`, the root `dokkaGenerate`, and builds the desktop, Android, and iOS
 samples. A screenshot failure uploads the diff images in the `reports` artifact. Review a changed
 golden before committing it; an API dump change means a public API change (see Releases).
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin; sandboxes without it

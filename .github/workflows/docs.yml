@@ -44,7 +44,7 @@ jobs:
 
       - name: Build API docs
         if: github.event_name == 'workflow_dispatch'
-        run: ./gradlew :components:dokkaGenerate
+        run: ./gradlew :dokkaGenerate
 
       - name: Download API docs from CI
         if: github.event_name == 'workflow_run'
@@ -57,7 +57,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: ${{ github.event_name == 'workflow_run' && 'site' || 'components/build/dokka/html' }}
+          path: ${{ github.event_name == 'workflow_run' && 'site' || 'build/dokka/html' }}
 
       - id: deployment
         uses: actions/deploy-pages@v5
