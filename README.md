@@ -90,7 +90,7 @@ or browse the copy that CI publishes from `main` to
 | `ThemeCheckbox` / `ThemeTriStateCheckbox` | Checkbox rows with a label; the tri-state one is for "select all" over a group. |
 | `RadioGroup` | Vertical radio list; each full-width row is the tap target. |
 | `ThemeSlider` | Full-width slider with an optional spoken label, value description, and steps. |
-| `SelectionList` / `SelectionListContent` / `SelectionListNode` | Searchable one- or two-level picker, single or multiple choice, in a bottom sheet or inline. Parents expand inline and summarize their selected children when collapsed. |
+| `SelectionList` / `SelectionListContent` / `SelectionListNode` | Searchable one- or two-level picker, single or multiple choice, in a bottom sheet or inline. Parents expand inline, scroll into view, and summarize their selected children when collapsed. |
 
 ### Feedback
 

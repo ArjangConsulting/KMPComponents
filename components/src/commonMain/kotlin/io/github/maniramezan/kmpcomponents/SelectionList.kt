@@ -1,6 +1,7 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -133,7 +137,10 @@ public fun <ID : Any> SelectionList(
  * Leaves are selectable and show a check when their id is in [selectedIds]. Parents expand inline;
  * a collapsed parent lists its selected children as its subtitle, and parents containing a
  * selection start expanded. While searching, every matching parent is expanded. The search query
- * and expansion are internal UI state. Expansion resets when [nodes] changes. A blank [title] without [confirmButton] draws no header.
+ * and expansion are internal UI state. Expansion resets when [nodes] changes. Expanding a parent
+ * scrolls its group into view after the expansion finishes; groups taller than the viewport remain
+ * scrollable. Initial selections and search results do not trigger this automatic scrolling.
+ * A blank [title] without [confirmButton] draws no header.
  */
 @Composable
 public fun <ID : Any> SelectionListContent(
@@ -201,38 +208,75 @@ public fun <ID : Any> SelectionListContent(
                         onClick = { onSelect(node.id) },
                     )
                 } else {
-                    val expanded = isSearching || node.id in expandedIds
-                    val summary = remember(node, selectedIds) { selectedChildrenSummary(node, selectedIds) }
-                    SelectionListRow(
+                    SelectionListParent(
                         node = node,
-                        subtitle = if (expanded) node.subtitle else summary ?: node.subtitle,
-                        isSelected = false,
-                        isIndented = false,
-                        expanded = expanded,
+                        selectedIds = selectedIds,
+                        expanded = isSearching || node.id in expandedIds,
+                        isSearching = isSearching,
                         labels = labels,
-                        onClick = {
+                        onToggle = {
                             expandedIds = if (node.id in expandedIds) expandedIds - node.id else expandedIds + node.id
                         },
+                        onSelect = onSelect,
                     )
-                    AnimatedVisibility(
-                        visible = expanded,
-                        enter = expandVertically(tween(MaterialTheme.kmpMotion.standardMillis)),
-                        exit = shrinkVertically(tween(MaterialTheme.kmpMotion.standardMillis)),
-                    ) {
-                        Column {
-                            node.children.forEach { child ->
-                                SelectionListRow(
-                                    node = child,
-                                    subtitle = child.subtitle,
-                                    isSelected = child.id in selectedIds,
-                                    isIndented = true,
-                                    expanded = null,
-                                    labels = labels,
-                                    onClick = { onSelect(child.id) },
-                                )
-                            }
-                        }
-                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun <ID : Any> SelectionListParent(
+    node: SelectionListNode<ID>,
+    selectedIds: Set<ID>,
+    expanded: Boolean,
+    isSearching: Boolean,
+    labels: SelectionListLabels,
+    onToggle: () -> Unit,
+    onSelect: (ID) -> Unit,
+) {
+    val requester = remember { BringIntoViewRequester() }
+    val expansion = remember { MutableTransitionState(expanded) }
+    var revealOnExpansion by remember(node) { mutableStateOf(false) }
+    val summary = remember(node, selectedIds) { selectedChildrenSummary(node, selectedIds) }
+    expansion.targetState = expanded
+    LaunchedEffect(expanded, expansion.isIdle, revealOnExpansion, isSearching) {
+        if (isSearching) {
+            revealOnExpansion = false
+        } else if (expanded && expansion.isIdle && revealOnExpansion) {
+            requester.bringIntoView()
+            revealOnExpansion = false
+        }
+    }
+    Column(Modifier.bringIntoViewRequester(requester)) {
+        SelectionListRow(
+            node = node,
+            subtitle = if (expanded) node.subtitle else summary ?: node.subtitle,
+            isSelected = false,
+            isIndented = false,
+            expanded = expanded,
+            labels = labels,
+            onClick = {
+                revealOnExpansion = !expanded
+                onToggle()
+            },
+        )
+        AnimatedVisibility(
+            visibleState = expansion,
+            enter = expandVertically(tween(MaterialTheme.kmpMotion.standardMillis)),
+            exit = shrinkVertically(tween(MaterialTheme.kmpMotion.standardMillis)),
+        ) {
+            Column {
+                node.children.forEach { child ->
+                    SelectionListRow(
+                        node = child,
+                        subtitle = child.subtitle,
+                        isSelected = child.id in selectedIds,
+                        isIndented = true,
+                        expanded = null,
+                        labels = labels,
+                        onClick = { onSelect(child.id) },
+                    )
                 }
             }
         }

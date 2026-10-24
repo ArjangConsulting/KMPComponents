@@ -2,6 +2,7 @@ package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +12,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -30,6 +34,48 @@ class SelectionScreenshotTest {
 
     @Test
     fun `selection at double font scale`() = capture("selection-font-200", ThemeMode.LIGHT, fontScale = 2f)
+
+    @Test
+    fun `expanded last group scrolls into view in light mode`() = captureExpandedGroup("light", ThemeMode.LIGHT)
+
+    @Test
+    fun `expanded last group scrolls into view in dark mode`() = captureExpandedGroup("dark", ThemeMode.DARK)
+
+    @Test
+    fun `expanded last group scrolls into view at double font scale`() =
+        captureExpandedGroup("font-200", ThemeMode.LIGHT, 2f)
+
+    private fun captureExpandedGroup(name: String, mode: ThemeMode, fontScale: Float = 1f) = runDesktopComposeUiTest(
+        width = 480,
+        height = 480,
+    ) {
+        val nodes = List(3) { SelectionListNode("item-$it", "Item $it") } + SelectionListNode(
+            "pt",
+            "Português",
+            children = listOf(SelectionListNode("pt-BR", "Brasil"), SelectionListNode("pt-PT", "Portugal")),
+        )
+        setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale)) {
+                KmpTheme(mode = mode) {
+                    Surface {
+                        Column(Modifier.padding(MaterialTheme.kmpSpacing.medium)) {
+                            SelectionListContent(
+                                title = "Also translate to",
+                                nodes = nodes,
+                                selectedIds = emptySet(),
+                                onSelect = {},
+                                modifier = Modifier.height(400.dp),
+                                isSearchable = true,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        onNodeWithText("Português").performScrollTo().performClick()
+        onRoot().captureRoboImage("$SNAPSHOT_DIR/selection-expanded-$name.png", roborazziOptions = OPTIONS)
+    }
 
     private fun capture(name: String, mode: ThemeMode, fontScale: Float = 1f) = runDesktopComposeUiTest(
         width = WINDOW_WIDTH,
