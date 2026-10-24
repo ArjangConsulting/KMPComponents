@@ -91,8 +91,9 @@ only *adapts* them to Compose/Material 3 and builds components on top.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
-  `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
-  `sample/ios` (XcodeGen spec and Swift host).
+  `jvmMain` the desktop window (`./gradlew :sample:run`) and its PNG app icon; `icons/` contains
+  desktop packaging icons. `iosMain` holds the view controller for `sample/ios` (XcodeGen spec,
+  Swift host, and app icon asset catalog).
 - The catalog's section picker opens each component family. `PickerAvailabilityControls.kt` lets
   testers disable a popup while it is open. `sample/src/jvmTest/.../CatalogUiTest.kt` renders all
   sections at 100%/200% text in LTR/RTL and checks section navigation.
@@ -100,7 +101,8 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   workflows, business rules, storage, credentials, or backend integrations into the sample.
   Simulations must be labeled; image examples default to embedded data and load a URL only after
   an explicit action.
-- `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).
+- `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`),
+  with an adaptive launcher icon using the sample artwork.
 - `.run/` — shared IntelliJ run configurations (sample catalog, JVM tests, all-target tests, CI
   check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).

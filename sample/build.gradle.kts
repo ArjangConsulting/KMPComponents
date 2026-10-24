@@ -45,5 +45,11 @@ compose.desktop {
     application {
         mainClass = "io.github.maniramezan.kmpcomponents.sample.MainKt"
         jvmArgs += "--enable-native-access=ALL-UNNAMED"
+        nativeDistributions {
+            packageName = "KMPComponents"
+            macOS { iconFile.set(project.file("icons/app-icon.icns")) }
+            windows { iconFile.set(project.file("icons/app-icon.ico")) }
+            linux { iconFile.set(project.file("src/jvmMain/resources/app-icon.png")) }
+        }
     }
 }
