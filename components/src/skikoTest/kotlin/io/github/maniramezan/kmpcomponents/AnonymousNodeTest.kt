@@ -1,6 +1,7 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -15,6 +16,24 @@ import kotlin.test.assertTrue
 // merging or actionable node as its own element, so one without a name is announced as unlabeled.
 @OptIn(ExperimentalTestApi::class)
 class AnonymousNodeTest {
+    @Test
+    fun `a described paging footer exposes no unnamed progress node`() = runComposeUiTest {
+        setContent {
+            KmpTheme {
+                PaginatedContent(
+                    pages = listOf(PaginationPage("One"), PaginationPage("Two"), PaginationPage("Three")),
+                    footerStyle = PageFooterStyle.PROGRESS,
+                    showScrollHint = false,
+                    pagePositionDescription = { index, count -> "Step ${index + 1} of $count" },
+                ) { _, page -> Text(page.title) }
+            }
+        }
+        val unnamed = onRoot().fetchSemanticsNode().descendants().filter {
+            it.isAccessibilityElement() && !it.hasName()
+        }
+        assertTrue(unnamed.isEmpty(), "Unnamed accessibility elements: ${unnamed.map { it.config }}")
+    }
+
     @Test
     fun `icon buttons with tooltips expose no unnamed actionable nodes`() = runComposeUiTest {
         setContent {
@@ -36,8 +55,10 @@ class AnonymousNodeTest {
 
 private fun SemanticsNode.descendants(): List<SemanticsNode> = children.flatMap { listOf(it) + it.descendants() }
 
-// Platforms expose merging nodes and nodes with actions as separate accessibility elements.
+// Platforms expose merging nodes, nodes with actions, and progress indicators as separate
+// accessibility elements.
 private fun SemanticsNode.isAccessibilityElement(): Boolean = config.isMergingSemanticsOfDescendants ||
+    config.getOrNull(SemanticsProperties.ProgressBarRangeInfo) != null ||
     listOf(SemanticsActions.OnClick, SemanticsActions.OnLongClick, SemanticsActions.SetText)
         .any { config.getOrNull(it) != null }
 

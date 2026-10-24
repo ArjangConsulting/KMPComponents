@@ -39,8 +39,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
@@ -293,11 +296,18 @@ private fun PageProgress(
 ) {
     val current = pagerState.currentPage
     val description = describe?.invoke(current, pageCount)
-    // A spoken footer is its own accessibility element, so it gets a full-size hit region.
+    // The footer replaces the progress bar's own unnamed semantics: silent without a description,
+    // otherwise one named, announced element with the settled position and a full-size hit region.
     Box(
         modifier = modifier
             .then(if (description.isNullOrBlank()) Modifier else Modifier.heightIn(min = minimumTouchTargetSize()))
-            .positionSemantics(description),
+            .clearAndSetSemantics {
+                if (!description.isNullOrBlank()) {
+                    contentDescription = description
+                    liveRegion = LiveRegionMode.Polite
+                    progressBarRangeInfo = ProgressBarRangeInfo(current.toFloat() / (pageCount - 1), 0f..1f)
+                }
+            },
         contentAlignment = Alignment.Center,
     ) {
         LinearProgressIndicator(
@@ -305,15 +315,6 @@ private fun PageProgress(
             progress = { ((current + pagerState.currentPageOffsetFraction) / (pageCount - 1)).coerceIn(0f, 1f) },
             modifier = Modifier.fillMaxWidth().clip(CircleShape),
         )
-    }
-}
-
-private fun Modifier.positionSemantics(description: String?): Modifier = if (description == null) {
-    this
-} else {
-    semantics {
-        contentDescription = description
-        liveRegion = LiveRegionMode.Polite
     }
 }
 

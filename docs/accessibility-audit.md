@@ -108,6 +108,55 @@ These findings prevent a blanket native-audit pass. The final run restored Syste
 This follow-up is limited to this screen in the default theme, LTR, and the catalog's font-scale
 control. It does not establish a full Dynamic Type, VoiceOver, TalkBack, browser, or whole-app audit.
 
+## iOS pre-release follow-up (0.2.0)
+
+Amoo's installed release (0.3.0) ran the sample on an iPhone 18 Pro Max simulator with iOS 27.2,
+at the default theme, System appearance, and 100% catalog text. Appearance, text size, orientation,
+and VoiceOver were restored afterwards.
+
+**The anonymous "Element has no description" finding is identified and fixed.** It followed the
+**Copy** row, not the image preview: the preview's earlier disappearance coincided with the Copy row
+leaving the screen. The element was an unlabeled sibling just before each tooltip icon button.
+Material's `TooltipBox` handles hover, focus, and long-press by wrapping its anchor in a merging
+semantics node. When the anchor is a button, itself a merge boundary, that node stays empty, and
+iOS exposes it as an element. The same wrapper produced "Element has no description, looks like:
+Up Arrow" beside `ChatComposer`'s Send button and the search field's Clear button, and made
+VoiceOver report "No speech available" after the message field.
+
+Tooltip anchors now pass `enableUserInput = false` and use the library's own triggers
+(`TooltipTriggers.kt`): mouse hover only, keyboard focus until it leaves, and touch long-press,
+which swallows the release. `AnonymousNodeTest` fails on any unnamed merging, actionable, or
+progress node on desktop, iOS, and the web.
+
+On the rebuilt app, the Copy section top and the Chat section top passed the native audit with no
+issues. VoiceOver read "Message Text field", then "Send dimmed Button". Long-pressing Copy showed its
+tooltip without copying, and a tap still copied.
+
+Other fixes from the same run:
+
+- The described `PageIndicator` ("Item 1 of 5") and `PaginatedContent`'s progress footer
+  ("Step 1 of 3") were flagged as too-small hit regions. When spoken, both now reserve the minimum
+  touch-target height. The progress footer also replaces the progress bar's own unnamed node with a
+  single named element carrying its position.
+- Empty `ChatComposer` and `SearchField` fields were read twice ("Message, Message"). They now
+  take the name from the placeholder while empty and from the description once text hides it.
+- List rows with a leading `Avatar` read the name twice. `Avatar` gained `contentDescription`
+  (default `name`); `null` keeps the initials while making the avatar decorative.
+
+Still open after the re-check:
+
+- Segmented and tab buttons partly under the status bar (Light/Dark/System, All/Unread/Flagged)
+  expose unlabeled wrapper nodes while clipped.
+- The top of **App bars, paging, and feeds** has one unidentified anonymous finding.
+- `Report 1–3` feed rows have small hit areas.
+- `v1.2.0` is reported as "Label not human-readable"; it is sample data.
+- With the keyboard up in Chat, one anonymous finding appears; it is probably system keyboard UI,
+  which was not proven.
+
+Amoo's `test_voiceover` verdicts are always `notAssessed`, and the native audit reports no element
+identity or bounds, so identities above are inferred from position. Light/dark, larger text sizes,
+and VoiceOver order around the page indicator were not exercised in this run.
+
 ## Android catalog follow-up
 
 Amoo installed and launched the sample APK built with AGP 9.1.1 on an Android 15/API 35
