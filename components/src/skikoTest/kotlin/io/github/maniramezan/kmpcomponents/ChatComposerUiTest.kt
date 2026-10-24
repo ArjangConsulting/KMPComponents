@@ -25,7 +25,7 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalTestApi::class)
 class ChatComposerUiTest {
     @Test
-    fun `sends a draft from the button, the keyboard action, and Enter`() = runComposeUiTest {
+    fun `sends a draft from the button the keyboard action and Enter`() = runComposeUiTest {
         var draft by mutableStateOf("")
         val sent = mutableListOf<String>()
         setContent {

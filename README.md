@@ -351,7 +351,7 @@ to make your own animations follow it. The sample's Appearance controls include 
 
 ```bash
 ./gradlew :components:jvmTest             # fastest loop: common + desktop UI tests
-./gradlew :components:allTests            # unit tests on every target (UI tests run on jvm)
+./gradlew :components:allTests            # unit tests on every target; UI tests on desktop, iOS, and web
 ./gradlew ktlintCheck                     # style from .editorconfig; ktlintFormat fixes most issues
 ./gradlew :components:lint :components-image:lint  # Android and JVM lint for the libraries
 ./gradlew :components:verifyRoborazziJvm  # desktop tests plus screenshot comparison

@@ -57,9 +57,11 @@ render is not proof of mobile label fit, native semantics, keyboard reachability
 
 - Pure logic -> `components/src/commonTest/.../<Name>Test.kt` using `kotlin.test`, backtick names
   describing the invariant.
-- Interaction -> add a case to `components/src/jvmTest/.../ComponentUiTest.kt` (or a new file)
-  with `runComposeUiTest { setContent { KmpTheme { ... } } }`. Assert callbacks fire and visible
-  text/state changes. These run on desktop only.
+- Interaction -> add a case to the family's UI test in `components/src/skikoTest/...` (for example
+  `EssentialsUiTest.kt`, or a new file) with `runComposeUiTest { setContent { KmpTheme { ... } } }`.
+  Assert callbacks fire and visible text/state changes. These run on desktop, the iOS simulator,
+  and headless Chrome. Use `nonWebTest` for hover or fling gestures and `jvmTest` only for desktop
+  window sizes or desktop APIs.
 - Visuals -> add the component to its family's gallery (`Gallery()` in `ScreenshotTest.kt` for the
   original components, `EssentialsGallery()` in `EssentialsScreenshotTest.kt`, or a new
   `<Family>ScreenshotTest.kt` for a new family), run
