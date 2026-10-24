@@ -58,29 +58,36 @@ public fun InfoTooltip(
     val focused by interactionSource.collectIsFocusedAsState()
     val colors = MaterialTheme.colorScheme
     TooltipFocusTrigger(tooltipState, interactionSource)
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-        tooltip = { PlainTooltip { Text(text) } },
-        state = tooltipState,
-        // See TooltipTriggers.kt: Material's own input handling adds an unnamed node on iOS.
-        modifier = modifier.tooltipPointerTriggers(tooltipState),
-        enableUserInput = false,
-    ) {
-        Box(
-            modifier = Modifier
-                .semantics { contentDescription = text }
-                .focusable(interactionSource = interactionSource)
-                .background(if (focused) colors.secondaryContainer else Color.Transparent, MaterialTheme.shapes.small)
-                .border(1.dp, if (focused) colors.primary else Color.Transparent, MaterialTheme.shapes.small)
-                .minimumInteractiveComponentSize()
-                .padding(MaterialTheme.kmpSpacing.extraSmall),
-            contentAlignment = Alignment.Center,
+    // The caller's modifier goes on an outer Box: TooltipBox wraps it in an inner container, which
+    // would hide a parent's align/weight from the parent.
+    Box(modifier = modifier) {
+        TooltipBox(
+            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+            tooltip = { PlainTooltip { Text(text) } },
+            state = tooltipState,
+            // See TooltipTriggers.kt: Material's own input handling adds an unnamed node on iOS.
+            modifier = Modifier.tooltipPointerTriggers(tooltipState),
+            enableUserInput = false,
         ) {
-            GlyphIcon(
-                glyph = Glyph.INFO,
-                size = glyphSize(MaterialTheme.typography.bodyMedium),
-                color = if (focused) colors.onSecondaryContainer else colors.onSurfaceVariant,
-            )
+            Box(
+                modifier = Modifier
+                    .semantics { contentDescription = text }
+                    .focusable(interactionSource = interactionSource)
+                    .background(
+                        if (focused) colors.secondaryContainer else Color.Transparent,
+                        MaterialTheme.shapes.small,
+                    )
+                    .border(1.dp, if (focused) colors.primary else Color.Transparent, MaterialTheme.shapes.small)
+                    .minimumInteractiveComponentSize()
+                    .padding(MaterialTheme.kmpSpacing.extraSmall),
+                contentAlignment = Alignment.Center,
+            ) {
+                GlyphIcon(
+                    glyph = Glyph.INFO,
+                    size = glyphSize(MaterialTheme.typography.bodyMedium),
+                    color = if (focused) colors.onSecondaryContainer else colors.onSurfaceVariant,
+                )
+            }
         }
     }
 }
