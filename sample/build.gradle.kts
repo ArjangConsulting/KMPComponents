@@ -45,6 +45,9 @@ compose.desktop {
     application {
         mainClass = "io.github.maniramezan.kmpcomponents.sample.MainKt"
         jvmArgs += "--enable-native-access=ALL-UNNAMED"
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            jvmArgs += "-Xdock:name=KMPComponents"
+        }
         nativeDistributions {
             packageName = "KMPComponents"
             macOS { iconFile.set(project.file("icons/app-icon.icns")) }

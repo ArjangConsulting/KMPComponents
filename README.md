@@ -276,6 +276,9 @@ If Android is missing from an existing checkout's project view, reload all Gradl
 `settings.gradle.kts` is imported again. The Android App configuration requires Android IDE support;
 Android Studio includes it. The `installDebug` command above also installs the catalog from a terminal.
 
+The desktop catalog uses the Arjang artwork for its window, Dock/taskbar, and packaged launcher.
+Stop and rerun an already-open catalog after updating the icon; the existing JVM keeps its loaded resources.
+
 The shared configurations in `.run/` also include **Run** > *Sample catalog (desktop)* and
 **Test** > *Tests (JVM)*, *Tests (all targets)*, and *Check (CI)*.
 
