@@ -42,6 +42,7 @@ import io.github.maniramezan.kmpcomponents.SectionCard
 import io.github.maniramezan.kmpcomponents.ShowcaseFeed
 import io.github.maniramezan.kmpcomponents.ShowcaseItemWidth
 import io.github.maniramezan.kmpcomponents.ShowcaseRow
+import io.github.maniramezan.kmpcomponents.ShowcaseSnapping
 import io.github.maniramezan.kmpcomponents.TabBar
 import io.github.maniramezan.kmpcomponents.TabBarItem
 import io.github.maniramezan.kmpcomponents.TabBarItemData
@@ -49,6 +50,7 @@ import io.github.maniramezan.kmpcomponents.ThemeCard
 import io.github.maniramezan.kmpcomponents.ThemeLargeTopAppBar
 import io.github.maniramezan.kmpcomponents.ThemeListItem
 import io.github.maniramezan.kmpcomponents.ThemeMediumTopAppBar
+import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.ThemeTabRow
 import io.github.maniramezan.kmpcomponents.ThemeTopAppBar
 import io.github.maniramezan.kmpcomponents.kmpSpacing
@@ -184,6 +186,8 @@ private fun FeedDemo() {
     var loading by remember { mutableStateOf(false) }
     var requested by remember { mutableIntStateOf(0) }
     var showAll by remember { mutableStateOf(false) }
+    var snapToItems by remember { mutableStateOf(true) }
+    val snapping = if (snapToItems) ShowcaseSnapping.ITEM else ShowcaseSnapping.FREE
     LaunchedLoad(requested) {
         loading = true
         delay(LOAD_MILLIS)
@@ -191,17 +195,23 @@ private fun FeedDemo() {
         loading = false
     }
     SectionCard(title = "Showcase feed", description = "Horizontal rows plus a vertical section that loads more.") {
-        ShowcaseRow(items = listOf("First", "Second", "Third")) { name ->
+        ThemeSwitch(checked = snapToItems, onCheckedChange = { snapToItems = it }, label = "Snap rows to items")
+        ShowcaseRow(items = listOf("First", "Second", "Third"), snapping = snapping) { name ->
             ThemeCard { Text(name) }
         }
         ShowcaseFeed(Modifier.heightIn(max = FEED_HEIGHT)) {
-            section(title = "Featured items", items = listOf("Alpha", "Beta", "Gamma", "Delta")) { name ->
+            section(
+                title = "Featured items",
+                items = listOf("Alpha", "Beta", "Gamma", "Delta"),
+                snapping = snapping,
+            ) { name ->
                 ThemeCard { Text(name) }
             }
             section(
                 title = "Collections",
                 items = if (showAll) listOf("Spring", "Summer", "Autumn", "Winter") else listOf("Spring", "Summer"),
                 itemWidth = ShowcaseItemWidth.Fixed(COLLECTION_WIDTH),
+                snapping = snapping,
                 actionLabel = if (showAll) "Show fewer" else "See all",
                 onAction = { showAll = !showAll },
             ) { name -> ThemeCard { Text(name) } }

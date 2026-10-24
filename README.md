@@ -209,7 +209,7 @@ sized from the body text so they follow the user's font scale.
 | `AdaptiveNavScaffold` | `TabBar` in compact windows, `NavRail` from 600 dp up. |
 | `PaginatedContent` | Swipeable pages with a synced title row, dots or progress footer, and an optional forward-only mode. |
 | `PageIndicator` | Dots for the current page of a pager or carousel; the current dot is a wider pill, and an optional description is announced. |
-| `ShowcaseRow` / `ShowcaseFeed` | Peeking horizontal carousels and an app-store style feed of them. |
+| `ShowcaseRow` / `ShowcaseFeed` / `ShowcaseSnapping` | Peeking horizontal carousels that settle on an item edge (or scroll freely), and an app-store style feed of them. SwiftUIComponents calls these `CarouselRow` and `CarouselBoard`. |
 | `FlipCard` | Two-sided card that turns in 3D; only the visible face is read by screen readers. |
 | `AppText` / `AppTextStyle` | Text in a semantic role, including heavier weight variants of Material slots. |
 | `ContentRow` | List row with title, secondary and supporting text, leading/trailing slots, and optional click and selection. |

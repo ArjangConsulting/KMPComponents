@@ -1,5 +1,8 @@
 package io.github.maniramezan.kmpcomponents
 
+import androidx.compose.foundation.gestures.ScrollableDefaults
+import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -49,10 +52,20 @@ public sealed interface ShowcaseItemWidth {
 
 private const val DEFAULT_PEEK_FRACTION = 0.85f
 
+/** How a [ShowcaseRow] settles after a fling. */
+public enum class ShowcaseSnapping {
+    /** Settles with an item's start edge at the row's start padding, like a paged carousel. */
+    ITEM,
+
+    /** Stops wherever the fling ends. */
+    FREE,
+}
+
 /**
  * A lazily composed horizontal carousel of [items], sized by [itemWidth]; by default the next item
  * peeks in to show the row scrolls. With [rows] above 1 and a [rowHeight] it becomes a
- * column-major grid of stacked rows ("top charts").
+ * column-major grid of stacked rows ("top charts"). [snapping] decides whether a fling settles on
+ * an item boundary (the default) or stops freely.
  */
 @Composable
 public fun <T> ShowcaseRow(
@@ -61,6 +74,7 @@ public fun <T> ShowcaseRow(
     itemWidth: ShowcaseItemWidth = ShowcaseItemWidth.Peek(),
     rows: Int = 1,
     rowHeight: Dp? = null,
+    snapping: ShowcaseSnapping = ShowcaseSnapping.ITEM,
     state: LazyListState = rememberLazyListState(),
     gridState: LazyGridState = rememberLazyGridState(),
     contentPadding: PaddingValues = PaddingValues(horizontal = MaterialTheme.kmpSpacing.medium),
@@ -86,6 +100,11 @@ public fun <T> ShowcaseRow(
             LazyHorizontalGrid(
                 rows = GridCells.Fixed(rows),
                 state = gridState,
+                flingBehavior = if (snapping == ShowcaseSnapping.ITEM) {
+                    rememberSnapFlingBehavior(gridState, SnapPosition.Start)
+                } else {
+                    ScrollableDefaults.flingBehavior()
+                },
                 modifier = Modifier.height(rowHeight * rows + itemSpacing * (rows - 1)),
                 contentPadding = contentPadding,
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing),
@@ -98,6 +117,11 @@ public fun <T> ShowcaseRow(
         } else {
             LazyRow(
                 state = state,
+                flingBehavior = if (snapping == ShowcaseSnapping.ITEM) {
+                    rememberSnapFlingBehavior(state, SnapPosition.Start)
+                } else {
+                    ScrollableDefaults.flingBehavior()
+                },
                 contentPadding = contentPadding,
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing),
             ) {
@@ -124,6 +148,7 @@ public interface ShowcaseFeedScope {
         itemWidth: ShowcaseItemWidth = ShowcaseItemWidth.Peek(),
         rows: Int = 1,
         rowHeight: Dp? = null,
+        snapping: ShowcaseSnapping = ShowcaseSnapping.ITEM,
         rowContentDescription: String? = null,
         itemKey: ((index: Int, item: T) -> Any)? = null,
         titleStyle: TextStyle? = null,
@@ -186,6 +211,7 @@ private class ShowcaseFeedScopeImpl : ShowcaseFeedScope {
         itemWidth: ShowcaseItemWidth,
         rows: Int,
         rowHeight: Dp?,
+        snapping: ShowcaseSnapping,
         rowContentDescription: String?,
         itemKey: ((index: Int, item: T) -> Any)?,
         titleStyle: TextStyle?,
@@ -211,6 +237,7 @@ private class ShowcaseFeedScopeImpl : ShowcaseFeedScope {
                         itemWidth = itemWidth,
                         rows = rows,
                         rowHeight = rowHeight,
+                        snapping = snapping,
                         key = itemKey,
                         itemContent = itemContent,
                     )
