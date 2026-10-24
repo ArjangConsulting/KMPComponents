@@ -67,6 +67,8 @@ class AccessibilityRegressionTest {
             CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale)) {
                 KmpTheme(mode = mode, tokens = tokens) {
                     focusColor = when (control) {
+                        FocusCase.TOOLTIP -> MaterialTheme.colorScheme.primary
+
                         FocusCase.PRIMARY, FocusCase.SELECTED_PILL, FocusCase.SEGMENT ->
                             MaterialTheme.colorScheme.onPrimary
 
@@ -83,7 +85,7 @@ class AccessibilityRegressionTest {
             }
         }
         val target = when (control) {
-            FocusCase.ICON -> onNodeWithContentDescription("Focus")
+            FocusCase.ICON, FocusCase.TOOLTIP -> onNodeWithContentDescription("Focus")
             FocusCase.ZOOM -> onNodeWithTag("control")
             else -> onNodeWithText("Focus")
         }
@@ -92,12 +94,13 @@ class AccessibilityRegressionTest {
         val after = target.captureToImage()
         assertEquals(before.width, after.width)
         assertEquals(before.height, after.height)
-        val top = after.toPixelMap()[after.width / 2, 1]
+        val borderY = if (control == FocusCase.TOOLTIP) 0 else 1
+        val top = after.toPixelMap()[after.width / 2, borderY]
         assertTrue(
             colorsMatch(focusColor, top),
             "$control $mode $fontScale expected a $focusColor focus border, got $top",
         )
-        assertTrue(!colorsMatch(focusColor, before.toPixelMap()[before.width / 2, 1]))
+        assertTrue(!colorsMatch(focusColor, before.toPixelMap()[before.width / 2, borderY]))
     }
 
     @Test
@@ -143,6 +146,8 @@ private fun FocusControl(control: FocusCase, modifier: Modifier) {
 
         FocusCase.SEGMENT -> SegmentedContent(listOf(SegmentedItem("Focus")), modifier) { _, _ -> }
 
+        FocusCase.TOOLTIP -> InfoTooltip("Focus", modifier)
+
         FocusCase.ICON -> ThemeIconButton(ColorPainter(MaterialTheme.colorScheme.primary), "Focus", {}, modifier)
 
         FocusCase.ZOOM -> ZoomableImage(ImageBitmap(100, 50), "Screenshot", modifier.size(200.dp))
@@ -166,6 +171,7 @@ private enum class FocusCase {
     ACTION_PILL,
     SEGMENT,
     ICON,
+    TOOLTIP,
     ZOOM,
     DISCLOSURE,
     RADIO,

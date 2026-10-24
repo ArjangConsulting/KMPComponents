@@ -72,7 +72,7 @@ class ControlContrastTest {
                             Boundary.HORIZONTAL_SPLIT -> HorizontalSplitPane(
                                 0.5f,
                                 {},
-                                Modifier.size(300.dp),
+                                Modifier.size(200.dp, 100.dp),
                                 leading = {},
                                 trailing = {},
                             )
@@ -106,14 +106,21 @@ private enum class Boundary { BUTTON, HORIZONTAL_SPLIT, VERTICAL_SPLIT }
 
 private fun boundaryContrast(image: ImageBitmap, background: Color, boundary: Boundary): Float {
     val pixels = image.toPixelMap()
-    val colors = when (boundary) {
-        Boundary.BUTTON -> (0 until minOf(3, image.height)).map { pixels[image.width / 2, it] }
-        Boundary.HORIZONTAL_SPLIT -> (0 until image.width).map { pixels[it, image.height / 2] }
-        Boundary.VERTICAL_SPLIT -> (0 until image.height).map { pixels[image.width / 2, it] }
+    val edges = when (boundary) {
+        Boundary.BUTTON -> listOf(
+            (0 until minOf(4, image.height)).map { pixels[image.width / 2, it] },
+            (0 until minOf(4, image.width)).map { pixels[it, image.height / 2] },
+        )
+
+        Boundary.HORIZONTAL_SPLIT -> listOf((0 until image.width).map { pixels[it, image.height / 2] })
+
+        Boundary.VERTICAL_SPLIT -> listOf((0 until image.height).map { pixels[image.width / 2, it] })
     }
-    return colors.maxOf { color ->
-        val first = color.luminance()
-        val second = background.luminance()
-        (maxOf(first, second) + 0.05f) / (minOf(first, second) + 0.05f)
+    return edges.minOf { colors ->
+        colors.maxOf { color ->
+            val first = color.luminance()
+            val second = background.luminance()
+            (maxOf(first, second) + 0.05f) / (minOf(first, second) + 0.05f)
+        }
     }
 }

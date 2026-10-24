@@ -45,6 +45,8 @@ private const val SURFACE_BRIGHT = 0.16f
  * kommon defines nine roles; Material defines ~35. Every role Material components read is set here
  * from kommon values (directly or by blending two of them), so a product that re-brands the tokens
  * never sees Material's baseline purple in secondary/tertiary/container slots.
+ * Material uses outlineVariant for enabled outlined buttons. Strengthening kommon's outline
+ * toward onSurface gives their antialiased borders contrast headroom on page and card surfaces.
  */
 internal fun ColorSchemeTokens.toMaterialColorScheme(dark: Boolean): ColorScheme {
     val primary = primary.toComposeColor()

@@ -1,28 +1,50 @@
 package io.github.maniramezan.kmpcomponents
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertWidthIsAtLeast
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.requestFocus
 import androidx.compose.ui.test.v2.runComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.dp
 import io.github.maniramezan.kommon.designsystem.KommonDesignTokens
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 // Desktop-only because runComposeUiTest needs a Skiko runtime; Android host tests have no renderer.
 @OptIn(ExperimentalTestApi::class)
@@ -96,6 +118,43 @@ class ComponentUiTest {
     }
 
     @Test
+    fun `theme mode selector fits multiword labels at normal and double font scales`() = runDesktopComposeUiTest(
+        width = 1600,
+        height = 300,
+    ) {
+        val labels = ThemeModeLabels(system = "Use system settings")
+        var fontScale by mutableStateOf(1f)
+        var mode by mutableStateOf(ThemeMode.SYSTEM)
+        setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale)) {
+                KmpTheme {
+                    ThemeModeSelector(selected = mode, onSelect = { mode = it }, labels = labels)
+                }
+            }
+        }
+        listOf(1f, 2f).forEach { scale ->
+            fontScale = scale
+            ThemeMode.entries.forEach { selected ->
+                mode = selected
+                waitForIdle()
+                ThemeMode.entries.forEach { option ->
+                    val label = labels.labelFor(option)
+                    val text = onNodeWithText(label, useUnmergedTree = true)
+                    val results = mutableListOf<TextLayoutResult>()
+                    text.performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(results) }
+                    assertEquals(1, results.single().lineCount, "$label at font scale $scale")
+                    assertFalse(results.single().hasVisualOverflow, "$label at font scale $scale")
+                    val textBounds = text.fetchSemanticsNode().boundsInRoot
+                    val buttonBounds = onNodeWithText(label).fetchSemanticsNode().boundsInRoot
+                    assertTrue(textBounds.left >= buttonBounds.left, "$label starts inside its button")
+                    assertTrue(textBounds.right <= buttonBounds.right, "$label ends inside its button")
+                }
+            }
+        }
+    }
+
+    @Test
     fun `section card renders title description and content`() = runComposeUiTest {
         setContent {
             KmpTheme {
@@ -125,6 +184,61 @@ class ComponentUiTest {
         }
         onNodeWithContentDescription("Show key").performClick()
         onNodeWithContentDescription("Hide key").assertIsDisplayed()
+    }
+
+    @Test
+    fun `field and tooltip keep spacing and usable icon targets at large text sizes`() = runDesktopComposeUiTest(
+        width = 600,
+        height = 300,
+    ) {
+        var fontScale by mutableStateOf(1f)
+        var expectedGap = 0.dp
+        var expectedPadding = 0.dp
+        setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale)) {
+                KmpTheme {
+                    val spacing = MaterialTheme.kmpSpacing
+                    expectedGap = spacing.small
+                    expectedPadding = spacing.medium
+                    val labelTopPadding = with(LocalDensity.current) {
+                        MaterialTheme.typography.bodySmall.lineHeight.toDp() / 2
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(spacing.medium),
+                        horizontalArrangement = Arrangement.spacedBy(spacing.small),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        SecretTextField(
+                            value = "secret",
+                            onValueChange = {},
+                            label = "Secret",
+                            modifier = Modifier.weight(1f),
+                            revealToggle = SecretRevealToggle.ICON,
+                        )
+                        InfoTooltip("More information", modifier = Modifier.padding(top = labelTopPadding))
+                    }
+                }
+            }
+        }
+        listOf(1f, 2f).forEach { scale ->
+            fontScale = scale
+            waitForIdle()
+            val tooltip = onNodeWithContentDescription("More information")
+            tooltip.assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
+            val fieldBounds = onNode(hasSetTextAction()).getUnclippedBoundsInRoot()
+            val tooltipBounds = tooltip.getUnclippedBoundsInRoot()
+            val rootBounds = onRoot().getUnclippedBoundsInRoot()
+            assertTrue(tooltipBounds.left - fieldBounds.right >= expectedGap)
+            assertTrue(rootBounds.right - tooltipBounds.right >= expectedPadding)
+            val revealBounds = onNodeWithContentDescription("Show").getUnclippedBoundsInRoot()
+            val fieldCenter = (revealBounds.top + revealBounds.bottom) / 2
+            val tooltipCenter = (tooltipBounds.top + tooltipBounds.bottom) / 2
+            assertEquals(fieldCenter.value, tooltipCenter.value, 1f)
+            tooltip.requestFocus().assertIsFocused()
+            onNodeWithContentDescription("Show").performClick()
+            onNodeWithContentDescription("Hide").performClick()
+        }
     }
 
     @Test
