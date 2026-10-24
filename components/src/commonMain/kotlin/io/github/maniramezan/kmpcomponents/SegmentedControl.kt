@@ -2,9 +2,11 @@ package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
@@ -15,7 +17,9 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow as MaterialSingleChoiceSegmentedButtonRow
@@ -112,19 +116,21 @@ public fun ThemeSingleChoiceSegmentedButtonRow(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
-    MaterialSingleChoiceSegmentedButtonRow(modifier = modifier) {
-        options.forEachIndexed { index, option ->
-            SegmentedButton(
-                selected = index == selectedIndex,
-                onClick = { onOptionSelected(index) },
-                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-                modifier = Modifier
-                    .keyboardFocusOutline(SegmentedButtonDefaults.itemShape(index = index, count = options.size))
-                    .heightIn(min = minimumTouchTargetSize()),
-                enabled = enabled,
-                icon = { SegmentedButtonDefaults.Icon(active = index == selectedIndex) },
-                label = { Text(option) },
-            )
+    key(LocalLayoutDirection.current) {
+        MaterialSingleChoiceSegmentedButtonRow(modifier = modifier) {
+            options.forEachIndexed { index, option ->
+                SegmentedButton(
+                    selected = index == selectedIndex,
+                    onClick = { onOptionSelected(index) },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                    modifier = Modifier
+                        .keyboardFocusOutline(SegmentedButtonDefaults.itemShape(index = index, count = options.size))
+                        .heightIn(min = minimumTouchTargetSize()),
+                    enabled = enabled,
+                    icon = { SegmentedButtonDefaults.Icon(active = index == selectedIndex) },
+                    label = { Text(option, modifier = Modifier.width(IntrinsicSize.Max)) },
+                )
+            }
         }
     }
 }

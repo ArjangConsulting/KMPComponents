@@ -368,7 +368,8 @@ public final class io/github/maniramezan/kmpcomponents/FormTextFieldKt {
 }
 
 public final class io/github/maniramezan/kmpcomponents/InfoTooltipKt {
-	public static final fun InfoTooltip (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final synthetic fun InfoTooltip (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun InfoTooltip (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/Long;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/maniramezan/kmpcomponents/InputControlsKt {

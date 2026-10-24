@@ -1,12 +1,5 @@
 package io.github.maniramezan.kmpcomponents
 
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
@@ -26,7 +19,6 @@ public data class ThemeModeLabels(
 }
 
 /** Segmented control for choosing a [ThemeMode]; pair it with [KmpTheme]'s `mode` parameter. */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun ThemeModeSelector(
     selected: ThemeMode,
@@ -36,17 +28,13 @@ public fun ThemeModeSelector(
     labels: ThemeModeLabels = ThemeModeLabels(),
 ) {
     val modes = ThemeMode.entries
-    SingleChoiceSegmentedButtonRow(modifier = modifier) {
-        modes.forEachIndexed { index, mode ->
-            SegmentedButton(
-                selected = mode == selected,
-                onClick = { onSelect(mode) },
-                shape = SegmentedButtonDefaults.itemShape(index = index, count = modes.size),
-                enabled = enabled,
-                label = { Text(labels.labelFor(mode), modifier = Modifier.width(IntrinsicSize.Max)) },
-            )
-        }
-    }
+    ThemeSingleChoiceSegmentedButtonRow(
+        options = modes.map(labels::labelFor),
+        selectedIndex = modes.indexOf(selected),
+        onOptionSelected = { onSelect(modes[it]) },
+        modifier = modifier,
+        enabled = enabled,
+    )
 }
 
 /**

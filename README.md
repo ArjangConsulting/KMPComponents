@@ -101,7 +101,7 @@ or browse the copy that CI publishes from `main` to
 | `CountBadge` | Pill with a count, capped as `99+`, with an optional spoken description. |
 | `EmptyState` | Centered title, message, and optional action for an empty pane. |
 | `ConfirmDialog` | Confirm / cancel dialog, optionally with a destructive (error-colored) confirm button. |
-| `InfoTooltip` | Info glyph showing an explanation on hover, long-press, or focus; screen readers read it directly. |
+| `InfoTooltip` | Info glyph showing an explanation on hover, long-press, or focus; configurable hover duration (`displayDurationMillis = null` keeps it visible while hovered); screen readers read it directly. |
 | `NoticeCard` | Full-width `StatusTone` notice with an optional action ("Retry") and dismiss button. |
 | `ProgressIndicator` | Centered spinner or determinate bar with an announced label, for a loading pane. |
 | `LocalReduceMotionEnabled` | Optional override for decorative animations and page hints; null follows live system settings. |

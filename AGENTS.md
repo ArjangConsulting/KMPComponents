@@ -77,7 +77,8 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
     `ActionsScreenshotTest.kt`, `SelectionScreenshotTest.kt`,
     `ContainersScreenshotTest.kt`, `NavigationScreenshotTest.kt`,
-    `AssistantScreenshotTest.kt`, `DesktopExtrasScreenshotTest.kt`; `SegmentedContentTest.kt` holds both its interaction test and goldens)
+    `AssistantScreenshotTest.kt`, `DesktopExtrasScreenshotTest.kt`; `SegmentedControlsScreenshotTest.kt`
+    covers live layout-direction changes, and `SegmentedContentTest.kt` holds both its interaction test and goldens)
     so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
 - `components-image/` — the second published module (`...:components-image`, package

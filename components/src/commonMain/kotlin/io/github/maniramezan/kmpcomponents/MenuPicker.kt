@@ -13,6 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 
 /**
  * A labeled dropdown for picking one of [items], shown as a read-only outlined field that opens a
@@ -20,7 +22,8 @@ import androidx.compose.ui.Modifier
  *
  * [itemLabel] supplies each item's visible text; [selected] does not have to be in [items] (for
  * example a value that is no longer offered), and is shown with the same label. Whether the menu
- * is open is internal UI state; disabling the picker closes the menu.
+ * is open is internal UI state; disabling the picker closes the menu. The mouse cursor indicates
+ * a clickable picker rather than editable text.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +40,10 @@ public fun <T> MenuPicker(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { if (enabled) expanded = it },
-        modifier = modifier,
+        modifier = modifier.pointerHoverIcon(
+            icon = if (enabled) PointerIcon.Hand else PointerIcon.Default,
+            overrideDescendants = true,
+        ),
     ) {
         OutlinedTextField(
             value = itemLabel(selected),

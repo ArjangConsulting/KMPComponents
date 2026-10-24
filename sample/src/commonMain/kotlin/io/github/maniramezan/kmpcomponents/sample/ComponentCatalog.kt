@@ -3,7 +3,6 @@ package io.github.maniramezan.kmpcomponents.sample
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +15,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -65,6 +61,7 @@ import io.github.maniramezan.kmpcomponents.TabChipRow
 import io.github.maniramezan.kmpcomponents.ThemeMode
 import io.github.maniramezan.kmpcomponents.ThemeModeDropdown
 import io.github.maniramezan.kmpcomponents.ThemeModeSelector
+import io.github.maniramezan.kmpcomponents.ThemeSingleChoiceSegmentedButtonRow
 import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TonalBadge
 import io.github.maniramezan.kmpcomponents.kmpSpacing
@@ -199,19 +196,13 @@ private enum class FontScale(val label: String, val factor: Float) {
     HUGE("200%", 2f),
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun <T> Segmented(options: List<T>, selected: T, label: (T) -> String, onSelect: (T) -> Unit) {
-    SingleChoiceSegmentedButtonRow {
-        options.forEachIndexed { index, option ->
-            SegmentedButton(
-                selected = option == selected,
-                onClick = { onSelect(option) },
-                shape = SegmentedButtonDefaults.itemShape(index, options.size),
-                label = { Text(label(option), modifier = Modifier.width(IntrinsicSize.Max)) },
-            )
-        }
-    }
+    ThemeSingleChoiceSegmentedButtonRow(
+        options = options.map(label),
+        selectedIndex = options.indexOf(selected),
+        onOptionSelected = { onSelect(options[it]) },
+    )
 }
 
 @Composable
@@ -308,6 +299,7 @@ private fun ProviderSection() {
             InfoTooltip(
                 "Use the eye button to show or hide the secret.",
                 modifier = Modifier.padding(top = labelTopPadding),
+                displayDurationMillis = null,
             )
         }
     }
