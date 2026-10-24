@@ -49,6 +49,10 @@ do not invent a similar-looking Material signature or silently upgrade the depen
 
 ## Verify in the consuming project
 
+For layout, gesture, accessibility, or native-host changes, read the relevant sections of
+[references/multiplatform-ui.md](references/multiplatform-ui.md). It covers ownership, constraint
+and gesture contracts, selecting platform checks, and interpreting audit evidence.
+
 Compile the affected target using the app's existing Gradle tasks. Exercise the callbacks and
 state transitions changed by the task, and inspect affected UI in the relevant themes, large text,
 and RTL where applicable. Distinguish source/build verification from device or screen-reader checks

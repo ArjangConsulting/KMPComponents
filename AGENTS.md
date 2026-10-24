@@ -188,6 +188,18 @@ table.
 Glyphs need no icon dependency: add a case to `Glyphs.kt`. Size anything that is not spacing from
 typography (`glyphSize(style)`) so it follows the user's font scale.
 
+## Multiplatform UI contracts
+
+Use [Multiplatform UI verification](skills/use-kmpcomponents/references/multiplatform-ui.md) when
+changing layout, input, accessibility, or native host integration. It records reusable design
+contracts and evidence levels; the audit report records run-specific results.
+
+Share component behavior and keep native window/system-bar/launcher effects in hosts or focused
+platform adapters. Reproduce failures with the real constraints and interaction state, then probe
+relevant native paths early. JVM layout/semantics tests do not establish native accessibility behavior.
+For this repo's mobile UI verification, use an Amoo subagent when available, inspect current audit
+capabilities, and record missing/blocked coverage explicitly. Consumer projects choose their own tools.
+
 ## Build and verification
 
 ```bash

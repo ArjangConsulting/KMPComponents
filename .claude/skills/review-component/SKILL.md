@@ -37,7 +37,11 @@ real failure.
 ## Accessibility
 
 - Titles are headings; dynamic warnings/errors use a polite live region; icon-only controls have a
-  `contentDescription`; touch targets are not shrunk below Material minimums.
+  meaningful name. Focused items expose their associated name/role/state without hiding independent actions.
+- Selection and keyboard focus have a shape/border/check cue as well as color. Meaningful drawn or
+  bitmap graphics are reviewed separately from a provider's contrast verdict.
+- Distinguish visible/clipped bounds from full targets. Missing exporter properties are unavailable
+  evidence, not proof of an unnamed app control. A Compose semantics assertion is not a native speech test.
 
 ## Performance
 
@@ -49,3 +53,15 @@ real failure.
 
 - `commonTest` for logic, `jvmTest` UI test for interaction, a `ScreenshotTest` gallery entry with
   reviewed goldens, sample catalog entry, README row, `AGENTS.md` repository map updated.
+
+## Platform contracts and evidence
+
+Use [Multiplatform UI verification](../../../skills/use-kmpcomponents/references/multiplatform-ui.md)
+for relevant failure cases and verification scope. Review actual text fit and reachable actions at
+constrained widths, live RTL changes, gesture ownership inside scrolling parents, and host effects
+such as resolved-theme system bars or launch icons when touched. Check that direction-dependent
+cache invalidation does not discard caller-owned state.
+
+Name the tested target/build and state. Separate source/JVM checks, native observations, heuristic
+versus native audits, and assistive-technology journeys. Report unsupported or blocked checks as
+coverage gaps; do not require unrelated platform runs for a change with no cross-platform effect.

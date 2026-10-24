@@ -3,8 +3,11 @@
 The portable consumer skill is [use-kmpcomponents](../skills/use-kmpcomponents/SKILL.md). It helps an
 agent choose from the component catalog, inspect the API for your dependency version, apply the
 theme, and connect components to your application's state. Its supporting files include a generated
-[catalog with source links](../skills/use-kmpcomponents/references/catalog.md) and a
-[usage guide with a complete example](../skills/use-kmpcomponents/references/usage.md).
+[catalog with source links](../skills/use-kmpcomponents/references/catalog.md), a
+[usage guide with a complete example](../skills/use-kmpcomponents/references/usage.md) and
+[Multiplatform UI verification](../skills/use-kmpcomponents/references/multiplatform-ui.md).
+The latter distills layout, gesture, native-host, and accessibility lessons into reusable contracts
+and distinguishes builds, screenshots, native audits, and screen-reader evidence.
 
 The skill is checked in under `skills/` for distribution. That location does not automatically
 register it with every agent. Install the entire folder, including `references/`, into your
