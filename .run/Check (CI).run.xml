@@ -30,6 +30,7 @@
           <option value=":sample:compileKotlinJvm" />
           <option value=":sample-android:assembleDebug" />
           <option value=":sample:linkDebugFrameworkIosSimulatorArm64" />
+          <option value=":sample:wasmJsBrowserDistribution" />
         </list>
       </option>
       <option name="vmOptions" />

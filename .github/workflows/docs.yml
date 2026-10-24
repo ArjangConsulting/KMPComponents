@@ -1,7 +1,7 @@
 name: Docs
 
-# Publishes the API docs of a released tag to GitHub Pages, so the hosted reference matches what is
-# on Maven Central. Release Please calls it after a release is published; run it by hand to
+# Publishes the API docs and the web catalog (under /catalog/) of a released tag to GitHub Pages, so
+# the hosted reference matches what is on Maven Central. Release Please calls it after a release is published; run it by hand to
 # republish a tag. Requires Settings > Pages > Source: GitHub Actions.
 on:
   workflow_call:
@@ -47,8 +47,13 @@ jobs:
           ORG_GRADLE_PROJECT_VERSION_NAME: ${{ inputs.tag }}
         run: ./gradlew :dokkaGenerate
 
-      - name: Include agent discovery index
-        run: cp llms.txt build/dokka/html/llms.txt
+      - name: Build web catalog
+        run: ./gradlew :sample:wasmJsBrowserDistribution
+
+      - name: Assemble site
+        run: |
+          cp llms.txt build/dokka/html/llms.txt
+          cp -R sample/build/dist/wasmJs/productionExecutable build/dokka/html/catalog
 
       - uses: actions/upload-pages-artifact@v5
         with:

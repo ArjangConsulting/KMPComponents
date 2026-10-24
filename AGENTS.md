@@ -104,12 +104,15 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   wait with `awaitIdle()` plus `withContext(Dispatchers.Default) { delay(...) }`. `jvmTest` keeps the
   network tests that need the JDK HTTP server. Coil has no disk cache on the web.
 - Root `build.gradle.kts` aggregates Dokka for both modules: `./gradlew :dokkaGenerate` writes
-  `build/dokka/html`. CI builds it to catch KDoc errors; `docs.yml` publishes it for each release tag.
+  `build/dokka/html`. CI builds it to catch KDoc errors; `docs.yml` publishes it for each release tag,
+  with the web catalog under `catalog/`.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`) and its PNG app icon; `icons/` contains
-  desktop packaging icons. `iosMain` holds the view controller for `sample/ios` (XcodeGen spec,
+  desktop packaging icons. `wasmJsMain` mounts the catalog with `ComposeViewport` on its
+  `index.html` and reuses the desktop icon as the favicon (`./gradlew :sample:wasmJsBrowserDevelopmentRun`).
+  `docs.yml` publishes `wasmJsBrowserDistribution` to Pages under `/catalog/` with each release. `iosMain` holds the view controller for `sample/ios` (XcodeGen spec,
   Swift host, and app icon asset catalog).
 - The catalog's section picker opens each component family. `PickerAvailabilityControls.kt` lets
   testers disable a popup while it is open. `sample/src/jvmTest/.../CatalogUiTest.kt` renders all
@@ -121,7 +124,7 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   an explicit action.
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`),
   with an adaptive launcher icon using the sample artwork.
-- `.run/` — shared IDE run configurations (desktop and Android sample catalogs, JVM tests, all-target tests, CI
+- `.run/` — shared IDE run configurations (desktop, Android, and web sample catalogs, JVM tests, all-target tests, CI
   check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
 - `.github/workflows/` — `ci.yml` (PRs, main, and dispatch), `release-please.yml` -> `release.yml`

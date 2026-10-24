@@ -47,7 +47,7 @@ jobs:
       - name: Build library, API docs, and samples
         run: >-
           ./gradlew :components:assemble :components-image:assemble :dokkaGenerate :sample:compileKotlinJvm
-          :sample-android:assembleDebug :sample:linkDebugFrameworkIosSimulatorArm64
+          :sample-android:assembleDebug :sample:linkDebugFrameworkIosSimulatorArm64 :sample:wasmJsBrowserDistribution
 
       # Test, lint, and Kover reports, and Roborazzi diff images when a screenshot changes.
       - uses: actions/upload-artifact@v7

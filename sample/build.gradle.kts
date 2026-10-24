@@ -1,7 +1,9 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 // Catalog of every component, shared by the desktop app (`./gradlew :sample:run`), the Android app
-// (`:sample-android`), and the iOS app (`sample/ios`). Not published.
+// (`:sample-android`), the iOS app (`sample/ios`), and the web app
+// (`./gradlew :sample:wasmJsBrowserDevelopmentRun`). Not published.
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.multiplatform.library)
@@ -16,6 +18,15 @@ kotlin {
         compileSdk = 37
         minSdk = 26
         compilerOptions.jvmTarget = JvmTarget.JVM_17
+    }
+    // The web catalog. `wasmJsBrowserDistribution` writes the static site that docs.yml publishes to
+    // GitHub Pages under /catalog/.
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            commonWebpackConfig { outputFileName = "catalog.js" }
+        }
+        binaries.executable()
     }
     listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
         target.binaries.framework {
@@ -33,6 +44,10 @@ kotlin {
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
+        }
+        // The browser tab icon reuses the desktop app icon.
+        wasmJsMain {
+            resources.srcDir("src/jvmMain/resources")
         }
         jvmTest.dependencies {
             implementation(kotlin("test"))
