@@ -1,16 +1,23 @@
 name: Docs
 
-# Publishes the API docs that CI built on main to GitHub Pages. Requires Settings > Pages >
-# Source: GitHub Actions.
+# Publishes the API docs of a released tag to GitHub Pages, so the hosted reference matches what is
+# on Maven Central. Release Please calls it after a release is published; run it by hand to
+# republish a tag. Requires Settings > Pages > Source: GitHub Actions.
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types: [completed]
-    branches: [main]
+  workflow_call:
+    inputs:
+      tag:
+        description: Released bare SemVer tag to document
+        required: true
+        type: string
   workflow_dispatch:
+    inputs:
+      tag:
+        description: Released bare SemVer tag to document
+        required: true
+        type: string
 
 permissions:
-  actions: read
   contents: read
   pages: write
   id-token: write
@@ -21,47 +28,31 @@ concurrency:
 
 jobs:
   deploy:
-    if: >-
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.event == 'push' &&
-       github.event.workflow_run.head_repository.full_name == github.repository) ||
-      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     runs-on: macos-26
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
-        if: github.event_name == 'workflow_dispatch'
+        with:
+          ref: ${{ inputs.tag }}
       - uses: actions/setup-java@v6
-        if: github.event_name == 'workflow_dispatch'
         with:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v6
-        if: github.event_name == 'workflow_dispatch'
 
       - name: Build API docs
-        if: github.event_name == 'workflow_dispatch'
+        env:
+          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ inputs.tag }}
         run: ./gradlew :dokkaGenerate
 
       - name: Include agent discovery index
-        if: github.event_name == 'workflow_dispatch'
         run: cp llms.txt build/dokka/html/llms.txt
-
-      - name: Download API docs from CI
-        if: github.event_name == 'workflow_run'
-        uses: actions/download-artifact@v8
-        with:
-          name: docs-site
-          path: site
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: ${{ github.event_name == 'workflow_run' && 'site' || 'build/dokka/html' }}
+          path: build/dokka/html
 
       - id: deployment
         uses: actions/deploy-pages@v5

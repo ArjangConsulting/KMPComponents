@@ -26,7 +26,8 @@ local source instead of the published artifact.
 
 Use source/KDoc from that exact version, a matching repository tag, dependency source JAR, or
 that checkout's `components/api/` dumps to confirm names, parameter names, overloads, defaults,
-and opt-ins. Catalog links and the hosted API site can be newer than the installed dependency.
+and opt-ins. Catalog links (main) and the hosted API site (latest release) can be newer than the installed
+dependency.
 If a desired API is unavailable, use an available component or explain the version requirement;
 do not invent a similar-looking Material signature or silently upgrade the dependency.
 

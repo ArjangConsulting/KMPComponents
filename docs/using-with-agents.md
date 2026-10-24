@@ -65,7 +65,8 @@ can read explicitly. Automatic `llms.txt` discovery depends on the tool.
 ## Version and platform checks
 
 Match the skill and source checkout to the library version you use when possible. The generated
-catalog and hosted API site can describe APIs newer than your Maven dependency. The skill instructs
+catalog can describe APIs newer than your Maven dependency, and the hosted API site describes the
+latest release. The skill instructs
 agents to inspect the consumer's resolved version, a matching tag, or matching source artifacts
 instead of inventing signatures or upgrading dependencies without authorization.
 

@@ -1,5 +1,8 @@
 # KMPComponents
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.maniramezan.kmpcomponents/components)](https://central.sonatype.com/artifact/io.github.maniramezan.kmpcomponents/components)
+[![CI](https://github.com/ArjangConsulting/KMPComponents/actions/workflows/ci.yml/badge.svg)](https://github.com/ArjangConsulting/KMPComponents/actions/workflows/ci.yml)
+
 Reusable Compose Multiplatform components for Android, desktop (JVM), iOS, and web (Wasm). The library adapts
 the platform-neutral tokens from [`kommon`](https://github.com/maniramezan/kommon)'s
 `design-system` module; it does not define a competing design system.
@@ -17,16 +20,21 @@ index. Contributor instructions for changing this library remain in `AGENTS.md`.
 
 ## Install
 
+The latest release is on [Maven Central](https://central.sonatype.com/namespace/io.github.maniramezan.kmpcomponents).
+Release Please updates the versions below when a release is cut.
+
+<!-- x-release-please-start-version -->
 ```kotlin
 // build.gradle.kts
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("io.github.maniramezan.kmpcomponents:components:<version>")
+            implementation("io.github.maniramezan.kmpcomponents:components:0.1.1")
         }
     }
 }
 ```
+<!-- x-release-please-end -->
 
 `kommon`'s `design-system`, Compose `runtime`, and `material3` are exposed as `api` dependencies,
 so token types and Material components are available without extra declarations.
@@ -42,9 +50,11 @@ resolves it from Maven Central; no local dependency substitution is required.
 loader. It is backed by [Coil 3](https://coil-kt.github.io/coil/) with Ktor networking and
 brings each platform's Ktor engine (Android, Darwin, Java); no Coil types appear in its API.
 
+<!-- x-release-please-start-version -->
 ```kotlin
-implementation("io.github.maniramezan.kmpcomponents:components-image:<version>")
+implementation("io.github.maniramezan.kmpcomponents:components-image:0.1.1")
 ```
+<!-- x-release-please-end -->
 
 The image artifact targets `android`, `jvm`, `iosArm64`, and `iosSimulatorArm64`.
 
@@ -79,7 +89,7 @@ KmpTheme(mode = themeMode) {
 ## Catalog
 
 API reference for both artifacts: run `./gradlew :dokkaGenerate` (output in `build/dokka/html`),
-or browse the copy that CI publishes from `main` to
+or browse the copy for the latest release on
 [GitHub Pages](https://arjangconsulting.github.io/KMPComponents/).
 
 ### Theme and forms
@@ -334,14 +344,17 @@ to make your own animations follow it. The sample's Appearance controls include 
 ./gradlew :components:jvmTest             # fastest loop: common + desktop UI tests
 ./gradlew :components:allTests            # unit tests on every target (UI tests run on jvm)
 ./gradlew ktlintCheck                     # style from .editorconfig; ktlintFormat fixes most issues
+./gradlew :components:lint :components-image:lint  # Android and JVM lint for the libraries
 ./gradlew :components:verifyRoborazziJvm  # desktop tests plus screenshot comparison
 ./gradlew :components:recordRoborazziJvm  # re-record goldens after an intended visual change
 ./gradlew :components:checkKotlinAbi      # public API against components/api (updateKotlinAbi accepts changes)
 ./gradlew :components:koverHtmlReport     # coverage report in components/build/reports/kover
+./gradlew :components:koverVerify         # fails below the coverage floor in components/build.gradle.kts
 ./gradlew :components:assemble :sample:compileKotlinJvm :sample-android:assembleDebug
 ```
 
-iOS tests need macOS with Xcode, and web tests need Chrome. The build needs access to Google Maven
+Contribution steps are in [CONTRIBUTING.md](CONTRIBUTING.md); report vulnerabilities as described in
+[SECURITY.md](SECURITY.md). iOS tests need macOS with Xcode, and web tests need Chrome. The build needs access to Google Maven
 for the Android plugin.
 
 To build against a local checkout of `kommon` next to this repo, pass `-PuseLocalKommon=true`;

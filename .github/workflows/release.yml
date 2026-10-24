@@ -7,15 +7,6 @@ on:
         description: Bare SemVer tag to build and publish
         required: true
         type: string
-    secrets:
-      MAVEN_CENTRAL_USERNAME:
-        required: true
-      MAVEN_CENTRAL_PASSWORD:
-        required: true
-      SIGNING_IN_MEMORY_KEY:
-        required: true
-      SIGNING_IN_MEMORY_KEY_PASSWORD:
-        required: true
   workflow_dispatch:
     inputs:
       tag:
@@ -59,6 +50,22 @@ jobs:
             exit 1
           fi
 
+      - name: Check publishing secrets
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          SIGNING_IN_MEMORY_KEY: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          SIGNING_IN_MEMORY_KEY_PASSWORD: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+        run: |
+          missing=0
+          for name in MAVEN_CENTRAL_USERNAME MAVEN_CENTRAL_PASSWORD SIGNING_IN_MEMORY_KEY SIGNING_IN_MEMORY_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is not set in the secrets environment."
+              missing=1
+            fi
+          done
+          exit "$missing"
+
       - name: Check
         env:
           ORG_GRADLE_PROJECT_VERSION_NAME: ${{ inputs.tag }}
@@ -90,3 +97,15 @@ jobs:
           tag_name: ${{ inputs.tag }}
           name: ${{ inputs.tag }}
           generate_release_notes: true
+
+      # Stacked PRs reach main through merge commits, so Release Please can list a change twice.
+      - name: Remove repeated release-note entries
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json body --jq .body > notes.md
+          python3 scripts/dedupe_release_notes.py < notes.md > deduped.md
+          if ! cmp -s notes.md deduped.md; then
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --notes-file deduped.md
+          fi

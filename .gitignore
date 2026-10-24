@@ -14,3 +14,4 @@ sample/ios/*.xcodeproj/
 sample/ios/Info.plist
 
 .claude/settings.local.json
+__pycache__/

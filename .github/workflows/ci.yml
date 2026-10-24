@@ -4,6 +4,9 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Release Please dispatches CI on its release branch when it pushes with GITHUB_TOKEN, whose pushes
+  # do not trigger workflows (see release-please.yml).
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -27,34 +30,26 @@ jobs:
       - name: Check consumer agent catalog
         run: python3 scripts/update_agent_catalog.py --check
 
+      - name: Test repository scripts
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
+
       - name: Lint
-        run: ./gradlew ktlintCheck
+        run: ./gradlew ktlintCheck :components:lint :components-image:lint :sample-android:lintDebug
 
       # Use the wrapper so CI builds with the pinned Gradle version rather than the runner's.
       # verifyRoborazziJvm runs the desktop tests with screenshot comparison against the goldens.
       - name: Test and check the public API
         run: >-
           ./gradlew :components:allTests :components:verifyRoborazziJvm :components:checkKotlinAbi
-          :components:koverXmlReport :components:koverLog
-          :components-image:allTests :components-image:checkKotlinAbi :sample:jvmTest
+          :components:koverXmlReport :components:koverLog :components:koverVerify
+          :components-image:allTests :components-image:checkKotlinAbi :components-image:koverVerify :sample:jvmTest
 
       - name: Build library, API docs, and samples
         run: >-
           ./gradlew :components:assemble :components-image:assemble :dokkaGenerate :sample:compileKotlinJvm
           :sample-android:assembleDebug :sample:linkDebugFrameworkIosSimulatorArm64
 
-      - name: Include agent discovery index
-        run: cp llms.txt build/dokka/html/llms.txt
-
-      - name: Upload API docs for Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v7
-        with:
-          name: docs-site
-          path: build/dokka/html/
-          if-no-files-found: error
-
-      # Test reports, Kover coverage, and Roborazzi diff images when a screenshot changes.
+      # Test, lint, and Kover reports, and Roborazzi diff images when a screenshot changes.
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -64,3 +59,4 @@ jobs:
             components/build/outputs/roborazzi/**
             components-image/build/reports/**
             sample/build/reports/**
+            sample-android/build/reports/**
