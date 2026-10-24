@@ -109,6 +109,7 @@ public fun SegmentedControl(
 /**
  * Material's connected, outlined segmented buttons for choosing one of [options], with a check
  * mark on the selected segment. Each segment is at least the Material minimum touch target high.
+ * Labels retain their intrinsic width; the connected row scrolls horizontally when space is tight.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,7 +121,7 @@ public fun ThemeSingleChoiceSegmentedButtonRow(
     enabled: Boolean = true,
 ) {
     key(LocalLayoutDirection.current) {
-        MaterialSingleChoiceSegmentedButtonRow(modifier = modifier) {
+        MaterialSingleChoiceSegmentedButtonRow(modifier = modifier.horizontalScroll(rememberScrollState())) {
             options.forEachIndexed { index, option ->
                 SegmentedButton(
                     selected = index == selectedIndex,

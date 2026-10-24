@@ -1,7 +1,7 @@
 # Shared-component accessibility audit
 
 The main audit covers the common Compose implementation and desktop-rendered behavior of the
-component catalog. The bounded iOS follow-up below adds simulator evidence for the reported screen.
+component catalog. The mobile follow-ups below add iOS and Android runtime evidence for bounded catalog states.
 It uses the repository's design style guide and the WCAG 2.2 criteria for
 [use of color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html),
 [text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html),
@@ -26,6 +26,9 @@ control boundaries. These are the acceptance thresholds used by the tests.
 | P2 | At 200% text, a long key squeezed the copy value into broken word fragments on iOS. | `KeyValueRow` flows the value below the label when its words cannot fit beside it. `ComponentUiTest` checks word boundaries at 100%/200% in LTR/RTL, and the iOS copy action was rechecked. |
 | P2 | The focusable zoom container exposed a state without its child image's description. | `ZoomableImage` merges its image description with the zoom state. A regression assertion on the focused node fails before the fix. |
 | P2 | The split-pane resize handle occupied only an 8 dp strip. | Both split directions reserve Material's minimum touch target independently of the thin visible line. Interaction tests check dimensions alongside keyboard and accessibility actions. |
+| P2 | Android's system-bar icons followed the device theme even when the catalog selected the opposite appearance. | The catalog reports its resolved theme to the Android host, which updates status/navigation icon appearance. Catalog tests check the callback and emulator captures verify Light/Dark/System. |
+| P2 | Connected segments split an ordinary label and grew to inconsistent heights at 200% text on a narrow Android viewport. | The shared connected row scrolls at intrinsic label widths. `ActionsUiTest` reproduces the original two-line label and verifies intact labels plus reachable selections in LTR/RTL after the fix. |
+| P2 | An unzoomed image preview's drag recognizer swallowed vertical parent scrolling. | The pan recognizer is active only while zoomed. `DesktopExtrasUiTest` reproduces the original blocked scroll and checks parent scrolling at 1× versus internal panning while zoomed. |
 
 ## Verification coverage
 
@@ -105,9 +108,65 @@ These findings prevent a blanket native-audit pass. The final run restored Syste
 This follow-up is limited to this screen in the default theme, LTR, and the catalog's font-scale
 control. It does not establish a full Dynamic Type, VoiceOver, TalkBack, browser, or whole-app audit.
 
+## Android catalog follow-up
+
+Amoo installed and launched the sample APK built with AGP 9.1.1 on an Android 15/API 35
+emulator: 1080 × 2400 pixels, 420 dpi (density 2.625), original system font scale 1.0.
+The normal-text sweep covered the top presentation of all 14 catalog families in the default
+light theme, plus an opened confirmation dialog. Cancel dismissed the dialog; its captured tree
+excluded underlying app controls. This is ordinary UI/tree evidence, not TalkBack traversal proof.
+Targeted checks added appearance, RTL, and the Desktop helpers preview/copy row at 200% catalog
+text. Catalog text multipliers do not verify Android's full OS/nonlinear font-scaling behavior.
+
+Amoo's `audit_accessibility` evaluated only the `UX-001` naming and `UX-002` bounds heuristics.
+Its verdicts were `notAssessed`, with repeated unnamed-control and small-bounds findings.
+Android's exported tree flattened descendants, separated visible labels from anonymous controls,
+and omitted selected/state-description data. These findings need review; empty exported fields
+do not establish missing native spoken names. For example, Reset's visible button node measured
+40 dp high beside a co-located 48 dp outer node; actual hit-region coverage was unavailable.
+The vertical split-pane handle measured 48 dp high when fully visible.
+
+`audit_accessibility_native` returned `unsupported` with no evaluated Android checks.
+`test_voiceover` also returned `unsupported`, and the installed schema exposed no TalkBack
+counterpart. No Android native/ATF, contrast, TalkBack speech, reading-order, or announcement
+pass is claimed. The heuristic missed both confirmed visual defects below, which were found
+through screenshots and app interaction.
+
+Selecting catalog Light on a dark-system emulator left white status-bar icons on a light surface.
+The Android host now uses the resolved catalog appearance for status/navigation icon styles;
+Light/Dark/System screenshots verify the corrected status-bar appearance. At 200% text, the
+connected theme row also split “System” into “Syste”/“m” and broke the joined outline. The shared
+row now preserves intrinsic label widths and scrolls when constrained. A JVM regression test
+fails before the change and passes in LTR/RTL afterward. Final emulator captures at 200% confirm
+uniform single-line labels in both directions; horizontal scrolling reveals Dark and selecting it
+changes the theme. Some gesture calls timed out after the gesture had executed, so subsequent
+queries and screenshots were used to verify the outcome.
+
+Desktop helpers' copy value wraps at words at 200%, and an Android clipboard overlay showed the
+full copied fixture text. Amoo did not export the state description, and `assert_value` returned
+a deadline error without the last observed value, so its `Copied` assertion could not be verified. Likewise, changing
+card selection visibly moved the checkmark while `tap_element` incorrectly described the screen
+as identical and `assert_selected` correctly reported unavailable state. These are provider/evidence
+limitations, not proof that the underlying component failed its action.
+
+The attempted large-text route from Desktop helpers back to the section picker failed in Amoo's
+`scroll_to_element`; the subsequent expanded-selection-group check is unverified on Android.
+A later touch regression test confirmed that `ZoomableImage` intercepted parent drags even when
+unzoomed. The app now leaves those drags to the parent and activates panning only while zoomed;
+the original navigation failure must not be attributed solely to Amoo. Its final Android follow-up
+could not execute the gesture because launch assertions and even ADB-backed screenshot capture
+timed out on the emulator. The pan fix has JVM touch-test coverage and Android build verification;
+its final Android device behavior remains unverified.
+The normal Choices presentation was included in the sweep. With the keyboard open on Chat,
+screenshots confirmed that Message and Send remained visible. The heuristic audit and later Send
+and keyboard-dismiss calls timed out; message completion is unverified. There is no claim that
+every control or scrolled state in each family was audited. App appearance/text/direction were
+restored to System/100%/LTR before the IME run; Amoo terminated the app and released that runtime.
+No OS font or accessibility-service settings were manually changed.
+
 ## Limits and host responsibilities
 
-This source, desktop-rendering, and bounded iOS audit is not a WCAG conformance certification.
+This source, desktop-rendering, and bounded mobile audit is not a WCAG conformance certification.
 VoiceOver and TalkBack announcement order, broader native bridge behavior, platform focus restoration,
 physical-device touch behavior, and browser assistive-technology behavior still need manual verification
 on their respective platforms. Those checks were not performed in this audit.

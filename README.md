@@ -132,7 +132,7 @@ sized from the body text so they follow the user's font scale.
 | `LoadingIconButton` | Icon button that shows a spinner and ignores clicks while loading. |
 | `FAB` / `ThemeExtendedFloatingActionButton` | Floating action buttons; the extended one is named by its visible label. |
 | `SegmentedControl` | Pill-shaped segments for one choice, with `SegmentDensity` and `SegmentWidthMode`. |
-| `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark. |
+| `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark; scrolls to preserve full labels in tight layouts. |
 | `SegmentedContent` | Segment bar (pill, underline, or bare) above content that crossfades; scrolls with edge fades instead of truncating titles. |
 | `PillChip` | Capsule chip with selected and unselected looks; selectable when clickable, static otherwise. |
 | `ActionPill` | Capsule command with arbitrary content and no selected state. |

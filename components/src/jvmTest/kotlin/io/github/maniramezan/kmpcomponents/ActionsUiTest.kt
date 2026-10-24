@@ -1,12 +1,18 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
@@ -17,9 +23,16 @@ import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.v2.runComposeUiTest
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 // Interaction tests for buttons, segmented controls, and pills.
 @OptIn(ExperimentalTestApi::class)
@@ -115,6 +128,46 @@ class ActionsUiTest {
         assertEquals(1, material)
         onNodeWithText("Week").assertIsSelected()
         onNodeWithText("YAML").assertIsSelected()
+    }
+
+    @Test
+    fun `connected segments keep labels intact and reachable in narrow large text layouts`() {
+        listOf(LayoutDirection.Ltr, LayoutDirection.Rtl).forEach { direction ->
+            runComposeUiTest {
+                var selected by mutableIntStateOf(1)
+                val options = listOf("System", "Light", "Dark")
+                setContent {
+                    val density = LocalDensity.current
+                    CompositionLocalProvider(
+                        LocalDensity provides Density(density.density, 2f),
+                        LocalLayoutDirection provides direction,
+                    ) {
+                        KmpTheme {
+                            ThemeSingleChoiceSegmentedButtonRow(
+                                options,
+                                selected,
+                                { selected = it },
+                                Modifier.width(260.dp),
+                            )
+                        }
+                    }
+                }
+                options.forEach { option ->
+                    val layouts = mutableListOf<TextLayoutResult>()
+                    onNodeWithText(option, useUnmergedTree = true).performSemanticsAction(
+                        SemanticsActions.GetTextLayoutResult,
+                    ) { it(layouts) }
+                    assertEquals(1, layouts.single().lineCount, "$option in $direction")
+                    assertFalse(layouts.single().hasVisualOverflow)
+                }
+                onNodeWithText("Dark").performScrollTo().performClick()
+                waitForIdle()
+                onNodeWithText("Dark").assertIsSelected()
+                onNodeWithText("System").performScrollTo().performClick()
+                waitForIdle()
+                onNodeWithText("System").assertIsSelected()
+            }
+        }
     }
 
     @Test

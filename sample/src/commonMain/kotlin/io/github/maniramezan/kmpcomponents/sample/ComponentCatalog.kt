@@ -1,5 +1,6 @@
 package io.github.maniramezan.kmpcomponents.sample
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -64,15 +66,19 @@ import io.github.maniramezan.kmpcomponents.ThemeModeSelector
 import io.github.maniramezan.kmpcomponents.ThemeSingleChoiceSegmentedButtonRow
 import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TonalBadge
+import io.github.maniramezan.kmpcomponents.isDark
 import io.github.maniramezan.kmpcomponents.kmpSpacing
 import io.github.maniramezan.kommon.designsystem.ColorToken
 import io.github.maniramezan.kommon.designsystem.KommonDesignTokens
 import io.github.maniramezan.kommon.designsystem.ShapeTokens
 import io.github.maniramezan.kommon.designsystem.ThemeTokens
 
-/** A sectioned catalog shared by the desktop, Android, and iOS sample apps. */
+/**
+ * A sectioned catalog shared by the desktop, Android, and iOS sample apps.
+ * [onDarkThemeChanged] lets the host align native system bars with the resolved catalog appearance.
+ */
 @Composable
-fun ComponentCatalog() {
+fun ComponentCatalog(onDarkThemeChanged: (Boolean) -> Unit = {}) {
     var themeMode by remember { mutableStateOf(ThemeMode.SYSTEM) }
     var brand by remember { mutableStateOf(Brand.DEFAULT) }
     var fontScale by remember { mutableStateOf(FontScale.DEFAULT) }
@@ -80,6 +86,8 @@ fun ComponentCatalog() {
     var controlsExpanded by remember { mutableStateOf(false) }
     var rightToLeft by remember { mutableStateOf(false) }
     var section by remember { mutableStateOf(CatalogSection.FORMS) }
+    val darkTheme = themeMode.isDark(isSystemInDarkTheme())
+    SideEffect { onDarkThemeChanged(darkTheme) }
     val scrollState = rememberScrollState()
     LaunchedEffect(section) { scrollState.scrollTo(0) }
     val density = LocalDensity.current

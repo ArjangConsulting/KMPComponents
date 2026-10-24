@@ -27,6 +27,8 @@ import io.github.maniramezan.kmpcomponents.KmpTheme
 import io.github.maniramezan.kmpcomponents.LocalReduceMotionEnabled
 import io.github.maniramezan.kmpcomponents.kmpSpacing
 import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class CatalogUiTest {
@@ -71,13 +73,20 @@ class CatalogUiTest {
         width = 560,
         height = 900,
     ) {
-        setContent { ComponentCatalog() }
+        val reportedAppearances = mutableListOf<Boolean>()
+        setContent { ComponentCatalog(onDarkThemeChanged = reportedAppearances::add) }
         onNodeWithText("Forms and validation").performScrollTo().assertIsDisplayed()
         onNodeWithText("Forms").performScrollTo().performClick()
         onNodeWithText(CatalogSection.STATUS.label).performScrollTo().performClick()
         onNodeWithText("Status messages and badges").performScrollTo().assertIsDisplayed()
         onNodeWithText("Forms and validation").assertDoesNotExist()
         onNodeWithText("Appearance and accessibility").performScrollTo().performClick()
+        onNodeWithText("Light").performScrollTo().performClick()
+        waitForIdle()
+        assertFalse(reportedAppearances.last())
+        onNodeWithText("Dark").performScrollTo().performClick()
+        waitForIdle()
+        assertTrue(reportedAppearances.last())
         onNode(hasText("Right-to-left layout")).performScrollTo().performClick()
         onNodeWithText("Status messages and badges").performScrollTo().assertIsDisplayed()
     }
