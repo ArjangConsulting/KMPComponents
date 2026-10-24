@@ -5,7 +5,8 @@ description: Add a new reusable Compose Multiplatform component (or split an exi
 
 # Add a component
 
-Read `AGENTS.md` ("Component API rules") first. Then:
+Read `AGENTS.md` ("Component API rules") first. For the rules that transfer to any KMP library
+(API shape, ABI dumps, version graph, evidence reporting), load `kmp-library-conventions`. Then:
 
 ## 1. Decide scope
 
@@ -50,7 +51,7 @@ Checklist while writing:
 ## 3. Test
 
 Use the relevant contracts and evidence levels in
-[Multiplatform UI verification](../../../skills/use-kmpcomponents/references/multiplatform-ui.md).
+[UI verification](../../../skills/kmp-library-conventions/references/ui-verification.md).
 Start with a small behavioral reproducer and an early affected-platform probe; a desktop gallery
 render is not proof of mobile label fit, native semantics, keyboard reachability, or host effects.
 
