@@ -70,8 +70,7 @@ latest release. The skill instructs
 agents to inspect the consumer's resolved version, a matching tag, or matching source artifacts
 instead of inventing signatures or upgrading dependencies without authorization.
 
-Core components support Android, desktop, iOS, and Wasm. The optional image artifact supports
-Android, desktop, and iOS. Application networking, persistence, routing, credential storage, and
+Core components and the optional image artifact support Android, desktop, iOS, and Wasm. Application networking, persistence, routing, credential storage, and
 business logic remain in the consuming app.
 
 ## Maintain the consumer guidance

@@ -40,6 +40,9 @@ public enum class ImageCachePolicy {
  * Memory and disk cache hits remain available according to their own policies; a cache miss shows
  * [error].
  *
+ * On the web (Wasm) there is no disk cache, so [diskCachePolicy] has no effect; the browser's HTTP
+ * cache governs repeated network loads.
+ *
  * @param memoryCacheKey a stable key for content whose URL changes (for example signed URLs);
  *   [diskCacheKey] defaults to it.
  */

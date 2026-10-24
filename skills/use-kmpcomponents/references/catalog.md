@@ -8,7 +8,7 @@ This index describes the checkout that produced it. Source links point to `main`
 discovery; inspect a tag or source artifact matching the application's resolved dependency
 version before copying a signature. A name in this index does not prove it exists in an
 older release. Core imports use `io.github.maniramezan.kmpcomponents`; the image module
-uses `io.github.maniramezan.kmpcomponents.image` and does not target Wasm.
+uses `io.github.maniramezan.kmpcomponents.image` and has the same targets.
 
 ## Theme and forms
 

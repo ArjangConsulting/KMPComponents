@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.v2.runComposeUiTest
@@ -25,23 +24,10 @@ import javax.imageio.ImageIO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-// Desktop-only because runComposeUiTest needs a Skiko runtime.
+// Desktop-only because it serves images from the JDK's HTTP server. Rendering without the network is
+// covered on every Skiko target by CachedAsyncImageRenderTest.
 @OptIn(ExperimentalTestApi::class)
 class CachedAsyncImageUiTest {
-    @Test
-    fun `missing data shows the fallback and keeps the description`() = runComposeUiTest {
-        setContent {
-            CachedAsyncImage(
-                data = null,
-                contentDescription = "Avatar",
-                modifier = Modifier.size(48.dp),
-                fallback = ColorPainter(Color.Gray),
-            )
-        }
-        onNodeWithContentDescription("Avatar").assertIsDisplayed()
-        assertEquals(Color.Gray, onNodeWithContentDescription("Avatar").captureToImage().toPixelMap()[24, 24])
-    }
-
     @Test
     fun `network image loads and a stable memory key reuses it for another URL`() {
         ImageServer().use { server ->

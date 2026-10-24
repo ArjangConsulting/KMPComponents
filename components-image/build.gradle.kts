@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
@@ -38,6 +40,28 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    // Same setup as :components: the common tests run in headless Chrome, and the executable binary
+    // only exists so webpack bundles Skiko for them (CMP-4906). Consumers get an ordinary klib.
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
+
+    // `skikoTest` holds Compose UI tests shared by every Skiko-rendered target (desktop, iOS, web).
+    // Android host tests have no Skiko renderer, so they only run `commonTest`.
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyDefaultHierarchyTemplate {
+        common {
+            group("skiko") {
+                withJvm()
+                withIosArm64()
+                withIosSimulatorArm64()
+                withWasmJs()
+            }
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             // The public signature uses Compose UI types (Modifier, Painter, ContentScale).
@@ -58,12 +82,17 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.ktor.client.java)
         }
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.js)
+        }
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
+        getByName("skikoTest").dependencies {
+            implementation(libs.compose.ui.test)
+        }
         jvmTest.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.compose.ui.test)
         }
     }
 }
