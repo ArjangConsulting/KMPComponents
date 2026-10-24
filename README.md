@@ -253,7 +253,9 @@ are `Painter`s you pass in, so there is no icon-font dependency.
 
 ### Sample app
 
-The shared catalog runs on desktop, Android, and iOS. Use **Catalog section** to jump between
+The shared catalog runs on desktop, Android, iOS, and the web. Each release publishes the web build
+at [arjangconsulting.github.io/KMPComponents/catalog/](https://arjangconsulting.github.io/KMPComponents/catalog/),
+so you can try every component in a browser. Use **Catalog section** to jump between
 component families. Every public component has an example, including standalone list and
 navigation primitives. Examples use generic copy and temporary local state; switching sections
 resets their state. Forms keep local state; chat replies, progress, and loading are UI simulations.
@@ -268,6 +270,7 @@ button.
 
 ```bash
 ./gradlew :sample:run                          # desktop
+./gradlew :sample:wasmJsBrowserDevelopmentRun  # web, served on localhost
 ./gradlew :sample-android:installDebug         # Android device or emulator
 xcodegen generate --spec sample/ios/project.yml && open sample/ios/KmpComponentsSample.xcodeproj
 ```
