@@ -857,15 +857,15 @@ public final class io/github/maniramezan/kmpcomponents/SelectionListNode {
 public abstract interface class io/github/maniramezan/kmpcomponents/ShowcaseFeedScope {
 	public abstract fun customSection (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)V
 	public static synthetic fun customSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
-	public abstract fun section-s1Sihoo (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;)V
-	public static synthetic fun section-s1Sihoo$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
+	public abstract fun section-LJ3wqLc (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;)V
+	public static synthetic fun section-LJ3wqLc$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
 	public abstract fun verticalSection (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;ZZLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;)V
 	public static synthetic fun verticalSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;ZZLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
 }
 
 public final class io/github/maniramezan/kmpcomponents/ShowcaseFeedScope$DefaultImpls {
 	public static synthetic fun customSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
-	public static synthetic fun section-s1Sihoo$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
+	public static synthetic fun section-LJ3wqLc$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
 	public static synthetic fun verticalSection$default (Lio/github/maniramezan/kmpcomponents/ShowcaseFeedScope;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/text/TextStyle;ZZLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)V
 }
 
@@ -908,7 +908,15 @@ public final class io/github/maniramezan/kmpcomponents/ShowcaseItemWidth$Wrap : 
 
 public final class io/github/maniramezan/kmpcomponents/ShowcaseKt {
 	public static final fun ShowcaseFeed-hGBTI10 (Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/layout/PaddingValues;FLkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
-	public static final fun ShowcaseRow-hcx6QBc (Ljava/util/List;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/lazy/grid/LazyGridState;Landroidx/compose/foundation/layout/PaddingValues;FLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V
+	public static final fun ShowcaseRow-PRPJcNY (Ljava/util/List;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/ShowcaseItemWidth;ILandroidx/compose/ui/unit/Dp;Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;Landroidx/compose/foundation/lazy/LazyListState;Landroidx/compose/foundation/lazy/grid/LazyGridState;Landroidx/compose/foundation/layout/PaddingValues;FLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ShowcaseSnapping : java/lang/Enum {
+	public static final field FREE Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;
+	public static final field ITEM Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/ShowcaseSnapping;
 }
 
 public final class io/github/maniramezan/kmpcomponents/SidebarNavigationKt {
