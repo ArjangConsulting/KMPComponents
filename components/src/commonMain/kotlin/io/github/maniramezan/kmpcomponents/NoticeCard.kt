@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -64,12 +64,19 @@ public fun NoticeCard(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.extraSmall),
             ) {
                 if (title != null) {
-                    Text(title, style = MaterialTheme.typography.titleSmall, color = accent)
+                    Text(
+                        title,
+                        modifier = Modifier.semantics {
+                            heading()
+                        },
+                        style = MaterialTheme.typography.titleSmall,
+                        color = tonalContentColor(accent),
+                    )
                 }
                 Text(message, style = MaterialTheme.typography.bodyMedium)
             }
             if (actionLabel != null && onAction != null) {
-                TextButton(onClick = onAction) { Text(actionLabel) }
+                ThemeTextButton(text = actionLabel, onClick = onAction)
             }
             if (onDismiss != null) {
                 GlyphIconButton(glyph = Glyph.CLOSE, label = dismissLabel, onClick = onDismiss)

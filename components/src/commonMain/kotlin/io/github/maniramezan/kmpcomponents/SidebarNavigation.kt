@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 
 /**
  * A full-height side navigation column for desktop-style layouts (app sections, preference panes).
@@ -73,6 +75,8 @@ public fun SidebarItem(
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.medium)
             .background(container)
+            .keyboardFocusOutline(MaterialTheme.shapes.medium, content)
+            .heightIn(min = minimumTouchTargetSize())
             .selectable(selected = selected, enabled = enabled, role = Role.Tab, onClick = onClick)
             .padding(horizontal = MaterialTheme.kmpSpacing.medium, vertical = MaterialTheme.kmpSpacing.small),
         verticalAlignment = Alignment.CenterVertically,
@@ -80,7 +84,14 @@ public fun SidebarItem(
     ) {
         CompositionLocalProvider(LocalContentColor provides content) {
             icon?.invoke()
-            Text(label, style = MaterialTheme.typography.labelLarge, color = content)
+            Text(
+                label,
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.labelLarge,
+                color = content,
+                fontWeight = if (selected) FontWeight.SemiBold else null,
+            )
+            if (selected) GlyphIcon(Glyph.CHECK, color = content)
         }
     }
 }

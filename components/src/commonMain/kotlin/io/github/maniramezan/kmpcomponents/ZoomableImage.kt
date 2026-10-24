@@ -90,9 +90,9 @@ public fun ZoomableImage(
                     }
                 }
             }
-            .pointerInput(Unit) {
-                detectDragGestures { change, drag ->
-                    if (zoom > 1f) {
+            .pointerInput(zoom > 1f) {
+                if (zoom > 1f) {
+                    detectDragGestures { change, drag ->
                         change.consume()
                         pan += drag
                     }
@@ -109,7 +109,7 @@ public fun ZoomableImage(
                 }
                 true
             }
-            .semantics { stateDescription = labels.zoomDescription(zoom) }
+            .semantics(mergeDescendants = true) { stateDescription = labels.zoomDescription(zoom) }
             .focusable(),
         contentAlignment = Alignment.Center,
     ) {

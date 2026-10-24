@@ -11,16 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 /** Semantic intent of a [StatusMessage]; selects its accent color. */
 public enum class StatusTone { INFO, SUCCESS, WARNING, ERROR }
-
-private const val STATUS_CONTAINER_TINT = 0.12f
 
 /**
  * An inline, non-dismissible message such as "Connection verified" or "API key rejected".
@@ -52,7 +50,14 @@ public fun StatusMessage(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.extraSmall),
         ) {
             if (title != null) {
-                Text(title, style = MaterialTheme.typography.titleSmall, color = accent)
+                Text(
+                    title,
+                    modifier = Modifier.semantics {
+                        heading()
+                    },
+                    style = MaterialTheme.typography.titleSmall,
+                    color = tonalContentColor(accent),
+                )
             }
             Text(message, style = MaterialTheme.typography.bodyMedium)
         }
@@ -74,4 +79,13 @@ internal fun statusAccent(tone: StatusTone): Color = when (tone) {
 @ReadOnlyComposable
 internal fun tonalContainerColor(
     accent: Color,
-): Color = lerp(MaterialTheme.colorScheme.surface, accent, STATUS_CONTAINER_TINT)
+): Color = tonalContainerColor(accent, MaterialTheme.colorScheme.surface)
+
+/** Uses the accent for text when readable, otherwise the theme's on-surface role. */
+@Composable
+@ReadOnlyComposable
+internal fun tonalContentColor(accent: Color): Color = readableAccent(
+    accent,
+    tonalContainerColor(accent),
+    MaterialTheme.colorScheme.onSurface,
+)

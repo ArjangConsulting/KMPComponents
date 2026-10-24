@@ -7,6 +7,11 @@ multi-ecosystem-groups:
 updates:
   - package-ecosystem: gradle
     directory: /
+    ignore:
+      - dependency-name: 'com.android.*'
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-major
     patterns:
       - '*'
     multi-ecosystem-group: dependencies

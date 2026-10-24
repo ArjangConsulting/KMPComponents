@@ -15,6 +15,16 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   existing tokens (see `TokenAdapters.kt`) or propose the token upstream in `maniramezan/kommon`.
 - Product-specific screens, copy, persistence, networking, and DI stay in consuming apps.
 
+## Consumer agent guidance
+
+`skills/use-kmpcomponents/` is a portable skill for agents using this library in consuming apps.
+`docs/using-with-agents.md` explains setup; root `llms.txt` routes documentation readers. These
+consumer resources do not replace this file or the contributor playbooks under `.claude/skills/`.
+For app-integration tasks, read the consumer skill to avoid applying contributor rules to an app.
+The skill's `references/catalog.md` is generated from the README catalog and public declaration
+locations. Regenerate it with `python3 scripts/update_agent_catalog.py` after catalog/source moves;
+CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage examples aligned with APIs.
+
 ## Repository map
 
 - `components/` — the main published module (`io.github.maniramezan.kmpcomponents:components`).
@@ -73,11 +83,14 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     Web resize cursors fall back to the hand cursor because CSS resize cursors are internal.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
+    `AccessibilityAuditTest.kt` checks selection cues, keyboard actions, accessible names, and minimum targets.
+    `SelectionAccessibilityScreenshotTest.kt` records selection and focus across themes, text sizes, and RTL.
     `ScreenshotTest.kt` renders a gallery of the original components into golden images in
     `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
     `ActionsScreenshotTest.kt`, `SelectionScreenshotTest.kt`,
     `ContainersScreenshotTest.kt`, `NavigationScreenshotTest.kt`,
-    `AssistantScreenshotTest.kt`, `DesktopExtrasScreenshotTest.kt`; `SegmentedContentTest.kt` holds both its interaction test and goldens)
+    `AssistantScreenshotTest.kt`, `DesktopExtrasScreenshotTest.kt`; `SegmentedControlsScreenshotTest.kt`
+    covers live layout-direction changes, and `SegmentedContentTest.kt` holds both its interaction test and goldens)
     so each set of goldens stays reviewable.
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
 - `components-image/` — the second published module (`...:components-image`, package
@@ -90,17 +103,20 @@ only *adapts* them to Compose/Material 3 and builds components on top.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
-  `jvmMain` the desktop window (`./gradlew :sample:run`); `iosMain` the view controller for
-  `sample/ios` (XcodeGen spec and Swift host).
+  `jvmMain` the desktop window (`./gradlew :sample:run`) and its PNG app icon; `icons/` contains
+  desktop packaging icons. `iosMain` holds the view controller for `sample/ios` (XcodeGen spec,
+  Swift host, and app icon asset catalog).
 - The catalog's section picker opens each component family. `PickerAvailabilityControls.kt` lets
   testers disable a popup while it is open. `sample/src/jvmTest/.../CatalogUiTest.kt` renders all
-  sections at 100%/200% text in LTR/RTL and checks section navigation.
+  sections at 100%/200% text in LTR/RTL and checks section navigation. `CatalogContrastTest.kt`
+  measures the generated image preview boundaries against their fill and background.
 - Catalog examples use generic copy and temporary local UI state. Do not copy consuming apps'
   workflows, business rules, storage, credentials, or backend integrations into the sample.
   Simulations must be labeled; image examples default to embedded data and load a URL only after
   an explicit action.
-- `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`).
-- `.run/` — shared IntelliJ run configurations (sample catalog, JVM tests, all-target tests, CI
+- `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`),
+  with an adaptive launcher icon using the sample artwork.
+- `.run/` — shared IDE run configurations (desktop and Android sample catalogs, JVM tests, all-target tests, CI
   check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
 - `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on
@@ -172,6 +188,18 @@ table.
 Glyphs need no icon dependency: add a case to `Glyphs.kt`. Size anything that is not spacing from
 typography (`glyphSize(style)`) so it follows the user's font scale.
 
+## Multiplatform UI contracts
+
+Use [Multiplatform UI verification](skills/use-kmpcomponents/references/multiplatform-ui.md) when
+changing layout, input, accessibility, or native host integration. It records reusable design
+contracts and evidence levels; the audit report records run-specific results.
+
+Share component behavior and keep native window/system-bar/launcher effects in hosts or focused
+platform adapters. Reproduce failures with the real constraints and interaction state, then probe
+relevant native paths early. JVM layout/semantics tests do not establish native accessibility behavior.
+For this repo's mobile UI verification, use an Amoo subagent when available, inspect current audit
+capabilities, and record missing/blocked coverage explicitly. Consumer projects choose their own tools.
+
 ## Build and verification
 
 ```bash
@@ -208,6 +236,9 @@ cannot configure the project, so say so rather than claiming a change was verifi
   (`composeMaterial3`); keep it on the release the Compose plugin pairs with `compose`.
   Dependabot groups Gradle and GitHub Actions updates into one weekly dependency PR. The ktlint
   engine version (`ktlint` in the catalog) is not tracked by Dependabot; bump it by hand.
+- Keep AGP in the 9.1 series for the documented Android Studio baseline. SDK 37 requires AGP
+  9.1.1 or later and Android Studio Panda 3 Patch 1 or later. Dependabot permits AGP patch updates;
+  move to another minor series only when intentionally updating the README's IDE requirement.
 - Keep Kotlin/JVM bytecode at `JvmTarget.JVM_17` to match kommon.
 - `.editorconfig` holds the house style (ktlint `intellij_idea` style, 120 columns, expression bodies
   may stay on the signature line, `@Composable` functions are PascalCase).

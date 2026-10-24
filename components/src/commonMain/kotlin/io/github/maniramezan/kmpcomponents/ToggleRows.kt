@@ -39,6 +39,7 @@ public fun ThemeSwitch(
 ) {
     Row(
         modifier = modifier
+            .keyboardFocusOutline()
             .heightIn(min = minimumTouchTargetSize())
             .toggleable(value = checked, enabled = enabled, role = Role.Switch, onValueChange = onCheckedChange),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
@@ -66,7 +67,7 @@ public fun ThemeCheckbox(
     tooltip: String? = null,
 ) {
     CheckboxRow(
-        modifier = modifier.toggleable(
+        modifier = modifier.keyboardFocusOutline().toggleable(
             value = checked,
             enabled = enabled,
             role = Role.Checkbox,
@@ -96,7 +97,7 @@ public fun ThemeTriStateCheckbox(
     tooltip: String? = null,
 ) {
     CheckboxRow(
-        modifier = modifier.triStateToggleable(
+        modifier = modifier.keyboardFocusOutline().triStateToggleable(
             state = state,
             enabled = enabled,
             role = Role.Checkbox,

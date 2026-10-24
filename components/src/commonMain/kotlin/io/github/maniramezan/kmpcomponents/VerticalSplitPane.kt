@@ -44,7 +44,8 @@ import kotlin.math.roundToInt
  * [split] is the top pane's share of the height, kept between [minSplit] and [maxSplit].
  *
  * The divider can be dragged, moved with the Up/Down arrow keys by [keyboardStep] when focused,
- * and adjusted by screen readers like a slider. Drag deltas accumulate locally so callbacks stay
+ * and adjusted by screen readers like a slider. The handle reserves Material's minimum touch
+ * target height. Drag deltas accumulate locally so callbacks stay
  * consistent when the caller applies updates late; the visible panes follow [split]. On desktop it
  * shows a vertical resize cursor.
  */
@@ -73,7 +74,7 @@ public fun VerticalSplitPane(
     val dividerColor = if (focused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
     BoxWithConstraints(modifier) {
-        val handleHeight = MaterialTheme.kmpSpacing.small
+        val handleHeight = MaterialTheme.kmpSpacing.small.coerceAtLeast(minimumTouchTargetSize())
         val paneHeight = maxHeight - handleHeight
         val paneHeightPx = with(LocalDensity.current) { paneHeight.toPx() }.coerceAtLeast(1f)
         // Track the drag locally so a parent that applies changes late cannot make the divider jump.

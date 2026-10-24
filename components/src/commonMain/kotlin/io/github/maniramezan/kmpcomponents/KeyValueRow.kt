@@ -1,6 +1,7 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,7 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 
 /**
  * A read-only label/value pair such as "Model · llama3" or "Port · 8080", for details panels and
- * popovers. The value is end-aligned and wraps; screen readers read the pair as one item.
+ * popovers. The value is end-aligned and wraps onto its own line when it cannot fit beside the
+ * label without splitting words. Screen readers read the pair as one item.
  *
  * @param valueStyle the value's text style; `null` uses `typography.bodyMedium`. Pass
  *   `MaterialTheme.kmpTypography.code` for identifiers, paths, and arguments.
@@ -32,9 +34,10 @@ public fun KeyValueRow(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
+        FlowRow(
             modifier = Modifier.weight(1f).semantics(mergeDescendants = true) {},
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.extraSmall),
         ) {
             Text(key, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(

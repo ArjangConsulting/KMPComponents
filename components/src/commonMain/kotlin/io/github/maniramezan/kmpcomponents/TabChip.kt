@@ -1,12 +1,13 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -17,8 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 
 /** A horizontally scrolling row of [TabChip]s that forms one selection group. */
@@ -58,6 +57,8 @@ public fun TabChip(
         modifier = modifier
             .clip(MaterialTheme.shapes.small)
             .background(container)
+            .keyboardFocusOutline(MaterialTheme.shapes.small, content)
+            .sizeIn(minWidth = minimumTouchTargetSize(), minHeight = minimumTouchTargetSize())
             .selectable(selected = selected, enabled = enabled, role = Role.Tab, onClick = onClick)
             .padding(
                 start = spacing.medium,
@@ -70,20 +71,16 @@ public fun TabChip(
     ) {
         Text(
             text = label,
+            modifier = if (onClose != null) Modifier.widthIn(min = minimumTouchTargetSize()) else Modifier,
             style = MaterialTheme.typography.labelLarge,
             color = content,
             fontWeight = if (selected) FontWeight.SemiBold else null,
         )
         if (onClose != null) {
-            GlyphIcon(
-                glyph = Glyph.CLOSE,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .clickable(enabled = enabled, role = Role.Button, onClick = onClose)
-                    .semantics { contentDescription = closeDescription },
-                size = glyphSize(MaterialTheme.typography.labelLarge),
-                color = content,
-            )
+            val iconSize = glyphSize(MaterialTheme.typography.labelLarge)
+            TooltipIconButton(closeDescription, onClose, iconSize, enabled = enabled) {
+                GlyphIcon(glyph = Glyph.CLOSE, size = iconSize, color = content)
+            }
         }
     }
 }

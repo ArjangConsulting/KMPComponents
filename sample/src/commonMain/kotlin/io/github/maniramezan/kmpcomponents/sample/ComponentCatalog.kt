@@ -1,9 +1,9 @@
 package io.github.maniramezan.kmpcomponents.sample
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,15 +16,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -65,17 +63,22 @@ import io.github.maniramezan.kmpcomponents.TabChipRow
 import io.github.maniramezan.kmpcomponents.ThemeMode
 import io.github.maniramezan.kmpcomponents.ThemeModeDropdown
 import io.github.maniramezan.kmpcomponents.ThemeModeSelector
+import io.github.maniramezan.kmpcomponents.ThemeSingleChoiceSegmentedButtonRow
 import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TonalBadge
+import io.github.maniramezan.kmpcomponents.isDark
 import io.github.maniramezan.kmpcomponents.kmpSpacing
 import io.github.maniramezan.kommon.designsystem.ColorToken
 import io.github.maniramezan.kommon.designsystem.KommonDesignTokens
 import io.github.maniramezan.kommon.designsystem.ShapeTokens
 import io.github.maniramezan.kommon.designsystem.ThemeTokens
 
-/** A sectioned catalog shared by the desktop, Android, and iOS sample apps. */
+/**
+ * A sectioned catalog shared by the desktop, Android, and iOS sample apps.
+ * [onDarkThemeChanged] lets the host align native system bars with the resolved catalog appearance.
+ */
 @Composable
-fun ComponentCatalog() {
+fun ComponentCatalog(onDarkThemeChanged: (Boolean) -> Unit = {}) {
     var themeMode by remember { mutableStateOf(ThemeMode.SYSTEM) }
     var brand by remember { mutableStateOf(Brand.DEFAULT) }
     var fontScale by remember { mutableStateOf(FontScale.DEFAULT) }
@@ -83,6 +86,8 @@ fun ComponentCatalog() {
     var controlsExpanded by remember { mutableStateOf(false) }
     var rightToLeft by remember { mutableStateOf(false) }
     var section by remember { mutableStateOf(CatalogSection.FORMS) }
+    val darkTheme = themeMode.isDark(isSystemInDarkTheme())
+    SideEffect { onDarkThemeChanged(darkTheme) }
     val scrollState = rememberScrollState()
     LaunchedEffect(section) { scrollState.scrollTo(0) }
     val density = LocalDensity.current
@@ -199,19 +204,13 @@ private enum class FontScale(val label: String, val factor: Float) {
     HUGE("200%", 2f),
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun <T> Segmented(options: List<T>, selected: T, label: (T) -> String, onSelect: (T) -> Unit) {
-    SingleChoiceSegmentedButtonRow {
-        options.forEachIndexed { index, option ->
-            SegmentedButton(
-                selected = option == selected,
-                onClick = { onSelect(option) },
-                shape = SegmentedButtonDefaults.itemShape(index, options.size),
-                label = { Text(label(option), modifier = Modifier.width(IntrinsicSize.Max)) },
-            )
-        }
-    }
+    ThemeSingleChoiceSegmentedButtonRow(
+        options = options.map(label),
+        selectedIndex = options.indexOf(selected),
+        onOptionSelected = { onSelect(options[it]) },
+    )
 }
 
 @Composable
@@ -308,6 +307,7 @@ private fun ProviderSection() {
             InfoTooltip(
                 "Use the eye button to show or hide the secret.",
                 modifier = Modifier.padding(top = labelTopPadding),
+                displayDurationMillis = null,
             )
         }
     }

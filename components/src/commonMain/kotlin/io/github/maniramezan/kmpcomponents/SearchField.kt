@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 
 /** Localizable labels for [SearchField]. */
@@ -21,7 +23,8 @@ public data class SearchFieldLabels(
 
 /**
  * A single-line search field with a search glyph and a clear button that appears once the field
- * has text. Clearing calls [onValueChange] with an empty string.
+ * has text. The placeholder also supplies the accessible name after typing. Clearing calls
+ * [onValueChange] with an empty string.
  *
  * The keyboard shows a Search action; [onSearch] runs when it is pressed. For filter-as-you-type
  * lists, leave [onSearch] `null` and react to [onValueChange].
@@ -38,7 +41,9 @@ public fun SearchField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.semantics {
+            if (labels.placeholder.isNotBlank()) contentDescription = labels.placeholder
+        },
         enabled = enabled,
         singleLine = true,
         placeholder = labels.placeholder.takeIf { it.isNotBlank() }?.let { text -> { Text(text) } },

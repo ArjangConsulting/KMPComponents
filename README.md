@@ -4,6 +4,17 @@ Reusable Compose Multiplatform components for Android, desktop (JVM), iOS, and w
 the platform-neutral tokens from [`kommon`](https://github.com/maniramezan/kommon)'s
 `design-system` module; it does not define a competing design system.
 
+## Using coding agents
+
+Give your agent the portable [use-kmpcomponents skill](skills/use-kmpcomponents/SKILL.md) to find
+existing components, check the API against your installed version, and wire theme, state, labels,
+and callbacks. It includes a [component index with source links](skills/use-kmpcomponents/references/catalog.md)
+and a [usage guide](skills/use-kmpcomponents/references/usage.md).
+
+[Setup instructions](docs/using-with-agents.md) cover copying the skill into Codex or Claude Code
+projects and using the same guide with other agents. [llms.txt](llms.txt) is a compact discovery
+index. Contributor instructions for changing this library remain in `AGENTS.md`.
+
 ## Install
 
 ```kotlin
@@ -90,7 +101,7 @@ or browse the copy that CI publishes from `main` to
 | `ThemeCheckbox` / `ThemeTriStateCheckbox` | Checkbox rows with a label; the tri-state one is for "select all" over a group. |
 | `RadioGroup` | Vertical radio list; each full-width row is the tap target. |
 | `ThemeSlider` | Full-width slider with an optional spoken label, value description, and steps. |
-| `SelectionList` / `SelectionListContent` / `SelectionListNode` | Searchable one- or two-level picker, single or multiple choice, in a bottom sheet or inline. Parents expand inline and summarize their selected children when collapsed. |
+| `SelectionList` / `SelectionListContent` / `SelectionListNode` | Searchable one- or two-level picker, single or multiple choice, in a bottom sheet or inline. Parents expand inline, scroll into view, and summarize their selected children when collapsed. |
 
 ### Feedback
 
@@ -101,7 +112,7 @@ or browse the copy that CI publishes from `main` to
 | `CountBadge` | Pill with a count, capped as `99+`, with an optional spoken description. |
 | `EmptyState` | Centered title, message, and optional action for an empty pane. |
 | `ConfirmDialog` | Confirm / cancel dialog, optionally with a destructive (error-colored) confirm button. |
-| `InfoTooltip` | Info glyph showing an explanation on hover, long-press, or focus; screen readers read it directly. |
+| `InfoTooltip` | Info glyph showing an explanation on hover, long-press, or focus; configurable hover duration (`displayDurationMillis = null` keeps it visible while hovered); screen readers read it directly. |
 | `NoticeCard` | Full-width `StatusTone` notice with an optional action ("Retry") and dismiss button. |
 | `ProgressIndicator` | Centered spinner or determinate bar with an announced label, for a loading pane. |
 | `LocalReduceMotionEnabled` | Optional override for decorative animations and page hints; null follows live system settings. |
@@ -121,7 +132,7 @@ sized from the body text so they follow the user's font scale.
 | `LoadingIconButton` | Icon button that shows a spinner and ignores clicks while loading. |
 | `FAB` / `ThemeExtendedFloatingActionButton` | Floating action buttons; the extended one is named by its visible label. |
 | `SegmentedControl` | Pill-shaped segments for one choice, with `SegmentDensity` and `SegmentWidthMode`. |
-| `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark. |
+| `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark; scrolls to preserve full labels in tight layouts. |
 | `SegmentedContent` | Segment bar (pill, underline, or bare) above content that crossfades; scrolls with edge fades instead of truncating titles. |
 | `PillChip` | Capsule chip with selected and unselected looks; selectable when clickable, static otherwise. |
 | `ActionPill` | Capsule command with arbitrary content and no selected state. |
@@ -168,7 +179,7 @@ sized from the body text so they follow the user's font scale.
 | --- | --- |
 | `SidebarNavigation` / `SidebarItem` | Desktop-style side navigation with a header and selectable destinations. |
 | `TabChipRow` / `TabChip` | Scrolling row of compact tabs with optional close controls. |
-| `SelectableCard` | Card in a pick-one list; the selected card is tinted and reported as selected. |
+| `SelectableCard` | Outlined card with a selection box, checked state, and visible keyboard focus; reports selection to accessibility services. |
 | `HorizontalSplitPane` | Two panes with a divider you can drag, move with arrow keys, or adjust with a screen reader. |
 | `VerticalSplitPane` | The same divider between a top and a bottom pane, moved with the Up/Down keys. |
 | `StatusBar` / `StatusBarItem` / `StatusBarSeparator` | Desktop status bar; items share space and ellipsize rather than dropping off. |
@@ -188,7 +199,7 @@ sized from the body text so they follow the user's font scale.
 | `FlipCard` | Two-sided card that turns in 3D; only the visible face is read by screen readers. |
 | `AppText` / `AppTextStyle` | Text in a semantic role, including heavier weight variants of Material slots. |
 | `ContentRow` | List row with title, secondary and supporting text, leading/trailing slots, and optional click and selection. |
-| `KeyValueRow` | Read-only label/value pair for details panels, read as one item. |
+| `KeyValueRow` | Read-only label/value pair for details panels; flows onto separate lines when space is tight and is read as one item. |
 
 ### Names shared with the sibling libraries
 
@@ -253,9 +264,23 @@ xcodegen generate --spec sample/ios/project.yml && open sample/ios/KmpComponents
 The iOS project builds the Kotlin framework in a pre-build phase; pick an Apple Silicon simulator
 and run. It needs [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
-In IntelliJ IDEA or Android Studio, the shared run configurations in `.run/` cover the same entry
-points: **Run** > *Sample catalog (desktop)*, and **Test** > *Tests (JVM)*, *Tests (all targets)*,
-and *Check (CI)*.
+The Android build uses AGP 9.1.1 and SDK 37. Use Android Studio Panda 3 (2025.3.3) Patch 1
+or newer, which supports both according to the
+[Android compatibility table](https://developer.android.com/build/releases/about-agp#api-level-support).
+AGP stays in the 9.1 series so the catalog does not require an IDE that supports AGP 9.4.
+
+In Android Studio, reload/sync the root Gradle project, select **Run** > *Sample catalog (Android)*,
+choose an emulator or connected device running Android 8.0/API 26 or later, then Run or Debug.
+The application module is `sample-android`; the `sample` module supplies the shared catalog UI.
+If Android is missing from an existing checkout's project view, reload all Gradle projects so
+`settings.gradle.kts` is imported again. The Android App configuration requires Android IDE support;
+Android Studio includes it. The `installDebug` command above also installs the catalog from a terminal.
+
+The desktop catalog uses the Arjang artwork for its window, Dock/taskbar, and packaged launcher.
+Stop and rerun an already-open catalog after updating the icon; the existing JVM keeps its loaded resources.
+
+The shared configurations in `.run/` also include **Run** > *Sample catalog (desktop)* and
+**Test** > *Tests (JVM)*, *Tests (all targets)*, and *Check (CI)*.
 
 ## Theming
 
@@ -325,3 +350,6 @@ Gradle substitutes `io.github.maniramezan.kommon:design-system` with the include
 
 Releases are automated by Release Please from Conventional Commit messages (`feat:`, `fix:`,
 `feat!:`). Contributor and AI-agent conventions live in [`AGENTS.md`](AGENTS.md).
+
+The shared-component [accessibility audit](docs/accessibility-audit.md) records verified behavior,
+regression coverage, and the platform checks still needed in consuming apps.

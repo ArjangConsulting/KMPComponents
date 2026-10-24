@@ -1,9 +1,11 @@
 package io.github.maniramezan.kmpcomponents
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
@@ -24,8 +26,10 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -33,8 +37,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.requestFocus
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import java.awt.datatransfer.DataFlavor
@@ -116,13 +122,42 @@ class DesktopExtrasUiTest {
                 }
             }
         }
-        onNodeWithTag("image").assert(stateIs("Zoom 100%")).requestFocus()
+        onNodeWithTag("image")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Screenshot")))
+            .assert(stateIs("Zoom 100%"))
+            .requestFocus()
         onNodeWithTag("image").performKeyInput { pressKey(Key.Equals) }
         waitForIdle()
         onNodeWithTag("image").assert(stateIs("Zoom 110%"))
         onNodeWithTag("image").performKeyInput { pressKey(Key.Zero) }
         waitForIdle()
         onNodeWithTag("image").assert(stateIs("Zoom 100%"))
+    }
+
+    @Test
+    fun `dragging an unzoomed preview scrolls its parent`() = runComposeUiTest {
+        val scrollState = ScrollState(0)
+        setContent {
+            KmpTheme {
+                Column(Modifier.size(200.dp, 150.dp).verticalScroll(scrollState)) {
+                    Text("Start")
+                    ZoomableImage(ImageBitmap(100, 50), "Preview", Modifier.size(200.dp))
+                    Text("End")
+                }
+            }
+        }
+        onNodeWithContentDescription("Preview").performTouchInput { swipeUp() }
+        runOnIdle {
+            assertTrue(scrollState.value > 0, "The preview intercepted its parent's scroll gesture")
+            scrollState.dispatchRawDelta(-scrollState.value.toFloat())
+        }
+        onNodeWithContentDescription("Preview").requestFocus()
+        onNodeWithContentDescription("Preview").performKeyInput { pressKey(Key.Equals) }
+        val scrollBeforePan = runOnIdle { scrollState.value }
+        onNodeWithContentDescription("Preview").performTouchInput { swipeUp() }
+        runOnIdle {
+            assertEquals(scrollBeforePan, scrollState.value, "Zoomed image drags should pan inside the preview")
+        }
     }
 
     @Test
@@ -195,7 +230,11 @@ class DesktopExtrasUiTest {
                 )
             }
         }
-        onNodeWithContentDescription("Resize panes").assert(stateIs("50% top pane")).requestFocus()
+        onNodeWithContentDescription("Resize panes")
+            .assertWidthIsAtLeast(48.dp)
+            .assertHeightIsAtLeast(48.dp)
+            .assert(stateIs("50% top pane"))
+            .requestFocus()
         onNodeWithContentDescription("Resize panes").performKeyInput { pressKey(Key.DirectionDown) }
         waitForIdle()
         assertEquals(0.55f, split, absoluteTolerance = 0.001f)

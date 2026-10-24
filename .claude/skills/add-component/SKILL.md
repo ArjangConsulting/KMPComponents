@@ -34,7 +34,7 @@ public fun Thing(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     labels: ThingLabels = ThingLabels(),
-) { /* spacing via MaterialTheme.kmpSpacing, colors via colorScheme / kmpColors */ }
+) {}
 ```
 
 Checklist while writing:
@@ -48,6 +48,11 @@ Checklist while writing:
 - Material APIs marked experimental need `@OptIn(ExperimentalMaterial3Api::class)` on the function.
 
 ## 3. Test
+
+Use the relevant contracts and evidence levels in
+[Multiplatform UI verification](../../../skills/use-kmpcomponents/references/multiplatform-ui.md).
+Start with a small behavioral reproducer and an early affected-platform probe; a desktop gallery
+render is not proof of mobile label fit, native semantics, keyboard reachability, or host effects.
 
 - Pure logic -> `components/src/commonTest/.../<Name>Test.kt` using `kotlin.test`, backtick names
   describing the invariant.
@@ -69,13 +74,20 @@ Checklist while writing:
 
 ## 5. Verify and commit
 
+For an intended public API change, update the ABI dump and review the diff:
+
 ```bash
-./gradlew :components:updateKotlinAbi              # records the new public API in components/api
+./gradlew :components:updateKotlinAbi
+```
+
+Otherwise leave the dump unchanged. Run the required checks:
+
+```bash
 ./gradlew ktlintFormat ktlintCheck :components:verifyRoborazziJvm :components:checkKotlinAbi \
     :components:assemble :sample:compileKotlinJvm
 ```
 
-Commit the `components/api/` dump with the change; reviewers read it as the API diff.
+Commit an intended `components/api/` change with the implementation; reviewers read it as the API diff.
 
 If the environment cannot reach Google Maven the build cannot configure; say that explicitly
 instead of reporting success. Commit with a Conventional Commit (`feat: add Thing component`);

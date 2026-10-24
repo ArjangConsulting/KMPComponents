@@ -16,7 +16,8 @@ import androidx.compose.ui.text.style.TextOverflow
 /**
  * A short label on a tinted background, such as an HTTP method, a status code, or a severity.
  *
- * [color] is the text color and tints the background, so pass an accent role (`primary`, `error`,
+ * [color] tints the background and supplies the preferred text color; unreadable text falls back
+ * to the on-surface role. Pass an accent role (`primary`, `error`,
  * `kmpColors.success`, ...), not an `on*` role. Use the [StatusTone] overload for semantic states.
  */
 @Composable
@@ -75,7 +76,7 @@ private fun BadgeText(text: String, color: Color, shape: Shape, modifier: Modifi
         modifier = modifier
             .background(tonalContainerColor(color), shape)
             .padding(horizontal = spacing.small, vertical = spacing.extraSmall / 2),
-        color = color,
+        color = tonalContentColor(color),
         style = MaterialTheme.typography.labelMedium,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
