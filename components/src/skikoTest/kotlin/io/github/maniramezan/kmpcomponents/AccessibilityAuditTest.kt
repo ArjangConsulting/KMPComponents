@@ -94,7 +94,7 @@ class AccessibilityAuditTest {
     }
 
     @Test
-    fun `custom tab sidebar and card targets stay at least 48 dp at both font scales and directions`() {
+    fun `custom tab sidebar card and list targets stay at least 48 dp at both font scales and directions`() {
         listOf(1f, 2f).forEach { scale ->
             listOf(LayoutDirection.Ltr, LayoutDirection.Rtl).forEach { direction -> verifyTargets(scale, direction) }
         }
@@ -114,11 +114,12 @@ class AccessibilityAuditTest {
                         SelectableCard(false, {}) { Text("Option") }
                         ThemeSwitch(false, {}, "Switch")
                         ThemeCheckbox(false, {}, "Checkbox")
+                        ThemeListItem(headline = "List item")
                     }
                 }
             }
         }
-        listOf("A", "Destination", "Option", "Switch", "Checkbox").forEach { label ->
+        listOf("A", "Destination", "Option", "Switch", "Checkbox", "List item").forEach { label ->
             onNodeWithText(label).assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
         }
         onNodeWithContentDescription("Close A").assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)

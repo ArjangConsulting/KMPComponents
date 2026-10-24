@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -25,8 +26,9 @@ import androidx.compose.ui.semantics.semantics
 
 /**
  * A Material-style list row: a [headline] in body text, optional [supportingText], and leading and
- * trailing slots, read by screen readers as one item. For clickable or selectable rows with
- * titles, use [ContentRow].
+ * trailing slots, read by screen readers as one item. That item is at least the Material minimum
+ * touch target high, so a one-line row still meets target-size audits. For clickable or selectable
+ * rows with titles, use [ContentRow].
  */
 @Composable
 public fun ThemeListItem(
@@ -39,12 +41,19 @@ public fun ThemeListItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.kmpSpacing.medium, vertical = MaterialTheme.kmpSpacing.small),
+            .padding(horizontal = MaterialTheme.kmpSpacing.medium),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         leadingContent?.invoke()
-        Column(Modifier.weight(1f).semantics(mergeDescendants = true) {}) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .semantics(mergeDescendants = true) {}
+                .heightIn(min = minimumTouchTargetSize())
+                .padding(vertical = MaterialTheme.kmpSpacing.small),
+            verticalArrangement = Arrangement.Center,
+        ) {
             Text(headline, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             if (supportingText != null) {
                 Text(

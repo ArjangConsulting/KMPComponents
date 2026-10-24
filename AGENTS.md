@@ -301,7 +301,9 @@ section keeps only this repo's concrete values.
   and `SIGNING_IN_MEMORY_KEY_PASSWORD` in the `secrets` environment, which only `main` may deploy to.
   `release-please.yml` passes `secrets: inherit`, and `release.yml` fails before building if one is
   empty.
-- `RELEASE_PLEASE_APP_CLIENT_ID` and `RELEASE_PLEASE_APP_PRIVATE_KEY` let Release Please push as a
+- `RELEASE_PLEASE_APP_CLIENT_ID` and `RELEASE_PLEASE_APP_PRIVATE_KEY` also live in the `secrets`
+  environment, so the `release-please` job names `environment: secrets`; a job that omits it sees
+  them empty. They let Release Please push as a
   GitHub App, so the release PR triggers CI and can auto-merge. Without them it falls back to
   `GITHUB_TOKEN`, warns, and dispatches `ci.yml` on the release branch so the required check still runs.
 - README install snippets sit between `x-release-please-start-version` / `x-release-please-end`
