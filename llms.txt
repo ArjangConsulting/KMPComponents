@@ -21,7 +21,8 @@ networking, and business rules belong to the consuming application.
 
 ## Styling and accessibility
 
-- [Multiplatform UI verification](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/skills/use-kmpcomponents/references/multiplatform-ui.md): Constraint and gesture contracts, host ownership, early platform checks, and honest audit coverage.
+- [UI verification](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/skills/kmp-library-conventions/references/ui-verification.md): Constraint and gesture contracts, host ownership, early platform checks, and honest audit coverage.
+- [KMPComponents UI verification notes](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/skills/use-kmpcomponents/references/multiplatform-ui.md): Sample-catalog conditions and component-specific checks.
 - [Design style guide](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/docs/design-style-guide.md): Theme roles, spacing, focus, contrast, and large-text expectations.
 - [Accessibility audit](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/docs/accessibility-audit.md): Automated coverage and remaining platform/screen-reader checks.
 

@@ -18,6 +18,10 @@ only *adapts* them to Compose/Material 3 and builds components on top.
 ## Consumer agent guidance
 
 `skills/use-kmpcomponents/` is a portable skill for agents using this library in consuming apps.
+`skills/kmp-library-conventions/` is its companion: library-wide API, build, release, and UI-verification
+rules that are not specific to KMPComponents, written to be reusable in other KMP libraries. It is the
+source for those rules; this file keeps this repo's concrete values. `.claude/skills/` and
+`.agents/skills/` symlink it for Claude Code and Codex while working in this checkout.
 `docs/using-with-agents.md` explains setup; root `llms.txt` routes documentation readers. These
 consumer resources do not replace this file or the contributor playbooks under `.claude/skills/`.
 For app-integration tasks, read the consumer skill to avoid applying contributor rules to an app.
@@ -118,13 +122,17 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   with an adaptive launcher icon using the sample artwork.
 - `.run/` — shared IDE run configurations (desktop and Android sample catalogs, JVM tests, all-target tests, CI
   check). Keep them in sync with the CI task list.
-- `.claude/skills/` — task playbooks (`add-component`, `review-component`).
+- `.claude/skills/` — task playbooks (`add-component`, `review-component`) and a symlink to
+  `skills/kmp-library-conventions`; `.agents/skills/` holds the same symlink for Codex.
 - `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on
   main), `release-please.yml` -> `release.yml` (Maven Central publish of both modules on release).
 
 ## Component API rules
 
-Follow these for every public composable; reviewers check them.
+Follow these for every public composable; reviewers check them. They are this repo's binding form of
+the library-wide rules in
+[`kmp-library-conventions`](skills/kmp-library-conventions/references/api-design.md), which also
+explains the reasoning.
 
 1. **Stateless first.** Take `value` + `onValueChange` (or `state` + `onStateChange`). Keep only
    ephemeral UI state internal (e.g. `SecretTextField`'s reveal toggle) and document it.
@@ -190,15 +198,14 @@ typography (`glyphSize(style)`) so it follows the user's font scale.
 
 ## Multiplatform UI contracts
 
-Use [Multiplatform UI verification](skills/use-kmpcomponents/references/multiplatform-ui.md) when
-changing layout, input, accessibility, or native host integration. It records reusable design
-contracts and evidence levels; the audit report records run-specific results.
-
-Share component behavior and keep native window/system-bar/launcher effects in hosts or focused
-platform adapters. Reproduce failures with the real constraints and interaction state, then probe
-relevant native paths early. JVM layout/semantics tests do not establish native accessibility behavior.
-For this repo's mobile UI verification, use an Amoo subagent when available, inspect current audit
-capabilities, and record missing/blocked coverage explicitly. Consumer projects choose their own tools.
+When changing layout, input, accessibility, or native host integration, use
+[UI verification](skills/kmp-library-conventions/references/ui-verification.md): platform ownership,
+constraint contracts, and what each check does and does not establish. The audit report records
+run-specific results. This repo adds only its own tooling choices on top:
+[Multiplatform UI verification](skills/use-kmpcomponents/references/multiplatform-ui.md) covers the
+sample catalog's conditions, and mobile verification here uses an Amoo subagent when available. Inspect
+current audit capabilities and record missing or blocked coverage explicitly. Consumer projects choose
+their own tools.
 
 ## Build and verification
 
@@ -221,24 +228,23 @@ CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests` and `checkKotlinAbi`
 `verifyRoborazziJvm`, Kover, `assemble`, the root `dokkaGenerate`, and builds the desktop, Android, and iOS
 samples. It also runs `:sample:jvmTest`. A screenshot failure uploads the diff images in the
 `reports` artifact. Review a changed golden before committing it; an API dump change means a public API change (see Releases).
-The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin; sandboxes without it
-cannot configure the project, so say so rather than claiming a change was verified.
+The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin. Without it, report
+which checks did not run instead of claiming verification.
+
+The reasons behind the build rules below (version compatibility graph, wasm build workarounds,
+sandbox reporting) live in
+[`kmp-library-conventions`](skills/kmp-library-conventions/references/build-and-versions.md); this
+section keeps only this repo's concrete values.
 
 - `-PuseLocalKommon=true` substitutes a sibling `../kommon` checkout via composite build; add
   `-PkommonDir=<path>` to use another checkout, such as a git worktree.
-- The `wasmJs` target runs `commonTest` in headless Chrome. It declares `binaries.executable()` only
-  so webpack bundles Skiko for those tests (CMP-4906). The Node.js, Yarn and Binaryen downloads the Kotlin
-  plugin needs are declared in `settings.gradle.kts`, because `FAIL_ON_PROJECT_REPOS` rejects the
-  repositories the plugin would otherwise add.
-- Versions live in `gradle/libs.versions.toml` only. Declare Compose libraries through catalog
-  entries (`libs.compose.*`); the plugin's `compose.runtime`/`compose.material3`/... accessors are
-  deprecated at error level in Compose Multiplatform 1.12. Material 3 has its own version
-  (`composeMaterial3`); keep it on the release the Compose plugin pairs with `compose`.
-  Dependabot groups Gradle and GitHub Actions updates into one weekly dependency PR. The ktlint
+- The `wasmJs` target runs `commonTest` in headless Chrome. Its Node.js, Yarn, and Binaryen wiring is in
+  `settings.gradle.kts` and the root `build.gradle.kts`; keep both halves together.
+- Versions live in `gradle/libs.versions.toml` only. Declare Compose libraries through `libs.compose.*`
+  catalog entries and keep `composeMaterial3` on the release the Compose plugin pairs with. The ktlint
   engine version (`ktlint` in the catalog) is not tracked by Dependabot; bump it by hand.
-- Keep AGP in the 9.1 series for the documented Android Studio baseline. SDK 37 requires AGP
-  9.1.1 or later and Android Studio Panda 3 Patch 1 or later. Dependabot permits AGP patch updates;
-  move to another minor series only when intentionally updating the README's IDE requirement.
+- Keep AGP in the 9.1 series for the documented Android Studio baseline (SDK 37 needs AGP 9.1.1+ and
+  Android Studio Panda 3 Patch 1+). Dependabot permits AGP patch updates only.
 - Keep Kotlin/JVM bytecode at `JvmTarget.JVM_17` to match kommon.
 - `.editorconfig` holds the house style (ktlint `intellij_idea` style, 120 columns, expression bodies
   may stay on the signature line, `@Composable` functions are PascalCase).
