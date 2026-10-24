@@ -105,7 +105,7 @@ An automated desktop check is not evidence of VoiceOver, TalkBack, or browser sc
 With a source checkout, search the declaration file linked from the catalog and its family example
 in `sample/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/sample/`. Public ABI dumps live
 in `components/api/` and `components-image/api/`. The hosted API reference is at
-https://arjangconsulting.github.io/KMPComponents/ and normally describes `main`, not every release.
+https://arjangconsulting.github.io/KMPComponents/ and describes the latest release only.
 For a published dependency, prefer matching source artifacts or a matching repository tag.
 
 The root `AGENTS.md` and `.claude/skills/add-component` / `review-component` govern contributing to

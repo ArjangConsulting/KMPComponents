@@ -12,6 +12,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -30,12 +31,29 @@ jobs:
           client-id: ${{ secrets.RELEASE_PLEASE_APP_CLIENT_ID }}
           private-key: ${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}
 
+      # Without the app token, Release Please pushes with GITHUB_TOKEN. Those pushes start no
+      # workflows, so the release PR would never get the required CI check.
+      - name: Warn when the release app token is unavailable
+        if: steps.app-token.outcome != 'success'
+        run: >-
+          echo "::warning::RELEASE_PLEASE_APP_CLIENT_ID / RELEASE_PLEASE_APP_PRIVATE_KEY did not produce a token.
+          Falling back to GITHUB_TOKEN; CI is dispatched on the release branch instead, and auto-merge is off."
+
       - uses: googleapis/release-please-action@v5
         id: release
         with:
           token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      - name: Run CI on the release PR
+        if: steps.release.outputs.pr && steps.app-token.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_JSON: ${{ steps.release.outputs.pr }}
+        run: |
+          branch="$(echo "$PR_JSON" | jq -r '.headBranchName')"
+          gh workflow run ci.yml --ref "$branch" --repo "$GITHUB_REPOSITORY"
 
       - name: Enable auto-merge for release PR
         if: steps.release.outputs.pr && steps.app-token.outcome == 'success'
@@ -54,8 +72,16 @@ jobs:
     uses: ./.github/workflows/release.yml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
-    secrets:
-      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-      SIGNING_IN_MEMORY_KEY: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
-      SIGNING_IN_MEMORY_KEY_PASSWORD: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+    # release.yml reads the Maven Central and signing secrets from its `secrets` environment;
+    # inheriting also covers copies still stored at repository level.
+    secrets: inherit
+
+  docs:
+    needs: [release-please, publish]
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/docs.yml
+    with:
+      tag: ${{ needs.release-please.outputs.tag_name }}

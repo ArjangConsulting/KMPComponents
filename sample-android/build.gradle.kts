@@ -17,6 +17,12 @@ android {
         versionName = "1.0"
     }
     buildFeatures { compose = true }
+    lint {
+        // The launcher artwork is a full-color bitmap with no silhouette for a themed icon. Dependabot
+        // owns version freshness.
+        disable +=
+            setOf("MonochromeLauncherIcon", "AndroidGradlePluginVersion", "GradleDependency", "NewerVersionAvailable")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

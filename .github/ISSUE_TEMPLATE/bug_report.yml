@@ -1,0 +1,43 @@
+name: Bug report
+description: A component renders, behaves, or reads incorrectly.
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Library version
+      description: The resolved KMPComponents version, for example 0.2.0.
+    validations:
+      required: true
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Platforms
+      multiple: true
+      options: [Android, Desktop (JVM), iOS, Web (Wasm)]
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: For example SegmentedControl or CachedAsyncImage.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened, and what did you expect?
+      description: Include the theme (light, dark, or custom), font scale, and layout direction if they matter.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: A small composable that shows the problem.
+      render: kotlin
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or logs

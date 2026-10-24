@@ -7,7 +7,7 @@ io.github.maniramezan.kmpcomponents. The optional components-image artifact uses
 io.github.maniramezan.kmpcomponents.image and supports Android, JVM, and iOS, not Wasm.
 
 Resolve the application's actual dependency version before copying signatures. Links to main
-and the hosted API reference can describe unreleased APIs. App state, persistence, routing,
+can describe unreleased APIs; the hosted API reference describes the latest release. App state, persistence, routing,
 networking, and business rules belong to the consuming application.
 
 ## Consumer guidance
@@ -17,7 +17,7 @@ networking, and business rules belong to the consuming application.
 - [Component index](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/skills/use-kmpcomponents/references/catalog.md): Catalog entries grouped by family with declaration-file links.
 - [Usage guide](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/skills/use-kmpcomponents/references/usage.md): Choosing components, targets, theme/state integration, and a complete common-source example.
 - [README](https://raw.githubusercontent.com/ArjangConsulting/KMPComponents/main/README.md): Maven installation, component catalog, theming, and sample entry points.
-- [API reference](https://arjangconsulting.github.io/KMPComponents/): Generated public API documentation for both artifacts.
+- [API reference](https://arjangconsulting.github.io/KMPComponents/): Generated public API documentation for both artifacts at the latest release.
 
 ## Styling and accessibility
 

@@ -1,0 +1,23 @@
+name: Component or API request
+description: Propose a new component, parameter, or behavior.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you need to build?
+      description: Describe the UI and why existing components don't cover it.
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: Proposed API
+      description: A sketch of the composable signature, if you have one. Note any matching component in ComposeUIComponents or SwiftUIComponents.
+      render: kotlin
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Platforms
+      multiple: true
+      options: [Android, Desktop (JVM), iOS, Web (Wasm)]

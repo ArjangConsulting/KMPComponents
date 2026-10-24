@@ -5,12 +5,17 @@ import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.multiplatform.library)
+    alias(libs.plugins.android.lint)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.kover)
 }
+
+// `./gradlew lint` (from the com.android.lint plugin) checks the Android and JVM sources and fails on
+// errors. Dependabot owns version freshness, and AGP stays on the 9.1 series on purpose (see AGENTS.md).
+val versionLintChecks = setOf("AndroidGradlePluginVersion", "GradleDependency", "NewerVersionAvailable")
 
 kotlin {
     explicitApi()
@@ -25,6 +30,7 @@ kotlin {
         minSdk = 26
         compilerOptions.jvmTarget = JvmTarget.JVM_17
         withHostTest {}
+        lint { disable += versionLintChecks }
     }
     jvm {
         compilerOptions.jvmTarget = JvmTarget.JVM_17
@@ -62,33 +68,14 @@ kotlin {
     }
 }
 
-mavenPublishing {
-    publishToMavenCentral()
-    if (providers.gradleProperty("RELEASE_SIGNING_ENABLED").orElse("true").get().toBoolean()) {
-        signAllPublications()
-    }
-    coordinates(artifactId = "components-image")
-    pom {
-        name = "KMPComponents Image"
-        description = "Cached async image loading for KMPComponents, backed by Coil"
-        inceptionYear = "2026"
-        url = "https://github.com/ArjangConsulting/KMPComponents"
-        licenses {
-            license {
-                name = "MIT License"
-                url = "https://opensource.org/licenses/MIT"
-            }
-        }
-        developers {
-            developer {
-                id = "maniramezan"
-                name = "Mani Ramezan"
-            }
-        }
-        scm {
-            url = "https://github.com/ArjangConsulting/KMPComponents"
-            connection = "scm:git:git://github.com/ArjangConsulting/KMPComponents.git"
-            developerConnection = "scm:git:ssh://git@github.com/ArjangConsulting/KMPComponents.git"
+lint { disable += versionLintChecks }
+
+// `koverVerify` fails when line coverage drops below this floor (98.3% when it was set). Raise it as
+// coverage grows; lowering it needs a reason in the PR.
+kover {
+    reports {
+        verify {
+            rule { minBound(95) }
         }
     }
 }

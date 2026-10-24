@@ -103,7 +103,7 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   loader; keep Coil types out of its public API (they are `implementation` dependencies). It has
   its own `api/` dump, common tests, and a desktop UI test, and shares the version with `components`.
 - Root `build.gradle.kts` aggregates Dokka for both modules: `./gradlew :dokkaGenerate` writes
-  `build/dokka/html`, which CI uploads for GitHub Pages.
+  `build/dokka/html`. CI builds it to catch KDoc errors; `docs.yml` publishes it for each release tag.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
@@ -124,8 +124,12 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`) and a symlink to
   `skills/kmp-library-conventions`; `.agents/skills/` holds the same symlink for Codex.
-- `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on
-  main), `release-please.yml` -> `release.yml` (Maven Central publish of both modules on release).
+- `.github/workflows/` — `ci.yml` (PRs, main, and dispatch), `release-please.yml` -> `release.yml`
+  (Maven Central publish of both modules, then GitHub release notes) -> `docs.yml` (Dokka for the
+  released tag to GitHub Pages; also dispatchable with a tag).
+- `.github/` also holds issue forms, the PR template, and `CODEOWNERS`; `SECURITY.md` and
+  `CONTRIBUTING.md` are at the root. `scripts/` holds the catalog generator and the release-note
+  filter, with `unittest` tests that CI runs.
 
 ## Component API rules
 
@@ -214,19 +218,21 @@ their own tools.
 ./gradlew :sample:jvmTest
 ./gradlew :components:allTests                      # all targets (iOS needs macOS + Xcode; web needs Chrome)
 ./gradlew ktlintCheck                               # style; ktlintFormat fixes most findings
+./gradlew :components:lint :components-image:lint :sample-android:lintDebug  # Android/JVM lint
 ./gradlew :components:verifyRoborazziJvm            # desktop tests + screenshot comparison
 ./gradlew :components:recordRoborazziJvm            # re-record goldens after an intended change
 ./gradlew :components:checkKotlinAbi                # public API vs components/api
 ./gradlew :components:updateKotlinAbi               # accept an intended API change
 ./gradlew :components:koverHtmlReport               # coverage (build/reports/kover)
+./gradlew :components:koverVerify :components-image:koverVerify  # coverage floors
 ./gradlew :components-image:allTests :components-image:checkKotlinAbi  # the image module
 ./gradlew :dokkaGenerate                            # API docs for both modules (build/dokka/html)
 ./gradlew :components:assemble :sample:compileKotlinJvm :sample-android:assembleDebug
 ```
 
-CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, `allTests` and `checkKotlinAbi` for both modules,
-`verifyRoborazziJvm`, Kover, `assemble`, the root `dokkaGenerate`, and builds the desktop, Android, and iOS
-samples. It also runs `:sample:jvmTest`. A screenshot failure uploads the diff images in the
+CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, Android lint, `allTests`, `checkKotlinAbi`, and
+`koverVerify` for both modules, `verifyRoborazziJvm`, `assemble`, the root `dokkaGenerate`, and builds the
+desktop, Android, and iOS samples. It also runs `:sample:jvmTest` and the `scripts/` tests. A screenshot failure uploads the diff images in the
 `reports` artifact. Review a changed golden before committing it; an API dump change means a public API change (see Releases).
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin. Without it, report
 which checks did not run instead of claiming verification.
@@ -243,8 +249,17 @@ section keeps only this repo's concrete values.
 - Versions live in `gradle/libs.versions.toml` only. Declare Compose libraries through `libs.compose.*`
   catalog entries and keep `composeMaterial3` on the release the Compose plugin pairs with. The ktlint
   engine version (`ktlint` in the catalog) is not tracked by Dependabot; bump it by hand.
-- Keep AGP in the 9.1 series for the documented Android Studio baseline (SDK 37 needs AGP 9.1.1+ and
-  Android Studio Panda 3 Patch 1+). Dependabot permits AGP patch updates only.
+- Keep AGP in the 9.1 series for the documented Android Studio baseline. SDK 37 requires AGP
+  9.1.1 or later and Android Studio Panda 3 Patch 1 or later. Dependabot permits AGP patch updates;
+  move to another minor series only when intentionally updating the README's IDE requirement.
+- Android lint comes from the `com.android.lint` plugin, because the KMP Android library plugin only
+  lints host tests. Each library lints its Android and JVM sources (`lint { }` at the target and the
+  project level); version-freshness checks are off because Dependabot owns them.
+- Each library has a Kover `minBound` set a few points under its measured line coverage. Raise it as
+  coverage grows; lowering it needs a reason in the PR.
+- Maven POM metadata is in the root `gradle.properties` (`POM_*`, `SONATYPE_HOST`,
+  `RELEASE_SIGNING_ENABLED`); each published module's `gradle.properties` adds `POM_NAME` and
+  `POM_DESCRIPTION`. Pass `-PRELEASE_SIGNING_ENABLED=false` to publish unsigned to `mavenLocal`.
 - Keep Kotlin/JVM bytecode at `JvmTarget.JVM_17` to match kommon.
 - `.editorconfig` holds the house style (ktlint `intellij_idea` style, 120 columns, expression bodies
   may stay on the signature line, `@Composable` functions are PascalCase).
@@ -257,4 +272,16 @@ section keeps only this repo's concrete values.
 - Never hand-edit versions. `VERSION_NAME` is injected by `release.yml` from the tag, which must
   equal `.release-please-manifest.json`.
 - Publishing needs `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD`, `SIGNING_IN_MEMORY_KEY`,
-  and `SIGNING_IN_MEMORY_KEY_PASSWORD` in the `secrets` environment.
+  and `SIGNING_IN_MEMORY_KEY_PASSWORD` in the `secrets` environment, which only `main` may deploy to.
+  `release-please.yml` passes `secrets: inherit`, and `release.yml` fails before building if one is
+  empty.
+- `RELEASE_PLEASE_APP_CLIENT_ID` and `RELEASE_PLEASE_APP_PRIVATE_KEY` let Release Please push as a
+  GitHub App, so the release PR triggers CI and can auto-merge. Without them it falls back to
+  `GITHUB_TOKEN`, warns, and dispatches `ci.yml` on the release branch so the required check still runs.
+- README install snippets sit between `x-release-please-start-version` / `x-release-please-end`
+  markers; Release Please rewrites them in the release PR (`extra-files`). Keep any other version
+  number outside those markers.
+- Release Please lists a change twice when it reached `main` through stacked merge commits.
+  `release.yml` runs `scripts/dedupe_release_notes.py` over the published notes to keep one entry per
+  subject.
+- The hosted API reference is published from release tags only, so it matches Maven Central.
