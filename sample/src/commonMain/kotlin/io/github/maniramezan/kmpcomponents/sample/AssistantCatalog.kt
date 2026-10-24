@@ -1,5 +1,6 @@
 package io.github.maniramezan.kmpcomponents.sample
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +38,7 @@ import io.github.maniramezan.kmpcomponents.SectionCard
 import io.github.maniramezan.kmpcomponents.ThemeCard
 import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TypingIndicator
+import io.github.maniramezan.kmpcomponents.kmpSpacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -90,7 +92,10 @@ private fun ChatDemo() {
             },
             modifier = Modifier.height(CHAT_HEIGHT),
         )
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             SearchField(
                 value = draft,
                 onValueChange = { draft = it },
