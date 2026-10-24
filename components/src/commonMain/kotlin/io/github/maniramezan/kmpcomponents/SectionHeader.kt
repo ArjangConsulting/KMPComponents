@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +59,7 @@ public fun SectionHeader(
         }
         actions?.invoke(this)
         if (actionLabel != null && onAction != null) {
-            TextButton(onClick = onAction) { Text(actionLabel) }
+            ThemeTextButton(text = actionLabel, onClick = onAction)
         }
     }
 }

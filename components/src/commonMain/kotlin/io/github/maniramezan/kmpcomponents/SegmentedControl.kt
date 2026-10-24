@@ -1,5 +1,6 @@
 package io.github.maniramezan.kmpcomponents
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow as MaterialSingleChoiceSegmentedButtonRow
 
 /** Vertical density of a [SegmentedControl]. */
@@ -91,6 +93,7 @@ public fun SegmentedControl(
                     )
                     .semantics { this.selected = selected },
                 enabled = enabled,
+                border = if (selected) BorderStroke(1.dp, colors.onPrimary) else null,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selected) colors.primary else colors.surfaceVariant,
                     contentColor = if (selected) colors.onPrimary else colors.onSurfaceVariant,

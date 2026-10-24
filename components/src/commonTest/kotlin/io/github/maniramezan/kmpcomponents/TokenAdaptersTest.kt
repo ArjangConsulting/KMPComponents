@@ -7,6 +7,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.maniramezan.kommon.designsystem.ColorToken
 import io.github.maniramezan.kommon.designsystem.KommonDesignTokens
 import io.github.maniramezan.kommon.designsystem.MotionTokens
 import io.github.maniramezan.kommon.designsystem.ShapeTokens
@@ -63,6 +64,57 @@ class TokenAdaptersTest {
             listOf(scheme.outline, scheme.outlineVariant).forEach { outline ->
                 surfaces.forEach { surface ->
                     assertTrue(contrastRatio(outline, surface) >= 3f, "$outline on $surface in dark=$dark")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `matching text roles remain readable across default and alternate themes`() {
+        val themes = listOf(
+            KommonDesignTokens.default,
+            KommonDesignTokens.default.copy(
+                lightColors = KommonDesignTokens.default.lightColors.copy(primary = ColorToken(0xFF_00_6C_4F)),
+                darkColors = KommonDesignTokens.default.darkColors.copy(primary = ColorToken(0xFF_7F_D8_B5)),
+            ),
+        )
+        themes.forEach { tokens ->
+            listOf(false, true).forEach { dark ->
+                val source = if (dark) tokens.darkColors else tokens.lightColors
+                val scheme = source.toMaterialColorScheme(dark)
+                val pairs = listOf(
+                    scheme.onPrimary to scheme.primary,
+                    scheme.onPrimaryContainer to scheme.primaryContainer,
+                    scheme.onSecondaryContainer to scheme.secondaryContainer,
+                    scheme.onTertiaryContainer to scheme.tertiaryContainer,
+                    scheme.onError to scheme.error,
+                    scheme.onErrorContainer to scheme.errorContainer,
+                    scheme.inverseOnSurface to scheme.inverseSurface,
+                    scheme.onSurface to scheme.surfaceContainerLow,
+                    scheme.onSurface to scheme.surfaceContainer,
+                    scheme.onSurface to scheme.surfaceContainerHigh,
+                    scheme.onSurface to scheme.surfaceContainerHighest,
+                )
+                pairs.forEach { (foreground, background) ->
+                    assertTrue(contrastRatio(foreground, background) >= 4.5f, "$foreground on $background dark=$dark")
+                }
+                val accents =
+                    listOf(
+                        scheme.primary,
+                        scheme.error,
+                        source.success.toComposeColor(),
+                        source.warning.toComposeColor(),
+                    )
+                accents.forEach { accent ->
+                    val background = tonalContainerColor(accent, scheme.surface)
+                    val foreground = readableAccent(accent, background, scheme.onSurface)
+                    assertTrue(
+                        contrastRatio(foreground, background) >= 4.5f,
+                        "Status $foreground on $background dark=$dark",
+                    )
+                    val inline = readableAccent(accent, scheme.surfaceVariant, scheme.onSurface)
+                    assertTrue(contrastRatio(inline, scheme.surfaceVariant) >= 4.5f, "Inline $inline dark=$dark")
+                    assertTrue(contrastRatio(inline, scheme.surface) >= 4.5f, "Inline $inline on page dark=$dark")
                 }
             }
         }

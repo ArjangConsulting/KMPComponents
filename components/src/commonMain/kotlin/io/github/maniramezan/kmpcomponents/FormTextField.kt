@@ -1,19 +1,9 @@
 package io.github.maniramezan.kmpcomponents
 
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TooltipAnchorPosition
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -127,9 +116,11 @@ public fun SecretTextField(
         trailingContent = {
             val toggleLabel = if (revealed) hideLabel else showLabel
             when (revealToggle) {
-                SecretRevealToggle.TEXT -> TextButton(onClick = { revealed = !revealed }, enabled = enabled) {
-                    Text(toggleLabel)
-                }
+                SecretRevealToggle.TEXT -> ThemeTextButton(
+                    text = toggleLabel,
+                    onClick = { revealed = !revealed },
+                    enabled = enabled,
+                )
 
                 SecretRevealToggle.ICON -> RevealIconButton(
                     revealed = revealed,
@@ -151,25 +142,9 @@ public enum class SecretRevealToggle {
     ICON,
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RevealIconButton(revealed: Boolean, label: String, enabled: Boolean, onClick: () -> Unit) {
-    val iconSize = glyphSize()
-    val buttonSize = iconSize + MaterialTheme.kmpSpacing.small * 2
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-        tooltip = { PlainTooltip { Text(label) } },
-        state = rememberTooltipState(),
-    ) {
-        IconButton(
-            onClick = onClick,
-            enabled = enabled,
-            modifier = Modifier
-                .sizeIn(minWidth = buttonSize, minHeight = buttonSize)
-                .semantics { contentDescription = label },
-        ) {
-            // Shows the action: an open eye reveals, a struck-through eye hides.
-            GlyphIcon(glyph = if (revealed) Glyph.EYE_OFF else Glyph.EYE, size = iconSize)
-        }
+    TooltipIconButton(label, onClick, glyphSize(), enabled = enabled) {
+        GlyphIcon(glyph = if (revealed) Glyph.EYE_OFF else Glyph.EYE, size = glyphSize())
     }
 }

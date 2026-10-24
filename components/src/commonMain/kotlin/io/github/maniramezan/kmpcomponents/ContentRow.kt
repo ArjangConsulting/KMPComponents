@@ -50,7 +50,12 @@ public fun ContentRow(
         .clip(MaterialTheme.shapes.small)
         .background(if (isSelected) colors.secondaryContainer else Color.Transparent)
         .let { base ->
-            if (onClick != null) base.clickable(enabled = enabled, role = Role.Button, onClick = onClick) else base
+            if (onClick != null) {
+                base.keyboardFocusOutline(MaterialTheme.shapes.small, contentColor)
+                    .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
+            } else {
+                base
+            }
         }
         .semantics(mergeDescendants = onClick != null) {
             if (selected != null) this.selected = selected
@@ -83,6 +88,7 @@ public fun ContentRow(
                     Text(supportingText, style = MaterialTheme.typography.bodySmall, color = supportingColor)
                 }
             }
+            if (isSelected) GlyphIcon(Glyph.CHECK, color = contentColor)
             trailingContent?.invoke()
         }
     }

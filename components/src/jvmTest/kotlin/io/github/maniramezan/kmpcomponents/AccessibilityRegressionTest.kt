@@ -11,19 +11,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.requestFocus
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -60,7 +60,6 @@ class AccessibilityRegressionTest {
         fontScale: Float,
         tokens: ThemeTokens,
     ) = runComposeUiTest {
-        val requester = FocusRequester()
         var focusColor = Color.Unspecified
         setContent {
             val density = LocalDensity.current
@@ -74,12 +73,17 @@ class AccessibilityRegressionTest {
 
                         FocusCase.UNSELECTED_PILL -> MaterialTheme.colorScheme.onPrimaryContainer
 
-                        FocusCase.ACTION_PILL, FocusCase.DISCLOSURE -> MaterialTheme.colorScheme.onSurfaceVariant
+                        FocusCase.ACTION_PILL, FocusCase.DISCLOSURE, FocusCase.SIDEBAR ->
+                            MaterialTheme.colorScheme.onSurfaceVariant
+
+                        FocusCase.TAB, FocusCase.TAB_CLOSE -> MaterialTheme.colorScheme.onPrimaryContainer
+
+                        FocusCase.SELECTED_CARD -> MaterialTheme.colorScheme.onSecondaryContainer
 
                         else -> MaterialTheme.colorScheme.onSurface
                     }
                     Surface {
-                        FocusControl(control, Modifier.testTag("control").focusRequester(requester))
+                        FocusControl(control, Modifier.testTag("control"))
                     }
                 }
             }
@@ -87,10 +91,13 @@ class AccessibilityRegressionTest {
         val target = when (control) {
             FocusCase.ICON, FocusCase.TOOLTIP -> onNodeWithContentDescription("Focus")
             FocusCase.ZOOM -> onNodeWithTag("control")
+            FocusCase.TAB_CLOSE -> onNodeWithContentDescription("Close tab")
+            FocusCase.SECRET_ICON -> onNodeWithContentDescription("Show")
+            FocusCase.SECRET_TEXT -> onNodeWithText("Show")
             else -> onNodeWithText("Focus")
         }
         val before = target.captureToImage()
-        runOnIdle { requester.requestFocus() }
+        target.requestFocus()
         val after = target.captureToImage()
         assertEquals(before.width, after.width)
         assertEquals(before.height, after.height)
@@ -154,6 +161,35 @@ private fun FocusControl(control: FocusCase, modifier: Modifier) {
 
         FocusCase.DISCLOSURE -> DisclosureCard(false, {}, modifier, summary = { Text("Focus") }, detail = {})
 
+        FocusCase.SELECTED_CARD -> SelectableCard(true, {}, modifier) { Text("Focus") }
+
+        FocusCase.UNSELECTED_CARD -> SelectableCard(false, {}, modifier) { Text("Focus") }
+
+        FocusCase.CARD -> ThemeCard(modifier, onClick = {}) { Text("Focus") }
+
+        FocusCase.SIDEBAR -> SidebarItem("Focus", false, {}, modifier)
+
+        FocusCase.TAB -> TabChip("Focus", true, {}, modifier)
+
+        FocusCase.TAB_CLOSE -> TabChip("Tab", true, {}, modifier, onClose = {}, closeDescription = "Close tab")
+
+        FocusCase.CONTENT_ROW -> ContentRow("Focus", modifier, onClick = {})
+
+        FocusCase.SWITCH -> ThemeSwitch(false, {}, "Focus", modifier)
+
+        FocusCase.CHECKBOX -> ThemeCheckbox(false, {}, "Focus", modifier)
+
+        FocusCase.TRI_CHECKBOX -> ThemeTriStateCheckbox(ToggleableState.Indeterminate, {}, "Focus", modifier)
+
+        FocusCase.HEADER_ACTION -> SectionHeader("Header", modifier, actionLabel = "Focus", onAction = {})
+
+        FocusCase.NOTICE_ACTION -> NoticeCard("Notice", modifier, actionLabel = "Focus", onAction = {})
+
+        FocusCase.SECRET_ICON -> SecretTextField("secret", {
+        }, "Secret", modifier, revealToggle = SecretRevealToggle.ICON)
+
+        FocusCase.SECRET_TEXT -> SecretTextField("secret", {}, "Secret", modifier)
+
         FocusCase.RADIO -> RadioGroup(listOf("Focus"), 0, {}, modifier)
 
         FocusCase.SELECTION -> Box(Modifier.size(300.dp)) {
@@ -163,6 +199,20 @@ private fun FocusControl(control: FocusCase, modifier: Modifier) {
 }
 
 private enum class FocusCase {
+    SELECTED_CARD,
+    UNSELECTED_CARD,
+    CARD,
+    SIDEBAR,
+    TAB,
+    TAB_CLOSE,
+    CONTENT_ROW,
+    SWITCH,
+    CHECKBOX,
+    TRI_CHECKBOX,
+    HEADER_ACTION,
+    NOTICE_ACTION,
+    SECRET_ICON,
+    SECRET_TEXT,
     PRIMARY,
     SECONDARY,
     TEXT,

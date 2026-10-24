@@ -49,7 +49,8 @@ public fun CheckStatus.message(labels: CheckStatusLabels = CheckStatusLabels()):
 
 /**
  * One line describing a [CheckStatus]: muted text when idle, a small spinner while checking, and the
- * result in the success or error color. Results are announced through a polite live region.
+ * result in the success or error color when readable on page and card surfaces, otherwise the
+ * on-surface color. Results are announced through a polite live region.
  */
 @Composable
 public fun CheckStatusRow(
@@ -58,11 +59,16 @@ public fun CheckStatusRow(
     labels: CheckStatusLabels = CheckStatusLabels(),
 ) {
     val text = status.message(labels)
-    val color: Color = when (status) {
+    val accent: Color = when (status) {
         CheckStatus.Idle, CheckStatus.Checking -> MaterialTheme.colorScheme.onSurfaceVariant
         is CheckStatus.Success -> MaterialTheme.kmpColors.success
         is CheckStatus.Failure -> MaterialTheme.colorScheme.error
     }
+    val color = readableAccent(
+        accent,
+        MaterialTheme.colorScheme.surfaceVariant,
+        MaterialTheme.colorScheme.onSurface,
+    )
     val announce = status is CheckStatus.Success || status is CheckStatus.Failure
     Row(
         modifier = modifier.semantics(mergeDescendants = true) {

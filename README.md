@@ -168,7 +168,7 @@ sized from the body text so they follow the user's font scale.
 | --- | --- |
 | `SidebarNavigation` / `SidebarItem` | Desktop-style side navigation with a header and selectable destinations. |
 | `TabChipRow` / `TabChip` | Scrolling row of compact tabs with optional close controls. |
-| `SelectableCard` | Card in a pick-one list; the selected card is tinted and reported as selected. |
+| `SelectableCard` | Outlined card with a selection box, checked state, and visible keyboard focus; reports selection to accessibility services. |
 | `HorizontalSplitPane` | Two panes with a divider you can drag, move with arrow keys, or adjust with a screen reader. |
 | `VerticalSplitPane` | The same divider between a top and a bottom pane, moved with the Up/Down keys. |
 | `StatusBar` / `StatusBarItem` / `StatusBarSeparator` | Desktop status bar; items share space and ellipsize rather than dropping off. |
@@ -325,3 +325,6 @@ Gradle substitutes `io.github.maniramezan.kommon:design-system` with the include
 
 Releases are automated by Release Please from Conventional Commit messages (`feat:`, `fix:`,
 `feat!:`). Contributor and AI-agent conventions live in [`AGENTS.md`](AGENTS.md).
+
+The shared-component [accessibility audit](docs/accessibility-audit.md) records verified behavior,
+regression coverage, and the platform checks still needed in consuming apps.

@@ -69,6 +69,14 @@ class ControlContrastTest {
                         when (boundary) {
                             Boundary.BUTTON -> SecondaryButton("Boundary", {})
 
+                            Boundary.CARD -> SelectableCard(false, {}, Modifier.size(300.dp, 100.dp)) {
+                                androidx.compose.material3.Text("Boundary")
+                            }
+
+                            Boundary.SELECTED_CARD -> SelectableCard(true, {}, Modifier.size(300.dp, 100.dp)) {
+                                androidx.compose.material3.Text("Boundary")
+                            }
+
                             Boundary.HORIZONTAL_SPLIT -> HorizontalSplitPane(
                                 0.5f,
                                 {},
@@ -89,7 +97,7 @@ class ControlContrastTest {
                 }
             }
         }
-        val node = if (boundary == Boundary.BUTTON) {
+        val node = if (boundary in listOf(Boundary.BUTTON, Boundary.CARD, Boundary.SELECTED_CARD)) {
             onNodeWithText("Boundary")
         } else {
             onNodeWithContentDescription("Resize panes")
@@ -102,12 +110,12 @@ class ControlContrastTest {
     }
 }
 
-private enum class Boundary { BUTTON, HORIZONTAL_SPLIT, VERTICAL_SPLIT }
+private enum class Boundary { BUTTON, CARD, SELECTED_CARD, HORIZONTAL_SPLIT, VERTICAL_SPLIT }
 
 private fun boundaryContrast(image: ImageBitmap, background: Color, boundary: Boundary): Float {
     val pixels = image.toPixelMap()
     val edges = when (boundary) {
-        Boundary.BUTTON -> listOf(
+        Boundary.BUTTON, Boundary.CARD, Boundary.SELECTED_CARD -> listOf(
             (0 until minOf(4, image.height)).map { pixels[image.width / 2, it] },
             (0 until minOf(4, image.width)).map { pixels[it, image.height / 2] },
         )

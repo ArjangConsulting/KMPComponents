@@ -73,6 +73,8 @@ only *adapts* them to Compose/Material 3 and builds components on top.
     Web resize cursors fall back to the hand cursor because CSS resize cursors are internal.
   - `commonTest/` — pure logic tests, run on every target.
   - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
+    `AccessibilityAuditTest.kt` checks selection cues, keyboard actions, accessible names, and minimum targets.
+    `SelectionAccessibilityScreenshotTest.kt` records selection and focus across themes, text sizes, and RTL.
     `ScreenshotTest.kt` renders a gallery of the original components into golden images in
     `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
     `ActionsScreenshotTest.kt`, `SelectionScreenshotTest.kt`,

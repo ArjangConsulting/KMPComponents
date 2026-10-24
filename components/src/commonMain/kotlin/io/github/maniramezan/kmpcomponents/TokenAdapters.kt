@@ -7,6 +7,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.TextStyle
@@ -194,4 +195,14 @@ internal fun ColorScheme.shimmerHighlight(): Color = if (surface.luminance() >=
     surface
 } else {
     onSurface
+}
+
+internal fun tonalContainerColor(accent: Color, surface: Color): Color = lerp(surface, accent, 0.12f)
+
+internal fun readableAccent(accent: Color, background: Color, fallback: Color): Color {
+    val foregroundLuminance = accent.compositeOver(background).luminance()
+    val backgroundLuminance = background.luminance()
+    val contrast = (maxOf(foregroundLuminance, backgroundLuminance) + 0.05f) /
+        (minOf(foregroundLuminance, backgroundLuminance) + 0.05f)
+    return if (contrast >= 4.5f) accent else fallback
 }
