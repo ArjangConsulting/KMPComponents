@@ -115,7 +115,7 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   an explicit action.
 - `sample-android/` — Android app hosting the catalog (`./gradlew :sample-android:installDebug`),
   with an adaptive launcher icon using the sample artwork.
-- `.run/` — shared IntelliJ run configurations (sample catalog, JVM tests, all-target tests, CI
+- `.run/` — shared IDE run configurations (desktop and Android sample catalogs, JVM tests, all-target tests, CI
   check). Keep them in sync with the CI task list.
 - `.claude/skills/` — task playbooks (`add-component`, `review-component`).
 - `.github/workflows/` — `ci.yml` (PRs and main), `docs.yml` (Dokka to GitHub Pages after CI on

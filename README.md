@@ -264,9 +264,15 @@ xcodegen generate --spec sample/ios/project.yml && open sample/ios/KmpComponents
 The iOS project builds the Kotlin framework in a pre-build phase; pick an Apple Silicon simulator
 and run. It needs [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
-In IntelliJ IDEA or Android Studio, the shared run configurations in `.run/` cover the same entry
-points: **Run** > *Sample catalog (desktop)*, and **Test** > *Tests (JVM)*, *Tests (all targets)*,
-and *Check (CI)*.
+In Android Studio, reload/sync the root Gradle project, select **Run** > *Sample catalog (Android)*,
+choose an emulator or connected device running Android 8.0/API 26 or later, then Run or Debug.
+The application module is `sample-android`; the `sample` module supplies the shared catalog UI.
+If Android is missing from an existing checkout's project view, reload all Gradle projects so
+`settings.gradle.kts` is imported again. The Android App configuration requires Android IDE support;
+Android Studio includes it. The `installDebug` command above also installs the catalog from a terminal.
+
+The shared configurations in `.run/` also include **Run** > *Sample catalog (desktop)* and
+**Test** > *Tests (JVM)*, *Tests (all targets)*, and *Check (CI)*.
 
 ## Theming
 
