@@ -199,7 +199,7 @@ sized from the body text so they follow the user's font scale.
 | `FlipCard` | Two-sided card that turns in 3D; only the visible face is read by screen readers. |
 | `AppText` / `AppTextStyle` | Text in a semantic role, including heavier weight variants of Material slots. |
 | `ContentRow` | List row with title, secondary and supporting text, leading/trailing slots, and optional click and selection. |
-| `KeyValueRow` | Read-only label/value pair for details panels, read as one item. |
+| `KeyValueRow` | Read-only label/value pair for details panels; flows onto separate lines when space is tight and is read as one item. |
 
 ### Names shared with the sibling libraries
 

@@ -24,8 +24,10 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -116,7 +118,10 @@ class DesktopExtrasUiTest {
                 }
             }
         }
-        onNodeWithTag("image").assert(stateIs("Zoom 100%")).requestFocus()
+        onNodeWithTag("image")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Screenshot")))
+            .assert(stateIs("Zoom 100%"))
+            .requestFocus()
         onNodeWithTag("image").performKeyInput { pressKey(Key.Equals) }
         waitForIdle()
         onNodeWithTag("image").assert(stateIs("Zoom 110%"))
@@ -195,7 +200,11 @@ class DesktopExtrasUiTest {
                 )
             }
         }
-        onNodeWithContentDescription("Resize panes").assert(stateIs("50% top pane")).requestFocus()
+        onNodeWithContentDescription("Resize panes")
+            .assertWidthIsAtLeast(48.dp)
+            .assertHeightIsAtLeast(48.dp)
+            .assert(stateIs("50% top pane"))
+            .requestFocus()
         onNodeWithContentDescription("Resize panes").performKeyInput { pressKey(Key.DirectionDown) }
         waitForIdle()
         assertEquals(0.55f, split, absoluteTolerance = 0.001f)

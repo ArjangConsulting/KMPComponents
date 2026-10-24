@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -39,6 +41,7 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.github.maniramezan.kommon.designsystem.KommonDesignTokens
 import kotlin.test.Test
@@ -49,6 +52,44 @@ import kotlin.test.assertTrue
 // Desktop-only because runComposeUiTest needs a Skiko runtime; Android host tests have no renderer.
 @OptIn(ExperimentalTestApi::class)
 class ComponentUiTest {
+    @Test
+    fun `key value pairs wrap without splitting ordinary words at large text sizes`() {
+        listOf(1f, 2f).forEach { scale ->
+            listOf(LayoutDirection.Ltr, LayoutDirection.Rtl).forEach { direction ->
+                runComposeUiTest {
+                    val value = "Text copied from the component catalog"
+                    setContent {
+                        val density = LocalDensity.current
+                        CompositionLocalProvider(
+                            LocalDensity provides Density(density.density, scale),
+                            LocalLayoutDirection provides direction,
+                        ) {
+                            KmpTheme {
+                                KeyValueRow("Example text", value, Modifier.width(300.dp)) {
+                                    CopyButton(value)
+                                }
+                            }
+                        }
+                    }
+                    val layouts = mutableListOf<TextLayoutResult>()
+                    onNodeWithText(value, useUnmergedTree = true).performSemanticsAction(
+                        SemanticsActions.GetTextLayoutResult,
+                    ) { it(layouts) }
+                    val layout = layouts.single()
+                    assertFalse(layout.hasVisualOverflow)
+                    for (line in 0 until layout.lineCount - 1) {
+                        val end = layout.getLineEnd(line)
+                        assertTrue(
+                            end == value.length || value[end - 1].isWhitespace() || value[end].isWhitespace(),
+                            "A word was split at $end in $direction at $scale",
+                        )
+                    }
+                    onNodeWithContentDescription("Copy").assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
+                }
+            }
+        }
+    }
+
     @Test
     fun `secret field toggles between show and hide`() = runComposeUiTest {
         setContent {

@@ -61,7 +61,8 @@ public object SplitPaneDefaults {
  * width, kept between [minSplit] and [maxSplit]; persist it if the layout should survive restarts.
  *
  * The divider can be dragged, moved with the Left/Right arrow keys by [keyboardStep] when focused,
- * and adjusted by screen readers like a slider. Dragging and arrow keys move the divider in the
+ * and adjusted by screen readers like a slider. The handle reserves Material's minimum touch
+ * target width. Dragging and arrow keys move the divider in the
  * indicated direction in both left-to-right and right-to-left layouts. Drag deltas accumulate
  * locally so callbacks stay consistent when the caller applies updates late; the visible panes
  * follow [split]. On desktop it shows a resize cursor.
@@ -93,7 +94,7 @@ public fun HorizontalSplitPane(
 
     BoxWithConstraints(modifier) {
         val totalWidth = maxWidth
-        val handleWidth = MaterialTheme.kmpSpacing.small
+        val handleWidth = MaterialTheme.kmpSpacing.small.coerceAtLeast(minimumTouchTargetSize())
         val paneWidth = totalWidth - handleWidth
         val paneWidthPx = with(LocalDensity.current) { paneWidth.toPx() }.coerceAtLeast(1f)
         var dragSplit by remember { mutableFloatStateOf(shown) }

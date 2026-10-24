@@ -1,7 +1,8 @@
 # Shared-component accessibility audit
 
-This audit covers the common Compose implementation and desktop-rendered behavior of the component
-catalog. It uses the repository's design style guide and the WCAG 2.2 criteria for
+The main audit covers the common Compose implementation and desktop-rendered behavior of the
+component catalog. The bounded iOS follow-up below adds simulator evidence for the reported screen.
+It uses the repository's design style guide and the WCAG 2.2 criteria for
 [use of color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html),
 [text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html),
 [non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html),
@@ -21,6 +22,10 @@ control boundaries. These are the acceptance thresholds used by the tests.
 | P2 | Sidebar and content-row selection depended on background color. Pill segments also relied on their fill. | Selected sidebar/content rows include a decorative check; selected pill segments gain a contrasting border. The parent's selected semantics remain the spoken state. |
 | P2 | A filled search field lost its placeholder-based accessible name. | `SearchField` keeps its localizable placeholder as its accessible name after typing; the clear action remains separately named and operable. |
 | P2 | Optional status and notice titles were styled as headings without heading semantics. | Both expose heading semantics while preserving polite announcements for warnings and errors. |
+| P2 | The generated zoom-preview bitmap used almost indistinguishable row fills, and the original audit did not measure those pixels. | The illustration has high-contrast row outlines and a visible preview caption. `CatalogContrastTest` measures the actual rendered image boundaries; the iOS follow-up records screenshot measurements. |
+| P2 | At 200% text, a long key squeezed the copy value into broken word fragments on iOS. | `KeyValueRow` flows the value below the label when its words cannot fit beside it. `ComponentUiTest` checks word boundaries at 100%/200% in LTR/RTL, and the iOS copy action was rechecked. |
+| P2 | The focusable zoom container exposed a state without its child image's description. | `ZoomableImage` merges its image description with the zoom state. A regression assertion on the focused node fails before the fix. |
+| P2 | The split-pane resize handle occupied only an 8 dp strip. | Both split directions reserve Material's minimum touch target independently of the thin visible line. Interaction tests check dimensions alongside keyboard and accessibility actions. |
 
 ## Verification coverage
 
@@ -42,11 +47,69 @@ control boundaries. These are the acceptance thresholds used by the tests.
   tooltips, paginated/showcase content, progress/state views, containers, and `CachedAsyncImage`.
   Informative images require a description; decorative images may use `null`.
 
+## iOS catalog follow-up
+
+Amoo reproduced the reported **Copy, zoom, and status bar** screen on an iPhone 18 Pro simulator
+running iOS 27.2. The original rows are pixels inside one generated illustration, not separately
+interactive controls. Their nearly identical fills made the preview difficult to interpret. The
+original source/desktop audit did not cover this generated bitmap and was insufficient evidence
+for its appearance on iOS.
+
+The preview now has a visible caption and outlines derived from `onSecondaryContainer`. Measurements
+from flat sRGB-tagged screenshot pixels were:
+
+| Theme | Original row fill/background | New outline/fill | New outline/background |
+| --- | --- | --- | --- |
+| Light | 1.013:1 | 13.12:1 | 13.28:1 |
+| Dark | 1.470:1 | 11.00:1 | 7.48:1 |
+
+The outline measurements held at both 100% and 200% **catalog text settings** in the default theme.
+These are screenshot estimates using the WCAG relative-luminance formula, not calibrated physical
+display measurements. Sampled nearby Notes labels exceeded 4.5:1 and field outlines exceeded 3:1.
+
+Apple's current-screen native contrast audit, invoked through Amoo, reported no contrast issues
+in light/dark at both catalog text settings. It also passed on the original faint illustration:
+its result did not establish contrast within the image's internal pixels. The separate screenshot
+measurements and rendered-image regression test cover that gap.
+
+The large-text pass also exposed fragmented wrapping in the copy row. After the shared
+`KeyValueRow` fix, the full value wraps at words below its label in both themes at 200%. The copy
+control remained visible/tappable, and its `Copied` feedback was asserted. Appearance and catalog
+text settings were restored to System/100%, and the leased simulator runtime was released.
+
+Expanded audits used an iPhone 18 Pro Max simulator on the same iOS version after an unrelated
+Xcode test runner occupied the original simulator. Amoo's current-screen heuristic evaluated
+`UX-001` and `UX-002`; its zero findings are a heuristic result, with a `notAssessed` verdict.
+The native audit additionally evaluated `hitRegion`, `sufficientElementDescription`, `textClipped`,
+`trait`, and `elementDetection` in scrolled presentations of the preview and lower controls.
+
+Before the final fixes, native auditing reported a missing description with an empty name/ID and
+no element bounds. Scrolling the preview offscreen removed that finding, but did not establish its
+identity. Independently, source and a failing semantic regression assertion showed that the
+focusable `ZoomableImage` root lacked its child image's description. Its name and zoom state are
+now merged. The native audit also identified the named `Resize panes` handle as only 8 points high;
+both split-pane directions now reserve the Material minimum touch target.
+
+On the rebuilt app, the named image container exports both its description and `Zoom 100%`, and
+the vertical resize handle measures 48 points high. The missing-description native finding still
+has no element identity or bounds and remains unresolved; the naming fix must not be presented
+as resolving that anonymous finding. A lower scrolled presentation also reports
+`v1.2.0` as "Label not human-readable". This is intentionally displayed sample version data and
+needs contextual assistive-technology review. The final native audit returned `fail` in all five captured presentations: light/dark at 100%
+near the top, light 100% lower, light 200% preview, and dark 200% lower. Each reported the anonymous
+description issue; light 100% lower additionally reported the version warning. No issues were
+reported for contrast, hit regions, clipping, traits, or element detection in those presentations.
+These findings prevent a blanket native-audit pass. The final run restored System appearance and
+100% catalog text, released its runtime, and changed no global accessibility settings.
+
+This follow-up is limited to this screen in the default theme, LTR, and the catalog's font-scale
+control. It does not establish a full Dynamic Type, VoiceOver, TalkBack, browser, or whole-app audit.
+
 ## Limits and host responsibilities
 
-This is a source and automated desktop-rendering audit, not a WCAG conformance certification.
-VoiceOver and TalkBack announcement order, native accessibility bridges, platform focus restoration,
-physical touch behavior, and browser assistive-technology behavior still need manual verification
+This source, desktop-rendering, and bounded iOS audit is not a WCAG conformance certification.
+VoiceOver and TalkBack announcement order, broader native bridge behavior, platform focus restoration,
+physical-device touch behavior, and browser assistive-technology behavior still need manual verification
 on their respective platforms. Those checks were not performed in this audit.
 
 Consuming apps supply meaningful localized labels and icon descriptions, accessible custom slot

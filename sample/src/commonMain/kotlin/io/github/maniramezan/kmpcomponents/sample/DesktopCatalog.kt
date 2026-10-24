@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.unit.dp
 import io.github.maniramezan.kmpcomponents.CopyButton
 import io.github.maniramezan.kmpcomponents.KeyValueRow
@@ -41,9 +42,15 @@ fun DesktopSection() {
     var split by remember { mutableFloatStateOf(DEFAULT_SPLIT) }
     var dirty by remember { mutableStateOf(true) }
     val colors = MaterialTheme.colorScheme
-    val image = remember(colors.surfaceVariant, colors.primary, colors.secondaryContainer) {
-        sampleScreenshot(colors.surfaceVariant, colors.primary, colors.secondaryContainer)
-    }
+    val image =
+        remember(colors.surfaceVariant, colors.primary, colors.secondaryContainer, colors.onSecondaryContainer) {
+            sampleScreenshot(
+                colors.surfaceVariant,
+                colors.primary,
+                colors.secondaryContainer,
+                colors.onSecondaryContainer,
+            )
+        }
     SectionCard(
         title = "Desktop helpers",
         description = "Tab out of the multi-line notes field; zoom the image with the wheel or +/-.",
@@ -62,6 +69,7 @@ fun DesktopSection() {
             KeyValueRow(key = "Example text", value = COPY_TEXT, modifier = Modifier.weight(1f))
             CopyButton(text = COPY_TEXT)
         }
+        Text("Generated image preview", style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
         ZoomableImage(
             image = image,
             contentDescription = "Generated example illustration",
@@ -100,17 +108,28 @@ private val IMAGE_HEIGHT = 200.dp
 private val SPLIT_HEIGHT = 220.dp
 
 /** A drawn stand-in for a screenshot, so the sample needs no image resources. */
-private fun sampleScreenshot(backgroundColor: Color, barColor: Color, rowColor: Color): ImageBitmap {
+internal fun sampleScreenshot(
+    backgroundColor: Color,
+    barColor: Color,
+    rowColor: Color,
+    rowOutlineColor: Color,
+): ImageBitmap {
     val image = ImageBitmap(SCREEN_WIDTH, SCREEN_HEIGHT)
     val canvas = Canvas(image)
     val background = Paint().apply { color = backgroundColor }
     val bar = Paint().apply { color = barColor }
     val row = Paint().apply { color = rowColor }
+    val outline = Paint().apply {
+        color = rowOutlineColor
+        style = PaintingStyle.Stroke
+        strokeWidth = ROW_HEIGHT / 12f
+    }
     canvas.drawRect(0f, 0f, SCREEN_WIDTH.toFloat(), SCREEN_HEIGHT.toFloat(), background)
     canvas.drawRect(0f, 0f, SCREEN_WIDTH.toFloat(), BAR_HEIGHT, bar)
     repeat(ROWS) { index ->
         val top = BAR_HEIGHT + ROW_GAP + index * (ROW_HEIGHT + ROW_GAP)
         canvas.drawRect(ROW_GAP, top, SCREEN_WIDTH - ROW_GAP, top + ROW_HEIGHT, row)
+        canvas.drawRect(ROW_GAP, top, SCREEN_WIDTH - ROW_GAP, top + ROW_HEIGHT, outline)
     }
     return image
 }

@@ -108,7 +108,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   Swift host, and app icon asset catalog).
 - The catalog's section picker opens each component family. `PickerAvailabilityControls.kt` lets
   testers disable a popup while it is open. `sample/src/jvmTest/.../CatalogUiTest.kt` renders all
-  sections at 100%/200% text in LTR/RTL and checks section navigation.
+  sections at 100%/200% text in LTR/RTL and checks section navigation. `CatalogContrastTest.kt`
+  measures the generated image preview boundaries against their fill and background.
 - Catalog examples use generic copy and temporary local UI state. Do not copy consuming apps'
   workflows, business rules, storage, credentials, or backend integrations into the sample.
   Simulations must be labeled; image examples default to embedded data and load a URL only after

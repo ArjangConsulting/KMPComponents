@@ -21,10 +21,12 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isHeading
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -243,6 +245,7 @@ class AppShellUiTest {
             }
         }
         val divider = onNodeWithContentDescription("Resize panes")
+        divider.assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
         divider.assert(hasStateDescription("50% leading pane"))
         divider.requestFocus()
         divider.performKeyInput { pressKey(Key.DirectionRight) }

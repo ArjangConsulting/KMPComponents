@@ -109,7 +109,7 @@ public fun ZoomableImage(
                 }
                 true
             }
-            .semantics { stateDescription = labels.zoomDescription(zoom) }
+            .semantics(mergeDescendants = true) { stateDescription = labels.zoomDescription(zoom) }
             .focusable(),
         contentAlignment = Alignment.Center,
     ) {
