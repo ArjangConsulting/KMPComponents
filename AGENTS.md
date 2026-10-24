@@ -263,6 +263,9 @@ section keeps only this repo's concrete values.
 
 - `-PuseLocalKommon=true` substitutes a sibling `../kommon` checkout via composite build; add
   `-PkommonDir=<path>` to use another checkout, such as a git worktree.
+- Both libraries use `karma.config.d/timeouts.js` to give each browser test 30 seconds. Mocha's
+  default 2-second timeout is too short for Compose UI tests on CI; keep the limit bounded so stalled
+  tests still fail.
 - The `wasmJs` target runs `commonTest` in headless Chrome. Its Node.js, Yarn, and Binaryen wiring is in
   `settings.gradle.kts` and the root `build.gradle.kts`; keep both halves together.
 - Versions live in `gradle/libs.versions.toml` only. Declare Compose libraries through `libs.compose.*`
