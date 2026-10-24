@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -30,8 +31,9 @@ import androidx.compose.ui.semantics.liveRegion
  *
  * The current page's dot is a wider pill as well as [activeColor], so the position does not rely on
  * color alone. The dots are hidden from accessibility services unless you supply
- * [pagePositionDescription]; the indicator then reads as one node (for example "Page 2 of 5") and
- * announces changes politely.
+ * [pagePositionDescription]; the indicator then reads as one node (for example "Page 2 of 5"),
+ * announces changes politely, and is at least the minimum touch-target height so assistive
+ * technology can land on it.
  *
  * @param pageCount total number of pages. Nothing is drawn when it is below 1.
  * @param currentPage zero-based index of the current page, clamped into range.
@@ -56,12 +58,14 @@ public fun PageIndicator(
     val animate = !rememberReduceMotionEnabled()
     val duration = MaterialTheme.kmpMotion.fastMillis
     Row(
-        modifier = modifier.clearAndSetSemantics {
-            if (!description.isNullOrBlank()) {
-                contentDescription = description
-                liveRegion = LiveRegionMode.Polite
-            }
-        },
+        modifier = modifier
+            .then(if (description.isNullOrBlank()) Modifier else Modifier.heightIn(min = minimumTouchTargetSize()))
+            .clearAndSetSemantics {
+                if (!description.isNullOrBlank()) {
+                    contentDescription = description
+                    liveRegion = LiveRegionMode.Polite
+                }
+            },
         horizontalArrangement = Arrangement.spacedBy(spacing.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {

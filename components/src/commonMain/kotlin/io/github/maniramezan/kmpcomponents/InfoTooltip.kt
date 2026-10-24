@@ -57,11 +57,14 @@ public fun InfoTooltip(
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
     val colors = MaterialTheme.colorScheme
+    TooltipFocusTrigger(tooltipState, interactionSource)
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = { PlainTooltip { Text(text) } },
         state = tooltipState,
-        modifier = modifier,
+        // See TooltipTriggers.kt: Material's own input handling adds an unnamed node on iOS.
+        modifier = modifier.tooltipPointerTriggers(tooltipState),
+        enableUserInput = false,
     ) {
         Box(
             modifier = Modifier

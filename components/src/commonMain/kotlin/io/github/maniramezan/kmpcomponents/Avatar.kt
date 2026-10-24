@@ -40,19 +40,23 @@ public enum class AvatarSize {
  * word), skipping digits and punctuation. When [name] yields no letters and there is no [image], the
  * tinted circle renders empty.
  *
- * The avatar is one accessibility node with an image role, announced as [name]. Pass a blank [name]
- * with an [image] for a decorative avatar beside text that already names the person.
+ * The avatar is one accessibility node with an image role, announced as [contentDescription]. Pass
+ * `null` for a decorative avatar beside text that already names the person, such as a list row's
+ * leading avatar, so the name is not read twice.
  *
- * @param name the display name, used for initials and the accessibility label.
+ * @param name the display name, used for the initials.
  * @param size the avatar diameter.
  * @param image optional image content, for example a `CachedAsyncImage` with `ContentScale.Crop`.
  *   It is clipped to the circle and sized to fill it.
+ * @param contentDescription the spoken name; defaults to [name]. `null` or blank makes the avatar
+ *   decorative.
  */
 @Composable
 public fun Avatar(
     name: String,
     modifier: Modifier = Modifier,
     size: AvatarSize = AvatarSize.MEDIUM,
+    contentDescription: String? = name,
     image: (@Composable () -> Unit)? = null,
 ) {
     val initials = remember(name) { avatarInitials(name) }
@@ -64,8 +68,8 @@ public fun Avatar(
             .background(MaterialTheme.colorScheme.primaryContainer)
             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
             .clearAndSetSemantics {
-                if (name.isNotBlank()) {
-                    contentDescription = name
+                if (!contentDescription.isNullOrBlank()) {
+                    this.contentDescription = contentDescription
                     role = Role.Image
                 }
             },

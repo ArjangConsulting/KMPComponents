@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -291,11 +292,20 @@ private fun PageProgress(
     modifier: Modifier,
 ) {
     val current = pagerState.currentPage
-    LinearProgressIndicator(
-        // The offset is read in the progress lambda, so scrolling redraws without recomposing.
-        progress = { ((current + pagerState.currentPageOffsetFraction) / (pageCount - 1)).coerceIn(0f, 1f) },
-        modifier = modifier.clip(CircleShape).positionSemantics(describe?.invoke(current, pageCount)),
-    )
+    val description = describe?.invoke(current, pageCount)
+    // A spoken footer is its own accessibility element, so it gets a full-size hit region.
+    Box(
+        modifier = modifier
+            .then(if (description.isNullOrBlank()) Modifier else Modifier.heightIn(min = minimumTouchTargetSize()))
+            .positionSemantics(description),
+        contentAlignment = Alignment.Center,
+    ) {
+        LinearProgressIndicator(
+            // The offset is read in the progress lambda, so scrolling redraws without recomposing.
+            progress = { ((current + pagerState.currentPageOffsetFraction) / (pageCount - 1)).coerceIn(0f, 1f) },
+            modifier = Modifier.fillMaxWidth().clip(CircleShape),
+        )
+    }
 }
 
 private fun Modifier.positionSemantics(description: String?): Modifier = if (description == null) {
