@@ -9,6 +9,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.isSpecified
 // Small line glyphs drawn on a Canvas so components need no icon-font dependency. They are
 // decorative: callers put the accessible label on the interactive parent.
 
-internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH, CHECK, CHEVRON_DOWN, COPY }
+internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH, CHECK, CHEVRON_DOWN, COPY, SEND, MIC, STOP }
 
 /** A glyph sized to [style]'s line height, so it scales with the user's font size. */
 @Composable
@@ -57,6 +58,18 @@ private const val CHEVRON_BOTTOM = 0.62f
 private const val COPY_SHEET_INSET = 0.18f
 private const val COPY_SHEET_SIZE = 0.52f
 private const val COPY_OFFSET = 0.12f
+private const val SEND_TOP = 0.2f
+private const val SEND_BOTTOM = 0.8f
+private const val SEND_HEAD_INSET = 0.26f
+private const val SEND_HEAD_DROP = 0.44f
+private const val MIC_WIDTH = 0.32f
+private const val MIC_TOP = 0.12f
+private const val MIC_HEIGHT = 0.46f
+private const val MIC_CUP_INSET = 0.22f
+private const val MIC_CUP_TOP = 0.36f
+private const val MIC_CUP_BOTTOM = 0.72f
+private const val MIC_BASE = 0.88f
+private const val STOP_INSET = 0.28f
 
 @Composable
 internal fun GlyphIcon(
@@ -158,6 +171,56 @@ internal fun GlyphIcon(
                 val back = Offset(w * COPY_SHEET_INSET, h * COPY_SHEET_INSET)
                 drawRoundRect(color, topLeft = back, size = sheet, cornerRadius = corner, style = Stroke(stroke))
                 drawRoundRect(color, topLeft = front, size = sheet, cornerRadius = corner, style = Stroke(stroke))
+            }
+
+            Glyph.SEND -> {
+                // An upward arrow: the direction a sent message moves, the same in LTR and RTL.
+                val tip = Offset(center.x, h * SEND_TOP)
+                drawLine(color, tip, Offset(center.x, h * SEND_BOTTOM), stroke, StrokeCap.Round)
+                drawLine(color, Offset(w * SEND_HEAD_INSET, h * SEND_HEAD_DROP), tip, stroke, StrokeCap.Round)
+                drawLine(color, tip, Offset(w * (1f - SEND_HEAD_INSET), h * SEND_HEAD_DROP), stroke, StrokeCap.Round)
+            }
+
+            Glyph.MIC -> {
+                val capsuleWidth = w * MIC_WIDTH
+                drawRoundRect(
+                    color,
+                    topLeft = Offset(center.x - capsuleWidth / 2f, h * MIC_TOP),
+                    size = Size(capsuleWidth, h * MIC_HEIGHT),
+                    cornerRadius = CornerRadius(capsuleWidth / 2f, capsuleWidth / 2f),
+                )
+                val cup = Rect(
+                    w * MIC_CUP_INSET,
+                    h * (2 * MIC_CUP_TOP - MIC_CUP_BOTTOM),
+                    w * (1f - MIC_CUP_INSET),
+                    h * MIC_CUP_BOTTOM,
+                )
+                drawArc(
+                    color,
+                    startAngle = 0f,
+                    sweepAngle = 180f,
+                    useCenter = false,
+                    topLeft = cup.topLeft,
+                    size = cup.size,
+                    style = Stroke(stroke, cap = StrokeCap.Round),
+                )
+                drawLine(
+                    color,
+                    Offset(center.x, h * MIC_CUP_BOTTOM),
+                    Offset(center.x, h * MIC_BASE),
+                    stroke,
+                    StrokeCap.Round,
+                )
+            }
+
+            Glyph.STOP -> {
+                val side = this.size.minDimension * (1f - 2 * STOP_INSET)
+                drawRoundRect(
+                    color,
+                    topLeft = Offset(center.x - side / 2f, center.y - side / 2f),
+                    size = Size(side, side),
+                    cornerRadius = CornerRadius(stroke, stroke),
+                )
             }
 
             Glyph.CHEVRON_DOWN -> {

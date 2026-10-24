@@ -118,6 +118,87 @@ public final class io/github/maniramezan/kmpcomponents/ButtonsKt {
 	public static final fun ThemeTextButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZZLandroidx/compose/runtime/Composer;II)V
 }
 
+public final class io/github/maniramezan/kmpcomponents/ChatComposerKt {
+	public static final fun ChatComposer (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZILio/github/maniramezan/kmpcomponents/ChatComposerVoiceInput;Lio/github/maniramezan/kmpcomponents/ChatComposerLabels;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatComposerLabels {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/ChatComposerLabels;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/ChatComposerLabels;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ChatComposerLabels;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPlaceholder ()Ljava/lang/String;
+	public final fun getProcessingVoice ()Ljava/lang/String;
+	public final fun getSend ()Ljava/lang/String;
+	public final fun getStartVoice ()Ljava/lang/String;
+	public final fun getStopVoice ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatComposerVoiceInput {
+	public static final field $stable I
+	public fun <init> (Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)V
+	public final fun component1 ()Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState;
+	public final fun component2 ()Lkotlin/jvm/functions/Function0;
+	public final fun component3 ()Lkotlin/jvm/functions/Function0;
+	public final fun copy (Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceInput;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceInput;Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceInput;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOnStart ()Lkotlin/jvm/functions/Function0;
+	public final fun getOnStop ()Lkotlin/jvm/functions/Function0;
+	public final fun getState ()Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/maniramezan/kmpcomponents/ChatComposerVoiceState {
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Idle : io/github/maniramezan/kmpcomponents/ChatComposerVoiceState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Idle;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Listening : io/github/maniramezan/kmpcomponents/ChatComposerVoiceState {
+	public static final field $stable I
+	public fun <init> (F)V
+	public final fun component1 ()F
+	public final fun copy (F)Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Listening;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Listening;FILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Listening;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLevel ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Processing : io/github/maniramezan/kmpcomponents/ChatComposerVoiceState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Processing;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Unavailable : io/github/maniramezan/kmpcomponents/ChatComposerVoiceState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/ChatComposerVoiceState$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/maniramezan/kmpcomponents/ChatErrorAction {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V

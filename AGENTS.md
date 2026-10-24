@@ -68,7 +68,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     (title layout math in `titleProgress` / `titleOffset`; its dots footer is `PageIndicator.kt`),
     `Avatar.kt` (`Avatar`, `AvatarSize`, initials in `avatarInitials`), `Showcase.kt` (`ShowcaseRow`,
     `ShowcaseFeed`), `FlipCard.kt`, `AppText.kt`.
-  - Chat and assistant: `ChatLog.kt`, `AssistantComponents.kt`, `TypingIndicator.kt`
+  - Chat and assistant: `ChatLog.kt`, `ChatComposer.kt` (`ChatComposer`, voice input types; the
+    button choice is the pure `resolveChatComposerAction`), `AssistantComponents.kt`, `TypingIndicator.kt`
     (`typingDotAlpha` is the pure wave function), `TypewriterReveal.kt` (`rememberTypewriterReveal`;
     `nextRevealLength` keeps surrogate pairs whole), `LoadingOverlay.kt`.
   - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
@@ -79,7 +80,7 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `FocusScreenshotTest.kt` records focused controls.
   - Internal helpers: `ComponentMetrics.kt` (`minimumTouchTargetSize`, `CompactWindowMaxWidth`), `TooltipIconButton.kt`
     (`TooltipIconButton`, `GlyphIconButton`: icon-only buttons with a tooltip).
-  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy) so the library needs no icon font.
+  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy, send, mic, stop) so the library needs no icon font.
   - `jvmMain`/`androidMain`/`iosMain`/`wasmJsMain` — only `resizeHorizontalPointerIcon` and
     `isReduceMotionEnabled` (`ReduceMotion.kt`; desktop always returns `false`). Decorative,
     looping animations check `decorativeAnimationsEnabled()`, which also turns them off in previews.

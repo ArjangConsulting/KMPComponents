@@ -271,6 +271,39 @@ abstract interface io.github.maniramezan.kmpcomponents/ToastData { // io.github.
     abstract fun performAction() // io.github.maniramezan.kmpcomponents/ToastData.performAction|performAction(){}[0]
 }
 
+sealed interface io.github.maniramezan.kmpcomponents/ChatComposerVoiceState { // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState|null[0]
+    final class Listening : io.github.maniramezan.kmpcomponents/ChatComposerVoiceState { // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening|null[0]
+        constructor <init>(kotlin/Float) // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.<init>|<init>(kotlin.Float){}[0]
+
+        final val level // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.level|{}level[0]
+            final fun <get-level>(): kotlin/Float // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.level.<get-level>|<get-level>(){}[0]
+
+        final fun component1(): kotlin/Float // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.component1|component1(){}[0]
+        final fun copy(kotlin/Float = ...): io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.copy|copy(kotlin.Float){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Listening.toString|toString(){}[0]
+    }
+
+    final object Idle : io.github.maniramezan.kmpcomponents/ChatComposerVoiceState { // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Idle|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Idle.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Idle.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Idle.toString|toString(){}[0]
+    }
+
+    final object Processing : io.github.maniramezan.kmpcomponents/ChatComposerVoiceState { // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Processing|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Processing.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Processing.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Processing.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.maniramezan.kmpcomponents/ChatComposerVoiceState { // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerVoiceState.Unavailable.toString|toString(){}[0]
+    }
+}
+
 sealed interface io.github.maniramezan.kmpcomponents/ChatMessageState { // io.github.maniramezan.kmpcomponents/ChatMessageState|null[0]
     final class Content : io.github.maniramezan.kmpcomponents/ChatMessageState { // io.github.maniramezan.kmpcomponents/ChatMessageState.Content|null[0]
         constructor <init>(kotlin/String) // io.github.maniramezan.kmpcomponents/ChatMessageState.Content.<init>|<init>(kotlin.String){}[0]
@@ -479,6 +512,50 @@ final class io.github.maniramezan.kmpcomponents/AssistantQuickActionState { // i
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/AssistantQuickActionState.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/AssistantQuickActionState.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/AssistantQuickActionState.toString|toString(){}[0]
+}
+
+final class io.github.maniramezan.kmpcomponents/ChatComposerLabels { // io.github.maniramezan.kmpcomponents/ChatComposerLabels|null[0]
+    constructor <init>(kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ...) // io.github.maniramezan.kmpcomponents/ChatComposerLabels.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String){}[0]
+
+    final val placeholder // io.github.maniramezan.kmpcomponents/ChatComposerLabels.placeholder|{}placeholder[0]
+        final fun <get-placeholder>(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.placeholder.<get-placeholder>|<get-placeholder>(){}[0]
+    final val processingVoice // io.github.maniramezan.kmpcomponents/ChatComposerLabels.processingVoice|{}processingVoice[0]
+        final fun <get-processingVoice>(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.processingVoice.<get-processingVoice>|<get-processingVoice>(){}[0]
+    final val send // io.github.maniramezan.kmpcomponents/ChatComposerLabels.send|{}send[0]
+        final fun <get-send>(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.send.<get-send>|<get-send>(){}[0]
+    final val startVoice // io.github.maniramezan.kmpcomponents/ChatComposerLabels.startVoice|{}startVoice[0]
+        final fun <get-startVoice>(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.startVoice.<get-startVoice>|<get-startVoice>(){}[0]
+    final val stopVoice // io.github.maniramezan.kmpcomponents/ChatComposerLabels.stopVoice|{}stopVoice[0]
+        final fun <get-stopVoice>(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.stopVoice.<get-stopVoice>|<get-stopVoice>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.component4|component4(){}[0]
+    final fun component5(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ...): io.github.maniramezan.kmpcomponents/ChatComposerLabels // io.github.maniramezan.kmpcomponents/ChatComposerLabels.copy|copy(kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/ChatComposerLabels.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/ChatComposerLabels.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerLabels.toString|toString(){}[0]
+}
+
+final class io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput { // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput|null[0]
+    constructor <init>(io.github.maniramezan.kmpcomponents/ChatComposerVoiceState, kotlin/Function0<kotlin/Unit>, kotlin/Function0<kotlin/Unit>) // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.<init>|<init>(io.github.maniramezan.kmpcomponents.ChatComposerVoiceState;kotlin.Function0<kotlin.Unit>;kotlin.Function0<kotlin.Unit>){}[0]
+
+    final val onStart // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.onStart|{}onStart[0]
+        final fun <get-onStart>(): kotlin/Function0<kotlin/Unit> // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.onStart.<get-onStart>|<get-onStart>(){}[0]
+    final val onStop // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.onStop|{}onStop[0]
+        final fun <get-onStop>(): kotlin/Function0<kotlin/Unit> // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.onStop.<get-onStop>|<get-onStop>(){}[0]
+    final val state // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.state|{}state[0]
+        final fun <get-state>(): io.github.maniramezan.kmpcomponents/ChatComposerVoiceState // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.state.<get-state>|<get-state>(){}[0]
+
+    final fun component1(): io.github.maniramezan.kmpcomponents/ChatComposerVoiceState // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.component1|component1(){}[0]
+    final fun component2(): kotlin/Function0<kotlin/Unit> // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.component2|component2(){}[0]
+    final fun component3(): kotlin/Function0<kotlin/Unit> // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.component3|component3(){}[0]
+    final fun copy(io.github.maniramezan.kmpcomponents/ChatComposerVoiceState = ..., kotlin/Function0<kotlin/Unit> = ..., kotlin/Function0<kotlin/Unit> = ...): io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.copy|copy(io.github.maniramezan.kmpcomponents.ChatComposerVoiceState;kotlin.Function0<kotlin.Unit>;kotlin.Function0<kotlin.Unit>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput.toString|toString(){}[0]
 }
 
 final class io.github.maniramezan.kmpcomponents/ChatErrorAction { // io.github.maniramezan.kmpcomponents/ChatErrorAction|null[0]
@@ -905,6 +982,16 @@ final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponent
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantContextBody$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantContextBody$stableprop|#static{}io_github_maniramezan_kmpcomponents_AssistantContextBody$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantLimitPromptCopy$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantLimitPromptCopy$stableprop|#static{}io_github_maniramezan_kmpcomponents_AssistantLimitPromptCopy$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantQuickActionState$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantQuickActionState$stableprop|#static{}io_github_maniramezan_kmpcomponents_AssistantQuickActionState$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Processing$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Processing$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerAction_Processing$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Send$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Send$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerAction_Send$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StartVoice$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StartVoice$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerAction_StartVoice$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StopVoice$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StopVoice$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerAction_StopVoice$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerLabels$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerLabels$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerLabels$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceInput$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceInput$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerVoiceInput$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Idle$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Idle$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Idle$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Listening$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Listening$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Listening$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Processing$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Processing$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Processing$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Unavailable$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Unavailable$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Unavailable$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatErrorAction$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatErrorAction$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatErrorAction$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessage$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessage$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatMessage$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessageState_Content$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessageState_Content$stableprop|#static{}io_github_maniramezan_kmpcomponents_ChatMessageState_Content$stableprop[0]
@@ -977,6 +1064,7 @@ final fun io.github.maniramezan.kmpcomponents/AssistantLimitPromptCard(io.github
 final fun io.github.maniramezan.kmpcomponents/AssistantStatusBanner(kotlin/String, androidx.compose.ui/Modifier?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/AssistantStatusBanner|AssistantStatusBanner(kotlin.String;androidx.compose.ui.Modifier?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/Avatar(kotlin/String, androidx.compose.ui/Modifier?, io.github.maniramezan.kmpcomponents/AvatarSize?, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/Avatar|Avatar(kotlin.String;androidx.compose.ui.Modifier?;io.github.maniramezan.kmpcomponents.AvatarSize?;kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/BottomSheet(kotlin/Function0<kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Function3<androidx.compose.foundation.layout/ColumnScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/BottomSheet|BottomSheet(kotlin.Function0<kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Function3<androidx.compose.foundation.layout.ColumnScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun io.github.maniramezan.kmpcomponents/ChatComposer(kotlin/String, kotlin/Function1<kotlin/String, kotlin/Unit>, kotlin/Function0<kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Boolean, kotlin/Int, io.github.maniramezan.kmpcomponents/ChatComposerVoiceInput?, io.github.maniramezan.kmpcomponents/ChatComposerLabels?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/ChatComposer|ChatComposer(kotlin.String;kotlin.Function1<kotlin.String,kotlin.Unit>;kotlin.Function0<kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Boolean;kotlin.Int;io.github.maniramezan.kmpcomponents.ChatComposerVoiceInput?;io.github.maniramezan.kmpcomponents.ChatComposerLabels?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/ChatLog(kotlin.collections/List<io.github.maniramezan.kmpcomponents/ChatMessage>, kotlin/String, io.github.maniramezan.kmpcomponents/ChatErrorAction, androidx.compose.ui/Modifier?, androidx.compose.foundation.layout/PaddingValues?, kotlin/String?, kotlin/Function4<io.github.maniramezan.kmpcomponents/ChatMessageSender, kotlin/String, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/ChatLog|ChatLog(kotlin.collections.List<io.github.maniramezan.kmpcomponents.ChatMessage>;kotlin.String;io.github.maniramezan.kmpcomponents.ChatErrorAction;androidx.compose.ui.Modifier?;androidx.compose.foundation.layout.PaddingValues?;kotlin.String?;kotlin.Function4<io.github.maniramezan.kmpcomponents.ChatMessageSender,kotlin.String,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/CheckStatusRow(io.github.maniramezan.kmpcomponents/CheckStatus, androidx.compose.ui/Modifier?, io.github.maniramezan.kmpcomponents/CheckStatusLabels?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/CheckStatusRow|CheckStatusRow(io.github.maniramezan.kmpcomponents.CheckStatus;androidx.compose.ui.Modifier?;io.github.maniramezan.kmpcomponents.CheckStatusLabels?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/ConfirmDialog(kotlin/String, kotlin/String, kotlin/Function0<kotlin/Unit>, kotlin/Function0<kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/String?, kotlin/String?, kotlin/Boolean, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/ConfirmDialog|ConfirmDialog(kotlin.String;kotlin.String;kotlin.Function0<kotlin.Unit>;kotlin.Function0<kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.String?;kotlin.String?;kotlin.Boolean;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
@@ -1066,6 +1154,16 @@ final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponent
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantContextBody$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantContextBody$stableprop_getter|io_github_maniramezan_kmpcomponents_AssistantContextBody$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantLimitPromptCopy$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantLimitPromptCopy$stableprop_getter|io_github_maniramezan_kmpcomponents_AssistantLimitPromptCopy$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantQuickActionState$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_AssistantQuickActionState$stableprop_getter|io_github_maniramezan_kmpcomponents_AssistantQuickActionState$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Processing$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Processing$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerAction_Processing$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Send$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_Send$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerAction_Send$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StartVoice$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StartVoice$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerAction_StartVoice$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StopVoice$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerAction_StopVoice$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerAction_StopVoice$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerLabels$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerLabels$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerLabels$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceInput$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceInput$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerVoiceInput$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Idle$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Idle$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Idle$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Listening$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Listening$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Listening$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Processing$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Processing$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Processing$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Unavailable$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Unavailable$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatComposerVoiceState_Unavailable$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatErrorAction$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatErrorAction$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatErrorAction$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessage$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessage$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatMessage$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessageState_Content$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ChatMessageState_Content$stableprop_getter|io_github_maniramezan_kmpcomponents_ChatMessageState_Content$stableprop_getter(){}[0]

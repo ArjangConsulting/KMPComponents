@@ -82,6 +82,21 @@ private fun AssistantGallery() {
             Modifier.padding(horizontal = spacing.medium),
             verticalArrangement = Arrangement.spacedBy(spacing.small),
         ) {
+            ChatComposer(value = "", onValueChange = {}, onSend = {})
+            ChatComposer(value = "A drafted question that is long enough to wrap onto a second line", onValueChange = {
+            }, onSend = {})
+            ChatComposer(
+                value = "",
+                onValueChange = {},
+                onSend = {},
+                voiceInput = ChatComposerVoiceInput(ChatComposerVoiceState.Idle, onStart = {}, onStop = {}),
+            )
+            ChatComposer(
+                value = "Dictated so far",
+                onValueChange = {},
+                onSend = {},
+                voiceInput = ChatComposerVoiceInput(ChatComposerVoiceState.Listening(0.7f), onStart = {}, onStop = {}),
+            )
             AssistantContextCard(
                 title = "Login screen",
                 highlight = "Sign in button",
