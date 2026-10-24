@@ -89,8 +89,16 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `prefers-reduced-motion` changes, and browser clipboard entries use Compose's plain-text helper.
     Web resize cursors fall back to the hand cursor because CSS resize cursors are internal.
   - `commonTest/` — pure logic tests, run on every target.
-  - `jvmTest/` — Compose UI tests (`runComposeUiTest`); desktop only because they need Skiko.
-    `AccessibilityAuditTest.kt` checks selection cues, keyboard actions, accessible names, and minimum targets.
+  - `skikoTest/` — Compose UI tests (`runComposeUiTest`) on every Skiko target: desktop, the iOS
+    simulator, and headless Chrome (a hierarchy-template group; Android host tests lack Skiko). Test
+    names must avoid commas, which Wasm rejects, and should drag slowly instead of relying on fling
+    distance, which differs by platform.
+  - `nonWebTest/` — desktop and iOS only, for tests whose synthetic hover or fling input the browser
+    harness does not deliver (`InfoTooltipUiTest`, `ShowcaseSnappingUiTest`); real-browser checks
+    cover those behaviors on the web.
+  - `jvmTest/` — Roborazzi goldens and tests that need desktop APIs: fixed window sizes
+    (`runDesktopComposeUiTest`), the AWT clipboard, and the desktop reduce-motion default.
+    `AccessibilityAuditTest.kt` (in `skikoTest`) checks selection cues, keyboard actions, accessible names, and minimum targets.
     `SelectionAccessibilityScreenshotTest.kt` records selection and focus across themes, text sizes, and RTL.
     `ScreenshotTest.kt` renders a gallery of the original components into golden images in
     `jvmTest/snapshots/`; newer families get their own gallery file (`EssentialsScreenshotTest.kt`,
@@ -204,7 +212,7 @@ explains the reasoning.
 
 Load `.claude/skills/add-component/SKILL.md`. In short: one file per component family in
 `components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/`, logic tests in
-`commonTest`, a UI test in `jvmTest`, a gallery entry in `ScreenshotTest.kt` (then re-record), an
+`commonTest`, a UI test in `skikoTest`, a gallery entry in `ScreenshotTest.kt` (then re-record), an
 updated ABI dump, an entry in `sample/.../ComponentCatalog.kt`, and a row in the README catalog
 table.
 

@@ -57,7 +57,10 @@ specific: recheck them against current release notes before relying on them.
 ## Tests and CI
 
 - `jvmTest` is the fast loop (common + Compose UI tests). `allTests` needs macOS + Xcode for iOS and
-  Chrome for web. Compose UI tests via `runComposeUiTest` are desktop-only because they need Skiko.
+  Chrome for web. Compose UI tests via `runComposeUiTest` need Skiko, so
+  Android host tests can't run them, but a hierarchy-template group of the JVM, iOS, and Wasm
+  targets runs them on all three (KMPComponents' `skikoTest`). On Wasm, avoid commas in test names,
+  and don't busy-wait on work that needs the browser event loop.
 - A typical CI run: format check, `allTests`, ABI check for each published module, screenshot
   verification, coverage, `assemble`, aggregated Dokka, and builds of the desktop, Android, and iOS
   samples. Keep shared IDE run configurations (`.run/`) in sync with the CI task list.

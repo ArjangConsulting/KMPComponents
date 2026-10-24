@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
@@ -50,6 +51,24 @@ kotlin {
         binaries.executable()
     }
 
+    // `skikoTest` holds Compose UI tests shared by every Skiko-rendered target (desktop, iOS, web).
+    // `nonWebTest` (desktop and iOS) holds the ones whose synthetic hover or fling input the browser
+    // test harness does not deliver. Android host tests have no Skiko renderer, so they only run
+    // `commonTest`.
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyDefaultHierarchyTemplate {
+        common {
+            group("skiko") {
+                withWasmJs()
+                group("nonWeb") {
+                    withJvm()
+                    withIosArm64()
+                    withIosSimulatorArm64()
+                }
+            }
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             api(libs.kommon.design.system)
@@ -61,11 +80,12 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
-        jvmTest.dependencies {
-            // Compose UI tests run on desktop only: they need a Skiko renderer, which Android host
-            // tests lack.
-            implementation(compose.desktop.currentOs)
+        getByName("skikoTest").dependencies {
             implementation(libs.compose.ui.test)
+        }
+        // Screenshot goldens and tests that need desktop APIs stay in jvmTest.
+        jvmTest.dependencies {
+            implementation(compose.desktop.currentOs)
             implementation(libs.roborazzi.compose.desktop)
         }
     }

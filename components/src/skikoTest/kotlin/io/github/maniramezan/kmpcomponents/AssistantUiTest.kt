@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -41,7 +42,7 @@ class AssistantUiTest {
     private val politeLiveRegion = SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite)
 
     @Test
-    fun `chat log shows the idle hint, messages, typing, and a retryable error`() = runComposeUiTest {
+    fun `chat log shows the idle hint messages typing and a retryable error`() = runComposeUiTest {
         var messages by mutableStateOf(emptyList<ChatMessage>())
         var retries = 0
         setContent {
@@ -187,7 +188,13 @@ class AssistantUiTest {
                 )
             }
         }
-        onNodeWithTag("chat").performTouchInput { swipeDown() }
+        // A slow drag rather than a fling: fling distance differs by platform and could scroll past
+        // the tall reply.
+        onNodeWithTag("chat").performTouchInput {
+            down(center)
+            repeat(DRAG_STEPS) { moveBy(Offset(0f, 200.dp.toPx() / DRAG_STEPS), delayMillis = 50) }
+            up()
+        }
         waitForIdle()
         val before = onNodeWithText("Latest").fetchSemanticsNode().boundsInRoot
         runOnIdle {
@@ -211,3 +218,5 @@ class AssistantUiTest {
         onNodeWithContentDescription("Writing a reply").assert(politeLiveRegion)
     }
 }
+
+private const val DRAG_STEPS = 10
