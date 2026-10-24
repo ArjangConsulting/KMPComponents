@@ -46,6 +46,10 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: ./gradlew :dokkaGenerate
 
+      - name: Include agent discovery index
+        if: github.event_name == 'workflow_dispatch'
+        run: cp llms.txt build/dokka/html/llms.txt
+
       - name: Download API docs from CI
         if: github.event_name == 'workflow_run'
         uses: actions/download-artifact@v8

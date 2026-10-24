@@ -15,6 +15,16 @@ only *adapts* them to Compose/Material 3 and builds components on top.
   existing tokens (see `TokenAdapters.kt`) or propose the token upstream in `maniramezan/kommon`.
 - Product-specific screens, copy, persistence, networking, and DI stay in consuming apps.
 
+## Consumer agent guidance
+
+`skills/use-kmpcomponents/` is a portable skill for agents using this library in consuming apps.
+`docs/using-with-agents.md` explains setup; root `llms.txt` routes documentation readers. These
+consumer resources do not replace this file or the contributor playbooks under `.claude/skills/`.
+For app-integration tasks, read the consumer skill to avoid applying contributor rules to an app.
+The skill's `references/catalog.md` is generated from the README catalog and public declaration
+locations. Regenerate it with `python3 scripts/update_agent_catalog.py` after catalog/source moves;
+CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage examples aligned with APIs.
+
 ## Repository map
 
 - `components/` — the main published module (`io.github.maniramezan.kmpcomponents:components`).

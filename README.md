@@ -4,6 +4,17 @@ Reusable Compose Multiplatform components for Android, desktop (JVM), iOS, and w
 the platform-neutral tokens from [`kommon`](https://github.com/maniramezan/kommon)'s
 `design-system` module; it does not define a competing design system.
 
+## Using coding agents
+
+Give your agent the portable [use-kmpcomponents skill](skills/use-kmpcomponents/SKILL.md) to find
+existing components, check the API against your installed version, and wire theme, state, labels,
+and callbacks. It includes a [component index with source links](skills/use-kmpcomponents/references/catalog.md)
+and a [usage guide](skills/use-kmpcomponents/references/usage.md).
+
+[Setup instructions](docs/using-with-agents.md) cover copying the skill into Codex or Claude Code
+projects and using the same guide with other agents. [llms.txt](llms.txt) is a compact discovery
+index. Contributor instructions for changing this library remain in `AGENTS.md`.
+
 ## Install
 
 ```kotlin
