@@ -143,18 +143,34 @@ Other fixes from the same run:
 - List rows with a leading `Avatar` read the name twice. `Avatar` gained `contentDescription`
   (default `name`); `null` keeps the initials while making the avatar decorative.
 
-Still open after the re-check:
+Follow-up run (Amoo 0.3.0, iPhone 18 Pro Max, iOS 27.2, default theme, System appearance, 100% text):
 
-- Segmented and tab buttons partly under the status bar (Light/Dark/System, All/Unread/Flagged)
-  expose unlabeled wrapper nodes while clipped.
-- The top of **App bars, paging, and feeds** has one unidentified anonymous finding.
-- `Report 1–3` feed rows have small hit areas.
+- **`Report 1–3` feed rows: fixed.** `ThemeListItem` now keeps its merged item at least the Material
+  minimum touch target high. With the rows fully visible, the native audit passes `hitRegion`. Report 1
+  is still flagged while the "Reports" heading partly covers it during a scroll, which is the clipped
+  state described below, not a row-size problem.
+- **Segmented buttons partly under the status bar: identified, not fixed.** The Light/Dark/System
+  control (`ThemeSingleChoiceSegmentedButtonRow`) loses its accessible names once it is scrolled
+  about 24 points past the status bar: Compose on iOS drops the child `Text`, and the three buttons
+  export `""`, failing `sufficientElementDescription`. Giving each button its own
+  `contentDescription` kept the name while clipped, but then every segment exported
+  "System, System" in normal use, because the merged child text is added too. That is worse, so the
+  change was reverted. Hiding the child text from semantics would break text lookups used by
+  consumers' UI tests. It needs a fix in Compose for iOS or a different labeling approach.
+- **Tab bar (All/Unread/Flagged) under the status bar: not reproduced.** It docks below the status bar
+  once the page scrolls, so it could not be parked partly clipped.
+- **Top of "App bars, paging, and feeds": not reproduced.** The native audit passed at six scroll
+  offsets with the Appearance panel open and closed. Unlabeled containers in the tree (app bar
+  wrappers, the section field internals, the accordion chevron, the tab indicator) were not flagged.
+  The earlier finding is most likely the same clipped-element symptom as the segmented control.
+- **Keyboard up in Chat: system UI.** The input view, QuickType bar, key layout, and bottom bar are
+  separate sibling roots of the app hierarchy, all inside the keyboard's frame, and the audit passed
+  three times with the keyboard up. Switches covered by the keyboard briefly export unlabeled, the
+  same clipped-element symptom, and recover when the keyboard closes.
 - `v1.2.0` is reported as "Label not human-readable"; it is sample data.
-- With the keyboard up in Chat, one anonymous finding appears; it is probably system keyboard UI,
-  which was not proven.
 
 Amoo's `test_voiceover` verdicts are always `notAssessed`, and the native audit reports no element
-identity or bounds, so identities above are inferred from position. Light/dark, larger text sizes,
+identity or bounds, so identities above are inferred from position (Amoo exposes element centres, not frames). Light/dark, larger text sizes,
 and VoiceOver order around the page indicator were not exercised in this run.
 
 ## Android catalog follow-up
