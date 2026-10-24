@@ -26,6 +26,16 @@ jobs:
           # Keep in sync with release.yml so CI verifies exactly what gets published.
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+
+      - name: Cache Kotlin Native toolchains and downloads
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.konan/dependencies
+            ~/.konan/kotlin-native-*
+          key: ${{ runner.os }}-${{ runner.arch }}-konan-v1-${{ hashFiles('gradle/libs.versions.toml') }}
 
       - name: Check consumer agent catalog
         run: python3 scripts/update_agent_catalog.py --check
