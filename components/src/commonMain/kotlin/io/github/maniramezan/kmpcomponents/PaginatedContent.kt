@@ -170,11 +170,10 @@ public fun PaginatedContent(
         ) { pageIndex -> pageContent(pageIndex, pages[pageIndex]) }
         if (pages.size > 1) {
             when (footerStyle) {
-                PageFooterStyle.DOTS -> PageDots(
-                    pageCount = pages.size,
+                PageFooterStyle.DOTS -> PageIndicator(
                     pagerState = pagerState,
-                    describe = pagePositionDescription,
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = spacing.small),
+                    pagePositionDescription = pagePositionDescription,
                 )
 
                 PageFooterStyle.PROGRESS -> PageProgress(
@@ -281,31 +280,6 @@ private fun DefaultPageTitle(title: String, progress: Float) {
         contentAlignment = Alignment.Center,
     ) {
         Text(title, style = MaterialTheme.typography.titleSmall, color = text)
-    }
-}
-
-@Composable
-private fun PageDots(
-    pageCount: Int,
-    pagerState: PagerState,
-    describe: ((Int, Int) -> String)?,
-    modifier: Modifier,
-) {
-    // Reading the page here keeps recomposition inside the footer.
-    val current = pagerState.currentPage
-    val description = describe?.invoke(current, pageCount)
-    Row(
-        modifier = modifier.positionSemantics(description),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        repeat(pageCount) { index ->
-            val color by animateColorAsState(
-                if (index == current) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
-                label = "dot",
-            )
-            Box(Modifier.size(MaterialTheme.kmpSpacing.small).clip(CircleShape).background(color))
-        }
     }
 }
 

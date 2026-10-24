@@ -30,11 +30,14 @@ import io.github.maniramezan.kmpcomponents.AppText
 import io.github.maniramezan.kmpcomponents.AppTextStyle
 import io.github.maniramezan.kmpcomponents.CountBadge
 import io.github.maniramezan.kmpcomponents.FlipCard
+import io.github.maniramezan.kmpcomponents.FlowLayout
 import io.github.maniramezan.kmpcomponents.NavRail
 import io.github.maniramezan.kmpcomponents.PageFooterStyle
+import io.github.maniramezan.kmpcomponents.PageIndicator
 import io.github.maniramezan.kmpcomponents.PageTitleAlignment
 import io.github.maniramezan.kmpcomponents.PaginatedContent
 import io.github.maniramezan.kmpcomponents.PaginationPage
+import io.github.maniramezan.kmpcomponents.SecondaryButton
 import io.github.maniramezan.kmpcomponents.SectionCard
 import io.github.maniramezan.kmpcomponents.ShowcaseFeed
 import io.github.maniramezan.kmpcomponents.ShowcaseItemWidth
@@ -153,8 +156,25 @@ private fun PagingDemo() {
             backLabel = "Answer",
             flipLabel = "Flip card",
         )
+        StandalonePageIndicator()
     }
 }
+
+@Composable
+private fun StandalonePageIndicator() {
+    var page by remember { mutableIntStateOf(0) }
+    FlowLayout {
+        SecondaryButton(text = "Previous", enabled = page > 0, onClick = { page-- })
+        PageIndicator(
+            pageCount = INDICATOR_PAGES,
+            currentPage = page,
+            pagePositionDescription = { index, count -> "Item ${index + 1} of $count" },
+        )
+        SecondaryButton(text = "Next", enabled = page < INDICATOR_PAGES - 1, onClick = { page++ })
+    }
+}
+
+private const val INDICATOR_PAGES = 5
 
 private val PAGE_HEIGHT = 120.dp
 
