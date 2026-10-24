@@ -44,5 +44,6 @@ kotlin {
 compose.desktop {
     application {
         mainClass = "io.github.maniramezan.kmpcomponents.sample.MainKt"
+        jvmArgs += "--enable-native-access=ALL-UNNAMED"
     }
 }

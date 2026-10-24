@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,13 +71,31 @@ class ScreenshotTest {
 private fun Gallery() {
     val spacing = MaterialTheme.kmpSpacing
     Column(Modifier.padding(spacing.medium), verticalArrangement = Arrangement.spacedBy(spacing.small)) {
+        SectionCard(title = "Actions") {
+            OutlinedButton(onClick = {}) { Text("Delete example item…") }
+            OutlinedButton(onClick = {}, enabled = false) { Text("Disabled action") }
+        }
         SectionCard(title = "Section", description = "SectionCard with a description") {
             ThemeModeSelector(selected = ThemeMode.SYSTEM, onSelect = {})
             ThemeModeDropdown(selected = ThemeMode.DARK, onSelect = {}, label = "Color scheme")
         }
         FormTextField(value = "", onValueChange = {}, label = "Name", errorText = "Required")
-        SecretTextField(value = "secret", onValueChange = {}, label = "API key")
-        SecretTextField(value = "secret", onValueChange = {}, label = "Token", revealToggle = SecretRevealToggle.ICON)
+        SecretTextField(value = "secret", onValueChange = {}, label = "Password")
+        val labelTopPadding = with(LocalDensity.current) { MaterialTheme.typography.bodySmall.lineHeight.toDp() / 2 }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(spacing.small),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SecretTextField(
+                value = "secret",
+                onValueChange = {},
+                label = "Secret",
+                modifier = Modifier.weight(1f),
+                revealToggle = SecretRevealToggle.ICON,
+            )
+            InfoTooltip("Show or hide the secret.", modifier = Modifier.padding(top = labelTopPadding))
+        }
         StatusTone.entries.forEach { tone ->
             StatusMessage(
                 message = "${tone.name.lowercase().replaceFirstChar(Char::uppercase)} message",
@@ -88,22 +107,22 @@ private fun Gallery() {
             horizontalArrangement = Arrangement.spacedBy(spacing.small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            TonalBadge("GET")
-            TonalBadge("500", tone = StatusTone.ERROR)
+            TonalBadge("Info")
+            TonalBadge("Error", tone = StatusTone.ERROR)
             CountBadge(120)
             InfoTooltip("Info")
         }
-        CheckStatusRow(CheckStatus.Success("Connected"))
-        CheckStatusRow(CheckStatus.Failure("Unauthorized"))
+        CheckStatusRow(CheckStatus.Success("Check succeeded"))
+        CheckStatusRow(CheckStatus.Failure("Example error"))
         TabChipRow {
-            TabChip(label = "Success", selected = true, onClick = {}, onClose = {})
-            TabChip(label = "Not found", selected = false, onClick = {})
+            TabChip(label = "First tab", selected = true, onClick = {}, onClose = {})
+            TabChip(label = "Second tab", selected = false, onClick = {})
         }
         SelectableCard(selected = true, onClick = {}, modifier = Modifier.fillMaxWidth()) { Text("Selected card") }
         Row(Modifier.height(IntrinsicSize.Min)) {
             SidebarNavigation(modifier = Modifier.width(SIDEBAR_WIDTH)) {
                 SidebarItem(label = "General", selected = true, onClick = {})
-                SidebarItem(label = "AI", selected = false, onClick = {})
+                SidebarItem(label = "Other", selected = false, onClick = {})
             }
             EmptyState(title = "Nothing here", modifier = Modifier.weight(1f), message = "EmptyState")
         }
@@ -117,5 +136,5 @@ private fun Gallery() {
     }
 }
 
-private val SIDEBAR_WIDTH = 140.dp
+private val SIDEBAR_WIDTH = 200.dp
 private val SPLIT_HEIGHT = 60.dp

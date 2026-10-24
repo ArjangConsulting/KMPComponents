@@ -1,5 +1,7 @@
 package io.github.maniramezan.kmpcomponents
 
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -41,7 +43,7 @@ public fun ThemeModeSelector(
                 onClick = { onSelect(mode) },
                 shape = SegmentedButtonDefaults.itemShape(index = index, count = modes.size),
                 enabled = enabled,
-                label = { Text(labels.labelFor(mode)) },
+                label = { Text(labels.labelFor(mode), modifier = Modifier.width(IntrinsicSize.Max)) },
             )
         }
     }

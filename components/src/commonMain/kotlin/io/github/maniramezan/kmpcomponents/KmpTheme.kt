@@ -21,6 +21,8 @@ import io.github.maniramezan.kommon.designsystem.ThemeTokens
  *
  * Material color roles that kommon does not define are derived from the nearest kommon role, so
  * the Material baseline palette never leaks into rendered components. See `TokenAdapters.kt`.
+ * Material outline roles derive from kommon's outline token for enabled control boundaries.
+ * Custom tokens must preserve at least 3:1 outline contrast against page and card surfaces.
  */
 @Composable
 public fun KmpTheme(

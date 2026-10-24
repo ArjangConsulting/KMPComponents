@@ -259,12 +259,16 @@ and *Check (CI)*.
 
 ## Theming
 
+Component styling follows the [design style guide](docs/design-style-guide.md):
+token-based spacing and colors, typography-scaled glyphs, Material minimum interactive sizes,
+visible keyboard focus, and contrast checks across themes and font scales.
+
 `KmpTheme(mode, tokens)` converts kommon tokens once per token change (results are `remember`ed)
 and provides:
 
 | Access | Source token |
 | --- | --- |
-| `MaterialTheme.colorScheme` | `ColorSchemeTokens`. The nine kommon roles map directly; every other Material role (containers, secondary, tertiary, surface containers, inverse, outline variant) is derived by blending kommon roles so the Material baseline palette never appears. |
+| `MaterialTheme.colorScheme` | `ColorSchemeTokens`. The nine kommon roles map directly; additional roles derive from them so the Material baseline palette never appears. `outlineVariant` strengthens kommon's `outline` toward `onSurface` for visible button boundaries. |
 | `MaterialTheme.typography` | `TypographyTokens`. display, title, body, and label expand to the full Material scale. |
 | `MaterialTheme.shapes` | `ShapeTokens` radii. |
 | `MaterialTheme.kmpSpacing` | `SpacingTokens` as `Dp`. |

@@ -3,6 +3,7 @@ package io.github.maniramezan.kmpcomponents.sample
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,6 +50,7 @@ import io.github.maniramezan.kmpcomponents.KmpTheme
 import io.github.maniramezan.kmpcomponents.LocalReduceMotionEnabled
 import io.github.maniramezan.kmpcomponents.MenuPicker
 import io.github.maniramezan.kmpcomponents.ProviderConfigurationForm
+import io.github.maniramezan.kmpcomponents.ProviderConfigurationLabels
 import io.github.maniramezan.kmpcomponents.ProviderConfigurationState
 import io.github.maniramezan.kmpcomponents.SecretRevealToggle
 import io.github.maniramezan.kmpcomponents.SecretTextField
@@ -180,9 +182,9 @@ internal fun CatalogExamples(section: CatalogSection) {
 
 /** A rebranded token set next to the default, to show every Material role following the tokens. */
 private enum class Brand(val label: String, val tokens: ThemeTokens) {
-    DEFAULT("kommon", KommonDesignTokens.default),
+    DEFAULT("Default", KommonDesignTokens.default),
     GREEN(
-        "Green brand",
+        "Green theme",
         KommonDesignTokens.default.copy(
             lightColors = KommonDesignTokens.default.lightColors.copy(primary = ColorToken(0xFF_00_6C_4F)),
             darkColors = KommonDesignTokens.default.darkColors.copy(primary = ColorToken(0xFF_7F_D8_B5)),
@@ -206,7 +208,7 @@ private fun <T> Segmented(options: List<T>, selected: T, label: (T) -> String, o
                 selected = option == selected,
                 onClick = { onSelect(option) },
                 shape = SegmentedButtonDefaults.itemShape(index, options.size),
-                label = { Text(label(option)) },
+                label = { Text(label(option), modifier = Modifier.width(IntrinsicSize.Max)) },
             )
         }
     }
@@ -224,8 +226,7 @@ private fun AppearanceSection(
     var pickerEnabled by remember { mutableStateOf(true) }
     SectionCard(
         title = "Appearance",
-        description = "ThemeModeSelector and ThemeModeDropdown drive KmpTheme. Tokens and font scale are " +
-            "catalog-only switches for checking rebranding and large text.",
+        description = "Preview light and dark modes, an alternate theme, and different text sizes.",
     ) {
         ThemeModeSelector(selected = themeMode, onSelect = onThemeModeChange)
         ThemeModeDropdown(
@@ -248,7 +249,7 @@ private fun ProviderSection() {
     var feedback by remember { mutableStateOf("Idle") }
     var token by remember { mutableStateOf("") }
     SectionCard(
-        title = "Provider configuration",
+        title = "Forms and validation",
         description = "Editable example fields with local validation and selectable feedback states.",
         action = {
             TextButton(onClick = {
@@ -262,6 +263,13 @@ private fun ProviderSection() {
             state = provider,
             onStateChange = { provider = it },
             showValidationErrors = showValidation,
+            labels = ProviderConfigurationLabels(
+                providerName = "Connection name",
+                baseUrl = "Service URL",
+                model = "Resource name",
+                apiKey = "Access token",
+                baseUrlPlaceholder = "https://example.com",
+            ),
             onDone = { showValidation = true },
         )
         ThemeSwitch(
@@ -284,25 +292,35 @@ private fun ProviderSection() {
                 else -> CheckStatus.Idle
             },
         )
-        SecretTextField(
-            value = token,
-            onValueChange = { token = it },
-            label = "Example secret (icon toggle)",
+        val labelTopPadding = with(LocalDensity.current) { MaterialTheme.typography.bodySmall.lineHeight.toDp() / 2 }
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            revealToggle = SecretRevealToggle.ICON,
-        )
-        InfoTooltip("Use the eye button to show or hide the example secret.")
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
+        ) {
+            SecretTextField(
+                value = token,
+                onValueChange = { token = it },
+                label = "Secret with icon toggle",
+                modifier = Modifier.weight(1f),
+                revealToggle = SecretRevealToggle.ICON,
+            )
+            InfoTooltip(
+                "Use the eye button to show or hide the secret.",
+                modifier = Modifier.padding(top = labelTopPadding),
+            )
+        }
     }
 }
 
 @Composable
 private fun StatusSection() {
     SectionCard(title = "Status messages and badges") {
-        StatusMessage("Uses the primary color.", Modifier.fillMaxWidth(), tone = StatusTone.INFO, title = "Info")
-        StatusMessage("Uses kmpColors.success.", Modifier.fillMaxWidth(), tone = StatusTone.SUCCESS, title = "Success")
-        StatusMessage("Uses kmpColors.warning.", Modifier.fillMaxWidth(), tone = StatusTone.WARNING, title = "Warning")
-        StatusMessage("Uses colorScheme.error.", Modifier.fillMaxWidth(), tone = StatusTone.ERROR, title = "Error")
-        StatusMessage("Sizes to its content without a fillMaxWidth modifier.")
+        StatusMessage("An update is available.", Modifier.fillMaxWidth(), tone = StatusTone.INFO, title = "Info")
+        StatusMessage("Changes saved.", Modifier.fillMaxWidth(), tone = StatusTone.SUCCESS, title = "Success")
+        StatusMessage("Review your changes.", Modifier.fillMaxWidth(), tone = StatusTone.WARNING, title = "Warning")
+        StatusMessage("Please try again.", Modifier.fillMaxWidth(), tone = StatusTone.ERROR, title = "Error")
+        StatusMessage("A short message.")
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
@@ -322,7 +340,7 @@ private fun NavigationSection() {
     var section by remember { mutableStateOf("General") }
     val tabs = remember { mutableStateListOf("First", "Second", "Third") }
     var selectedTab by remember { mutableStateOf("First") }
-    SectionCard(title = "Navigation", description = "SidebarNavigation, SidebarItem, TabChipRow, and EmptyState.") {
+    SectionCard(title = "Navigation", description = "Choose a destination, switch tabs, or close a tab.") {
         Row(Modifier.fillMaxWidth().height(SIDEBAR_DEMO_HEIGHT)) {
             SidebarNavigation(
                 modifier = Modifier.width(SIDEBAR_DEMO_WIDTH),

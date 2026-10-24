@@ -1,9 +1,11 @@
 package io.github.maniramezan.kmpcomponents
 
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
@@ -152,6 +154,8 @@ public enum class SecretRevealToggle {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RevealIconButton(revealed: Boolean, label: String, enabled: Boolean, onClick: () -> Unit) {
+    val iconSize = glyphSize()
+    val buttonSize = iconSize + MaterialTheme.kmpSpacing.small * 2
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = { PlainTooltip { Text(label) } },
@@ -160,10 +164,12 @@ private fun RevealIconButton(revealed: Boolean, label: String, enabled: Boolean,
         IconButton(
             onClick = onClick,
             enabled = enabled,
-            modifier = Modifier.semantics { contentDescription = label },
+            modifier = Modifier
+                .sizeIn(minWidth = buttonSize, minHeight = buttonSize)
+                .semantics { contentDescription = label },
         ) {
             // Shows the action: an open eye reveals, a struck-through eye hides.
-            GlyphIcon(glyph = if (revealed) Glyph.EYE_OFF else Glyph.EYE)
+            GlyphIcon(glyph = if (revealed) Glyph.EYE_OFF else Glyph.EYE, size = iconSize)
         }
     }
 }

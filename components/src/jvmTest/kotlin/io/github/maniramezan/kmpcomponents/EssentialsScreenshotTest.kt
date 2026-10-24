@@ -66,8 +66,18 @@ class EssentialsScreenshotTest {
 private fun EssentialsGallery() {
     val spacing = MaterialTheme.kmpSpacing
     Column(Modifier.padding(spacing.medium), verticalArrangement = Arrangement.spacedBy(spacing.small)) {
-        SectionHeader(title = "Endpoints", subtitle = "SectionHeader with subtitle", actionLabel = "Add", onAction = {})
-        ContentRow(title = "Selected row", secondaryText = "GET", supportingText = "/users/{id}", selected = true)
+        SectionHeader(
+            title = "Example items",
+            subtitle = "SectionHeader with subtitle",
+            actionLabel = "Add",
+            onAction = {},
+        )
+        ContentRow(
+            title = "Selected row",
+            secondaryText = "Example",
+            supportingText = "Select this item",
+            selected = true,
+        )
         ContentRow(
             title = "Clickable row",
             supportingText = "With a trailing action",
@@ -75,7 +85,7 @@ private fun EssentialsGallery() {
             trailingContent = { TextButton(onClick = {}) { Text("Remove") } },
         )
         SearchField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
-        SearchField(value = "users", onValueChange = {}, modifier = Modifier.fillMaxWidth())
+        SearchField(value = "alpha", onValueChange = {}, modifier = Modifier.fillMaxWidth())
         MenuPicker(
             items = listOf("Kotlin", "Swift"),
             selected = "Kotlin",
@@ -84,11 +94,11 @@ private fun EssentialsGallery() {
             itemLabel = { it },
             modifier = Modifier.fillMaxWidth(),
         )
-        InlineProgressIndicator(label = "Booting device")
-        ProgressIndicator(label = "Downloading", modifier = Modifier.fillMaxWidth(), progress = 0.4f)
-        NoticeCard(message = "Provider not configured", title = "Info", actionLabel = "Open settings", onAction = {})
+        InlineProgressIndicator(label = "Working")
+        ProgressIndicator(label = "Example progress", modifier = Modifier.fillMaxWidth(), progress = 0.4f)
+        NoticeCard(message = "Example notice", title = "Info", actionLabel = "Details", onAction = {})
         NoticeCard(
-            message = "Device disconnected",
+            message = "Example error",
             tone = StatusTone.ERROR,
             actionLabel = "Retry",
             onAction = {},
@@ -97,17 +107,17 @@ private fun EssentialsGallery() {
         ThemeSwitch(
             checked = true,
             onCheckedChange = {},
-            label = "Record traffic",
+            label = "Example switch",
             modifier = Modifier.fillMaxWidth(),
             supportingText = "ThemeSwitch with a tooltip",
-            tooltip = "Saves requests to the project",
+            tooltip = "Explains this example switch",
         )
-        ThemeCheckbox(checked = false, onCheckedChange = {}, label = "Include headers")
+        ThemeCheckbox(checked = false, onCheckedChange = {}, label = "Include option")
         ThemeTriStateCheckbox(state = ToggleableState.Indeterminate, onClick = {}, label = "3 of 5 selected")
-        KeyValueRow(key = "Model", value = "llama3", modifier = Modifier.fillMaxWidth())
+        KeyValueRow(key = "Identifier", value = "example", modifier = Modifier.fillMaxWidth())
         KeyValueRow(
             key = "Path",
-            value = "~/projects/demo",
+            value = "example/item",
             modifier = Modifier.fillMaxWidth(),
             valueStyle = MaterialTheme.kmpTypography.code,
         )

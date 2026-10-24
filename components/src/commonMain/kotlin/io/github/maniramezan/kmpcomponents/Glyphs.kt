@@ -11,7 +11,9 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -31,8 +33,9 @@ internal fun glyphSize(style: TextStyle = MaterialTheme.typography.bodyLarge): D
 }
 
 private const val STROKE_FRACTION = 0.09f
-private const val EYE_HEIGHT_FRACTION = 0.6f
-private const val PUPIL_FRACTION = 0.25f
+private const val EYE_CURVE_INSET = 0.22f
+private const val EYE_CURVE_TOP = 0.08f
+private const val PUPIL_FRACTION = 0.14f
 private const val CLOSE_INSET_FRACTION = 0.25f
 private const val INFO_DOT_Y = 0.3f
 private const val INFO_DOT_RADIUS = 0.75f
@@ -68,11 +71,42 @@ internal fun GlyphIcon(
         val h = this.size.height
         when (glyph) {
             Glyph.EYE, Glyph.EYE_OFF -> {
-                val eyeHeight = h * EYE_HEIGHT_FRACTION
-                drawOval(color, Offset(0f, (h - eyeHeight) / 2f), Size(w, eyeHeight), style = Stroke(stroke))
-                drawCircle(color, radius = eyeHeight * PUPIL_FRACTION, center = center)
+                val inset = stroke / 2f
+                val eyeOutline = Path().apply {
+                    moveTo(inset, center.y)
+                    cubicTo(
+                        w * EYE_CURVE_INSET,
+                        h * EYE_CURVE_TOP,
+                        w * (1f - EYE_CURVE_INSET),
+                        h * EYE_CURVE_TOP,
+                        w - inset,
+                        center.y,
+                    )
+                    cubicTo(
+                        w * (1f - EYE_CURVE_INSET),
+                        h * (1f - EYE_CURVE_TOP),
+                        w * EYE_CURVE_INSET,
+                        h * (1f - EYE_CURVE_TOP),
+                        inset,
+                        center.y,
+                    )
+                    close()
+                }
+                drawPath(eyeOutline, color, style = Stroke(stroke, join = StrokeJoin.Round))
+                drawCircle(
+                    color,
+                    radius = this.size.minDimension * PUPIL_FRACTION,
+                    center = center,
+                    style = Stroke(stroke),
+                )
                 if (glyph == Glyph.EYE_OFF) {
-                    drawLine(color, Offset(0f, 0f), Offset(w, h), strokeWidth = stroke, cap = StrokeCap.Round)
+                    drawLine(
+                        color,
+                        Offset(stroke, stroke),
+                        Offset(w - stroke, h - stroke),
+                        strokeWidth = stroke,
+                        cap = StrokeCap.Round,
+                    )
                 }
             }
 

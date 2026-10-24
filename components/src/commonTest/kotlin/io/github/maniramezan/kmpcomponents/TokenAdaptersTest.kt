@@ -52,6 +52,8 @@ class TokenAdaptersTest {
             val surfaces = listOf(
                 scheme.surface,
                 scheme.surfaceVariant,
+                scheme.surfaceBright,
+                scheme.surfaceDim,
                 scheme.surfaceContainerLowest,
                 scheme.surfaceContainerLow,
                 scheme.surfaceContainer,
@@ -63,6 +65,20 @@ class TokenAdaptersTest {
                     assertTrue(contrastRatio(outline, surface) >= 3f, "$outline on $surface in dark=$dark")
                 }
             }
+        }
+    }
+
+    @Test
+    fun `surface text keeps readable contrast`() {
+        listOf(false to tokens.lightColors, true to tokens.darkColors).forEach { (dark, colors) ->
+            val scheme = colors.toMaterialColorScheme(dark)
+            listOf(scheme.onSurface to scheme.surface, scheme.onSurfaceVariant to scheme.surfaceVariant)
+                .forEach { (foreground, background) ->
+                    assertTrue(
+                        contrastRatio(foreground, background) >= 4.5f,
+                        "dark=$dark: $foreground must have at least 4.5:1 contrast against $background",
+                    )
+                }
         }
     }
 

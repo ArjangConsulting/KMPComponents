@@ -72,11 +72,11 @@ class CatalogUiTest {
         height = 900,
     ) {
         setContent { ComponentCatalog() }
-        onNodeWithText("Provider configuration").performScrollTo().assertIsDisplayed()
+        onNodeWithText("Forms and validation").performScrollTo().assertIsDisplayed()
         onNodeWithText("Forms").performScrollTo().performClick()
         onNodeWithText(CatalogSection.STATUS.label).performScrollTo().performClick()
         onNodeWithText("Status messages and badges").performScrollTo().assertIsDisplayed()
-        onNodeWithText("Provider configuration").assertDoesNotExist()
+        onNodeWithText("Forms and validation").assertDoesNotExist()
         onNodeWithText("Appearance and accessibility").performScrollTo().performClick()
         onNode(hasText("Right-to-left layout")).performScrollTo().performClick()
         onNodeWithText("Status messages and badges").performScrollTo().assertIsDisplayed()

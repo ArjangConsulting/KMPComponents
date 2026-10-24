@@ -136,6 +136,31 @@ Follow these for every public composable; reviewers check them.
     `Switch`) so apps never pick up the unthemed Material one by accident. List new name
     mappings in the README.
 
+### Styling and visual accessibility
+
+- Follow `docs/design-style-guide.md` for shared color roles, contrast requirements, and verification.
+- Use `MaterialTheme.kmpSpacing` for padding and gaps. Let text and icons determine control size;
+  avoid fixed control widths that clip translated labels or text at 200% font scale. Segmented
+  labels should request their full intrinsic width while respecting the available space.
+- Use matching foreground and background roles (`onSurfaceVariant` on `surfaceVariant`,
+  `onSecondaryContainer` on `secondaryContainer`). Both `outline` and `outlineVariant` must retain
+  at least 3:1 contrast for enabled controls; Material outlined buttons use `outlineVariant`.
+  Interactive dividers need at least 3:1 contrast against adjacent surfaces in both
+  normal and focused states. Check the default and alternate themes on `surface` and
+  `surfaceVariant`; custom themes must preserve those contrast relationships.
+- Derive glyph dimensions from `glyphSize(style)`, keep their drawing inside the canvas bounds,
+  and use consistent optical insets. Geometry fractions describe the drawing, not new tokens.
+  Reserve Material's minimum interactive size independently of the visible glyph size. Separate
+  neighboring controls with a spacing token and retain the container's end padding.
+- Keyboard focus must be visible through a border, thickness, or shape change as well as color.
+  Use theme colors and shapes for the indicator, and preserve accessible names and tooltips.
+- Catalog examples use generic copy. Preview frame dimensions may be fixed, but component
+  padding, typography, colors, and shapes follow the same token rules as the library.
+- Verify label fit and icon controls at 100% and 200% font scales. Contrast regressions should
+  measure the rendered divider in light and dark modes, including focus and alternate themes.
+  Review updated light, dark, and large-text screenshot goldens before accepting visual changes.
+
+
 ## Adding or changing a component
 
 Load `.claude/skills/add-component/SKILL.md`. In short: one file per component family in
