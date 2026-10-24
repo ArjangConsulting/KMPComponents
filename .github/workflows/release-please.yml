@@ -20,6 +20,9 @@ jobs:
   release-please:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    # The release app credentials live in the `secrets` environment, which a job can read only
+    # when it names that environment.
+    environment: secrets
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
