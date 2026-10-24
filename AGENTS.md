@@ -65,10 +65,12 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`),
     `Navigation.kt` (top app bars, `TabBar`, `TabBarItem`, `ThemeTabRow`, `NavRail`,
     `AdaptiveNavScaffold`, `TabBarDefaults`), `TabBarScrollBehavior.kt`, `PaginatedContent.kt`
-    (title layout math in `titleProgress` / `titleOffset`), `Showcase.kt` (`ShowcaseRow`,
+    (title layout math in `titleProgress` / `titleOffset`; its dots footer is `PageIndicator.kt`),
+    `Avatar.kt` (`Avatar`, `AvatarSize`, initials in `avatarInitials`), `Showcase.kt` (`ShowcaseRow`,
     `ShowcaseFeed`), `FlipCard.kt`, `AppText.kt`.
   - Chat and assistant: `ChatLog.kt`, `AssistantComponents.kt`, `TypingIndicator.kt`
-    (`typingDotAlpha` is the pure wave function), `LoadingOverlay.kt`.
+    (`typingDotAlpha` is the pure wave function), `TypewriterReveal.kt` (`rememberTypewriterReveal`;
+    `nextRevealLength` keeps surrogate pairs whole), `LoadingOverlay.kt`.
   - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
     `CopyButton.kt`, `FocusTraversal.kt` (`Modifier.focusNextOnTab`, a `Modifier.Node`).
   - Accessibility: `KeyboardFocus.kt` adds token-derived focus outlines; `ReduceMotion.kt` exposes

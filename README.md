@@ -171,6 +171,7 @@ sized from the body text so they follow the user's font scale.
 | --- | --- |
 | `ChatLog` / `ChatMessage` / `ChatMessageState` | Conversation with user and assistant bubbles, typing and retryable error states; follows new messages only while the reader is at the bottom. |
 | `TypingIndicator` | Three-dot "reply is being written" wave; still when the system reduces motion. |
+| `rememberTypewriterReveal` | Reveals streamed text a character at a time, continuing as it grows; shows it at once when the system reduces motion. |
 | `LoadingOverlay` | Scrim that blocks interaction with its content during work the user must wait for, and announces it. |
 | `AssistantContextCard` | Title, highlighted value, optional quote, and footnote describing what the assistant sees. |
 | `AssistantQuickActionChips` | Scrolling filter chips for quick actions, with caller-owned state. |
@@ -206,11 +207,13 @@ sized from the body text so they follow the user's font scale.
 | `NavRail` | Side rail sharing `TabBarItemData` and colors with `TabBar`. |
 | `AdaptiveNavScaffold` | `TabBar` in compact windows, `NavRail` from 600 dp up. |
 | `PaginatedContent` | Swipeable pages with a synced title row, dots or progress footer, and an optional forward-only mode. |
+| `PageIndicator` | Dots for the current page of a pager or carousel; the current dot is a wider pill, and an optional description is announced. |
 | `ShowcaseRow` / `ShowcaseFeed` | Peeking horizontal carousels and an app-store style feed of them. |
 | `FlipCard` | Two-sided card that turns in 3D; only the visible face is read by screen readers. |
 | `AppText` / `AppTextStyle` | Text in a semantic role, including heavier weight variants of Material slots. |
 | `ContentRow` | List row with title, secondary and supporting text, leading/trailing slots, and optional click and selection. |
 | `KeyValueRow` | Read-only label/value pair for details panels; flows onto separate lines when space is tight and is read as one item. |
+| `Avatar` / `AvatarSize` | Circular image or initials for a person, read as one named image; sizes follow the text size. |
 
 ### Names shared with the sibling libraries
 
@@ -218,7 +221,8 @@ Components that also exist in [ComposeUIComponents](https://github.com/maniramez
 or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here,
 for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
 `BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, `Skeleton`, `TabBar`, `NavRail`,
-`PaginatedContent`, `SegmentedContent`, `ShowcaseFeed`, `FlipCard`, `ChatLog`, `TypingIndicator`, `LoadingOverlay`,
+`PaginatedContent`, `PageIndicator`, `SegmentedContent`, `ShowcaseFeed`, `FlipCard`, `Avatar`, `ChatLog`,
+`TypingIndicator`, `rememberTypewriterReveal`, `LoadingOverlay`,
 and the `Assistant*` components. Where that name would
 collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
 `ThemeCard`), like SwiftUIComponents' `ThemeButton`. Enum entries use SCREAMING_CASE

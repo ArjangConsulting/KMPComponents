@@ -87,6 +87,19 @@ public final class io/github/maniramezan/kmpcomponents/AssistantQuickActionState
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/maniramezan/kmpcomponents/AvatarKt {
+	public static final fun Avatar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/AvatarSize;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/AvatarSize : java/lang/Enum {
+	public static final field LARGE Lio/github/maniramezan/kmpcomponents/AvatarSize;
+	public static final field MEDIUM Lio/github/maniramezan/kmpcomponents/AvatarSize;
+	public static final field SMALL Lio/github/maniramezan/kmpcomponents/AvatarSize;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/AvatarSize;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/AvatarSize;
+}
+
 public final class io/github/maniramezan/kmpcomponents/BadgesKt {
 	public static final fun CountBadge-T042LqI (ILandroidx/compose/ui/Modifier;JILjava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun TonalBadge (Ljava/lang/String;Lio/github/maniramezan/kmpcomponents/StatusTone;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
@@ -489,6 +502,11 @@ public final class io/github/maniramezan/kmpcomponents/PageFooterStyle : java/la
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/PageFooterStyle;
 	public static fun values ()[Lio/github/maniramezan/kmpcomponents/PageFooterStyle;
+}
+
+public final class io/github/maniramezan/kmpcomponents/PageIndicatorKt {
+	public static final fun PageIndicator-jA1GFJw (Landroidx/compose/foundation/pager/PagerState;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;JJLandroidx/compose/runtime/Composer;II)V
+	public static final fun PageIndicator-wBJOh4Y (IILandroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;JJLandroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/maniramezan/kmpcomponents/PageTitleAlignment : java/lang/Enum {
@@ -1053,6 +1071,10 @@ public final class io/github/maniramezan/kmpcomponents/ToggleRowsKt {
 	public static final fun ThemeCheckbox (ZLkotlin/jvm/functions/Function1;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeSwitch (ZLkotlin/jvm/functions/Function1;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeTriStateCheckbox (Landroidx/compose/ui/state/ToggleableState;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/TypewriterRevealKt {
+	public static final fun rememberTypewriterReveal (Ljava/lang/String;ILandroidx/compose/runtime/Composer;II)Landroidx/compose/runtime/State;
 }
 
 public final class io/github/maniramezan/kmpcomponents/TypingIndicatorKt {

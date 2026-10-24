@@ -1,5 +1,8 @@
 package io.github.maniramezan.kmpcomponents.sample
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.dp
+import io.github.maniramezan.kmpcomponents.Avatar
+import io.github.maniramezan.kmpcomponents.AvatarSize
 import io.github.maniramezan.kmpcomponents.ContentRow
+import io.github.maniramezan.kmpcomponents.FlowLayout
 import io.github.maniramezan.kmpcomponents.FormTextField
 import io.github.maniramezan.kmpcomponents.InlineProgressIndicator
 import io.github.maniramezan.kmpcomponents.KeyValueRow
@@ -33,10 +39,11 @@ import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.ThemeTriStateCheckbox
 import io.github.maniramezan.kmpcomponents.kmpTypography
 
-/** Headers, rows, search, pickers, progress, notices, and toggle rows. */
+/** Headers, rows, avatars, search, pickers, progress, notices, and toggle rows. */
 @Composable
 fun EssentialsSection() {
     ListsDemo()
+    AvatarsDemo()
     LazyListDemo()
     FormsDemo()
     FeedbackDemo()
@@ -62,10 +69,28 @@ private fun ListsDemo() {
                 modifier = Modifier.fillMaxWidth(),
                 secondaryText = "Example",
                 supportingText = "Select or remove this item",
+                leadingContent = { Avatar(name = name, size = AvatarSize.SMALL) },
                 onClick = { selected = name },
                 selected = selected == name,
                 trailingContent = { TextButton(onClick = { items.remove(name) }) { Text("Remove") } },
             )
+        }
+    }
+}
+
+@Composable
+private fun AvatarsDemo() {
+    SectionCard(
+        title = "Avatars",
+        description = "Initials come from the first and last words of the name; sizes follow the text size.",
+    ) {
+        FlowLayout {
+            Avatar(name = "Example Person", size = AvatarSize.SMALL)
+            Avatar(name = "Another Example")
+            Avatar(name = "Third Example Name", size = AvatarSize.LARGE)
+            Avatar(name = "Image avatar", size = AvatarSize.LARGE) {
+                Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.tertiary))
+            }
         }
     }
 }

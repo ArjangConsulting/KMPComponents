@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +40,7 @@ import io.github.maniramezan.kmpcomponents.ThemeCard
 import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TypingIndicator
 import io.github.maniramezan.kmpcomponents.kmpSpacing
+import io.github.maniramezan.kmpcomponents.rememberTypewriterReveal
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -47,6 +49,7 @@ import kotlinx.coroutines.launch
 fun AssistantSection() {
     ChatDemo()
     AssistantCardsDemo()
+    StreamingDemo()
     OverlayDemo()
 }
 
@@ -182,3 +185,47 @@ private fun OverlayDemo() {
 
 private const val EXPORT_MILLIS = 2_000L
 private val OVERLAY_HEIGHT = 200.dp
+
+@Composable
+private fun StreamingDemo() {
+    var target by remember { mutableStateOf("") }
+    var streaming by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val revealed by rememberTypewriterReveal(target, charsPerSecond = STREAM_CHARS_PER_SECOND)
+    SectionCard(
+        title = "Streaming reply",
+        description = "Simulated: the example text arrives in chunks and is revealed character by character. " +
+            "With reduced motion it appears at once.",
+    ) {
+        Text(
+            text = revealed.ifEmpty { "Press Stream example reply to start." },
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.fillMaxWidth().heightIn(min = STREAM_MIN_HEIGHT),
+        )
+        PrimaryButton(
+            text = "Stream example reply",
+            enabled = !streaming,
+            onClick = {
+                streaming = true
+                target = ""
+                scope.launch {
+                    STREAM_CHUNKS.forEach { chunk ->
+                        target += chunk
+                        delay(STREAM_CHUNK_MILLIS)
+                    }
+                    streaming = false
+                }
+            },
+        )
+    }
+}
+
+private val STREAM_CHUNKS = listOf(
+    "This example reply ",
+    "arrives in several chunks, ",
+    "the way a streamed response would, ",
+    "and keeps revealing from where it left off. 🎉",
+)
+private const val STREAM_CHARS_PER_SECOND = 40
+private const val STREAM_CHUNK_MILLIS = 600L
+private val STREAM_MIN_HEIGHT = 72.dp
