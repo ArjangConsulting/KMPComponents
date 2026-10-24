@@ -26,6 +26,9 @@ import io.github.maniramezan.kmpcomponents.AssistantLimitPromptCopy
 import io.github.maniramezan.kmpcomponents.AssistantQuickActionChips
 import io.github.maniramezan.kmpcomponents.AssistantQuickActionState
 import io.github.maniramezan.kmpcomponents.AssistantStatusBanner
+import io.github.maniramezan.kmpcomponents.ChatComposer
+import io.github.maniramezan.kmpcomponents.ChatComposerVoiceInput
+import io.github.maniramezan.kmpcomponents.ChatComposerVoiceState
 import io.github.maniramezan.kmpcomponents.ChatErrorAction
 import io.github.maniramezan.kmpcomponents.ChatLog
 import io.github.maniramezan.kmpcomponents.ChatMessage
@@ -41,6 +44,7 @@ import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.TypingIndicator
 import io.github.maniramezan.kmpcomponents.kmpSpacing
 import io.github.maniramezan.kmpcomponents.rememberTypewriterReveal
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -61,6 +65,9 @@ private fun ChatDemo() {
     var draft by remember { mutableStateOf("") }
     var failNext by remember { mutableStateOf(false) }
     var nextId by remember { mutableIntStateOf(0) }
+    var voiceEnabled by remember { mutableStateOf(false) }
+    var voiceState: ChatComposerVoiceState by remember { mutableStateOf(ChatComposerVoiceState.Idle) }
+    var voiceJob by remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
     fun reply(replyId: String, question: String) {
         scope.launch {
@@ -95,25 +102,61 @@ private fun ChatDemo() {
             },
             modifier = Modifier.height(CHAT_HEIGHT),
         )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            SearchField(
-                value = draft,
-                onValueChange = { draft = it },
-                modifier = Modifier.weight(1f),
-                onSearch = ::send,
-                labels = SearchFieldLabels(placeholder = "Message", clear = "Clear message"),
-            )
-            PrimaryButton(text = "Send", onClick = { send(draft) })
-        }
+        ChatComposer(
+            value = draft,
+            onValueChange = { draft = it },
+            onSend = { send(draft) },
+            modifier = Modifier.fillMaxWidth(),
+            voiceInput = if (voiceEnabled) {
+                ChatComposerVoiceInput(
+                    state = voiceState,
+                    onStart = {
+                        voiceJob = scope.launch {
+                            simulateDictation(
+                                onState = { voiceState = it },
+                                onTranscript = { draft = it },
+                            )
+                        }
+                    },
+                    onStop = {
+                        voiceJob?.cancel()
+                        voiceState = ChatComposerVoiceState.Idle
+                    },
+                )
+            } else {
+                null
+            },
+        )
         ThemeSwitch(checked = failNext, onCheckedChange = { failNext = it }, label = "Fail the next reply")
+        ThemeSwitch(
+            checked = voiceEnabled,
+            onCheckedChange = { voiceEnabled = it },
+            label = "Simulated voice input",
+            supportingText = "The microphone types a sample transcript; no audio is recorded.",
+        )
         AssistantDisclaimerFooter(text = "Sample disclaimer text. Replies in this catalog are simulated locally.")
     }
 }
 
 private const val REPLY_MILLIS = 1_500L
+
+/** Pretends to dictate: a few listening frames with changing levels, then processing, then a transcript. */
+private suspend fun simulateDictation(onState: (ChatComposerVoiceState) -> Unit, onTranscript: (String) -> Unit) {
+    val words = SIMULATED_TRANSCRIPT.split(" ")
+    words.forEachIndexed { index, _ ->
+        onState(ChatComposerVoiceState.Listening(level = SIMULATED_LEVELS[index % SIMULATED_LEVELS.size]))
+        onTranscript(words.take(index + 1).joinToString(" "))
+        delay(SIMULATED_WORD_MILLIS)
+    }
+    onState(ChatComposerVoiceState.Processing)
+    delay(SIMULATED_WORD_MILLIS * 2)
+    onTranscript(SIMULATED_TRANSCRIPT)
+    onState(ChatComposerVoiceState.Idle)
+}
+
+private const val SIMULATED_TRANSCRIPT = "This sample transcript was typed by a simulation"
+private val SIMULATED_LEVELS = listOf(0.3f, 0.8f, 0.5f, 1f, 0.2f, 0.6f)
+private const val SIMULATED_WORD_MILLIS = 350L
 private val CHAT_HEIGHT = 320.dp
 
 @Composable

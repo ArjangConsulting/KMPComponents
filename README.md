@@ -170,6 +170,7 @@ sized from the body text so they follow the user's font scale.
 | Component | Purpose |
 | --- | --- |
 | `ChatLog` / `ChatMessage` / `ChatMessageState` | Conversation with user and assistant bubbles, typing and retryable error states; follows new messages only while the reader is at the bottom. |
+| `ChatComposer` / `ChatComposerVoiceInput` / `ChatComposerVoiceState` | Growing message field with a send button (Enter sends, Shift+Enter adds a line) and optional caller-driven voice input: microphone, stop with a level ring, and processing. |
 | `TypingIndicator` | Three-dot "reply is being written" wave; still when the system reduces motion. |
 | `rememberTypewriterReveal` | Reveals streamed text a character at a time, continuing as it grows; shows it at once when the system reduces motion. |
 | `LoadingOverlay` | Scrim that blocks interaction with its content during work the user must wait for, and announces it. |
@@ -221,7 +222,7 @@ Components that also exist in [ComposeUIComponents](https://github.com/maniramez
 or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the same name here,
 for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
 `BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, `Skeleton`, `TabBar`, `NavRail`,
-`PaginatedContent`, `PageIndicator`, `SegmentedContent`, `ShowcaseFeed`, `FlipCard`, `Avatar`, `ChatLog`,
+`PaginatedContent`, `PageIndicator`, `SegmentedContent`, `ShowcaseFeed`, `FlipCard`, `Avatar`, `ChatLog`, `ChatComposer`,
 `TypingIndicator`, `rememberTypewriterReveal`, `LoadingOverlay`,
 and the `Assistant*` components. Where that name would
 collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
