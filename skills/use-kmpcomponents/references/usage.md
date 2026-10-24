@@ -11,7 +11,7 @@ arm64, and browser Wasm. It exposes kommon design-system, Compose runtime, and M
 dependencies; do not add a second design-token system to make the examples work.
 
 `io.github.maniramezan.kmpcomponents:components-image` is optional and shares the core version.
-It targets Android, JVM, and iOS, not Wasm. `CachedAsyncImage` accepts a nullable description:
+It has the same targets as the core library; on Wasm there is no disk cache. `CachedAsyncImage` accepts a nullable description:
 use `null` for decorative images and meaningful text otherwise. Android network images require
 the host app's INTERNET permission. Coil types are implementation details, not its public API.
 

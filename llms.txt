@@ -4,7 +4,7 @@
 
 Use existing components before building equivalent controls. Core imports are
 io.github.maniramezan.kmpcomponents. The optional components-image artifact uses
-io.github.maniramezan.kmpcomponents.image and supports Android, JVM, and iOS, not Wasm.
+io.github.maniramezan.kmpcomponents.image and supports the same targets, including Wasm.
 
 Resolve the application's actual dependency version before copying signatures. Links to main
 can describe unreleased APIs; the hosted API reference describes the latest release. App state, persistence, routing,

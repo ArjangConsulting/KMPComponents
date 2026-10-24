@@ -48,7 +48,7 @@ resolves it from Maven Central; no local dependency substitution is required.
 
 `CachedAsyncImage` lives in a separate artifact so the main library does not pull in an image
 loader. It is backed by [Coil 3](https://coil-kt.github.io/coil/) with Ktor networking and
-brings each platform's Ktor engine (Android, Darwin, Java); no Coil types appear in its API.
+brings each platform's Ktor engine (Android, Darwin, Java, JS); no Coil types appear in its API.
 
 <!-- x-release-please-start-version -->
 ```kotlin
@@ -56,7 +56,8 @@ implementation("io.github.maniramezan.kmpcomponents:components-image:0.1.1")
 ```
 <!-- x-release-please-end -->
 
-The image artifact targets `android`, `jvm`, `iosArm64`, and `iosSimulatorArm64`.
+The image artifact has the same targets as the core library. On the web there is no disk cache, so
+`diskCachePolicy` has no effect and the browser's HTTP cache handles repeat loads.
 
 On Android, network images need `<uses-permission android:name="android.permission.INTERNET" />`
 in the app manifest. Both artifacts share one version.

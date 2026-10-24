@@ -99,9 +99,14 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   - `api/` — the checked-in public ABI dump (`checkKotlinAbi` compares against it).
 - `components-image/` — the second published module (`...:components-image`, package
   `io.github.maniramezan.kmpcomponents.image`): `CachedAsyncImage` and `ImageCachePolicy`, backed by
-  Coil 3 with Ktor (one engine per platform). It is separate so `components` stays free of an image
-  loader; keep Coil types out of its public API (they are `implementation` dependencies). It has
-  its own `api/` dump, common tests, and a desktop UI test, and shares the version with `components`.
+  Coil 3 with Ktor (one engine per platform, including `ktor-client-js` for Wasm). It is separate so
+  `components` stays free of an image loader; keep Coil types out of its public API (they are
+  `implementation` dependencies). It has its own `api/` dump and shares the version with `components`.
+  `commonTest` holds pure tests; `skikoTest` (a hierarchy-template group of the JVM, iOS, and Wasm
+  targets) holds Compose UI tests that need a Skiko renderer, so they run on desktop, the iOS
+  simulator, and headless Chrome. On Wasm, `waitUntil` busy-waits and starves Coil's decoding, so
+  wait with `awaitIdle()` plus `withContext(Dispatchers.Default) { delay(...) }`. `jvmTest` keeps the
+  network tests that need the JDK HTTP server. Coil has no disk cache on the web.
 - Root `build.gradle.kts` aggregates Dokka for both modules: `./gradlew :dokkaGenerate` writes
   `build/dokka/html`. CI builds it to catch KDoc errors; `docs.yml` publishes it for each release tag.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
