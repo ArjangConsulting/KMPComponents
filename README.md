@@ -264,6 +264,11 @@ xcodegen generate --spec sample/ios/project.yml && open sample/ios/KmpComponents
 The iOS project builds the Kotlin framework in a pre-build phase; pick an Apple Silicon simulator
 and run. It needs [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
+The Android build uses AGP 9.1.1 and SDK 37. Use Android Studio Panda 3 (2025.3.3) Patch 1
+or newer, which supports both according to the
+[Android compatibility table](https://developer.android.com/build/releases/about-agp#api-level-support).
+AGP stays in the 9.1 series so the catalog does not require an IDE that supports AGP 9.4.
+
 In Android Studio, reload/sync the root Gradle project, select **Run** > *Sample catalog (Android)*,
 choose an emulator or connected device running Android 8.0/API 26 or later, then Run or Debug.
 The application module is `sample-android`; the `sample` module supplies the shared catalog UI.

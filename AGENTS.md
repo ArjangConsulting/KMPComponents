@@ -224,6 +224,9 @@ cannot configure the project, so say so rather than claiming a change was verifi
   (`composeMaterial3`); keep it on the release the Compose plugin pairs with `compose`.
   Dependabot groups Gradle and GitHub Actions updates into one weekly dependency PR. The ktlint
   engine version (`ktlint` in the catalog) is not tracked by Dependabot; bump it by hand.
+- Keep AGP in the 9.1 series for the documented Android Studio baseline. SDK 37 requires AGP
+  9.1.1 or later and Android Studio Panda 3 Patch 1 or later. Dependabot permits AGP patch updates;
+  move to another minor series only when intentionally updating the README's IDE requirement.
 - Keep Kotlin/JVM bytecode at `JvmTarget.JVM_17` to match kommon.
 - `.editorconfig` holds the house style (ktlint `intellij_idea` style, 120 columns, expression bodies
   may stay on the signature line, `@Composable` functions are PascalCase).
