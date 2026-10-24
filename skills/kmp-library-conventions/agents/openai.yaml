@@ -1,0 +1,3 @@
+interface:
+  display_name: "KMP Library Conventions"
+  short_description: "API, build, release, and UI-verification rules for KMP libraries"

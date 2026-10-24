@@ -5,7 +5,8 @@ description: Review a change to KMPComponents' public components or theme adapte
 
 # Review a component change
 
-Read the diff, then each touched file in full. Report findings ranked by severity with
+Read the diff, then each touched file in full. For API-shape, build-graph, and verification-evidence
+rules that apply beyond this repo, consult `kmp-library-conventions`. Report findings ranked by severity with
 `file:line`, a concrete failure scenario, and the fix. Skip anything you cannot tie to a rule or a
 real failure.
 
@@ -56,7 +57,7 @@ real failure.
 
 ## Platform contracts and evidence
 
-Use [Multiplatform UI verification](../../../skills/use-kmpcomponents/references/multiplatform-ui.md)
+Use [UI verification](../../../skills/kmp-library-conventions/references/ui-verification.md)
 for relevant failure cases and verification scope. Review actual text fit and reachable actions at
 constrained widths, live RTL changes, gesture ownership inside scrolling parents, and host effects
 such as resolved-theme system bars or launch icons when touched. Check that direction-dependent

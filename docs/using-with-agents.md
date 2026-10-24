@@ -5,13 +5,18 @@ agent choose from the component catalog, inspect the API for your dependency ver
 theme, and connect components to your application's state. Its supporting files include a generated
 [catalog with source links](../skills/use-kmpcomponents/references/catalog.md), a
 [usage guide with a complete example](../skills/use-kmpcomponents/references/usage.md) and
-[Multiplatform UI verification](../skills/use-kmpcomponents/references/multiplatform-ui.md).
-The latter distills layout, gesture, native-host, and accessibility lessons into reusable contracts
-and distinguishes builds, screenshots, native audits, and screen-reader evidence.
+[KMPComponents-specific UI verification notes](../skills/use-kmpcomponents/references/multiplatform-ui.md).
 
-The skill is checked in under `skills/` for distribution. That location does not automatically
-register it with every agent. Install the entire folder, including `references/`, into your
-application's supported skill location, or point the agent at its `SKILL.md` directly.
+The companion skill [kmp-library-conventions](../skills/kmp-library-conventions/SKILL.md) holds the
+reusable layout, gesture, native-host, and accessibility contracts, and distinguishes builds,
+screenshots, native audits, and screen-reader evidence. It also covers the rules for building or
+releasing a Compose Multiplatform library. Install it alongside `use-kmpcomponents`; the verification
+notes link to it.
+
+Both skills are checked in under `skills/` for distribution. That location does not automatically
+register them with every agent. Install each entire folder, including `references/`, into your
+application's supported skill location, or point the agent at its `SKILL.md` directly. The commands
+below show `use-kmpcomponents`; repeat them for `kmp-library-conventions`.
 
 ## Codex
 
