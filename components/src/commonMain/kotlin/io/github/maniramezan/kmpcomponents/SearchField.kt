@@ -41,8 +41,10 @@ public fun SearchField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        // The placeholder names the empty field; once it is hidden the name has to come from here,
+        // and setting it while empty would read it twice.
         modifier = modifier.semantics {
-            if (labels.placeholder.isNotBlank()) contentDescription = labels.placeholder
+            if (value.isNotEmpty() && labels.placeholder.isNotBlank()) contentDescription = labels.placeholder
         },
         enabled = enabled,
         singleLine = true,

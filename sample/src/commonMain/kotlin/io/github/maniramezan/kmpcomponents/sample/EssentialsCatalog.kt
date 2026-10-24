@@ -69,7 +69,7 @@ private fun ListsDemo() {
                 modifier = Modifier.fillMaxWidth(),
                 secondaryText = "Example",
                 supportingText = "Select or remove this item",
-                leadingContent = { Avatar(name = name, size = AvatarSize.SMALL) },
+                leadingContent = { Avatar(name = name, size = AvatarSize.SMALL, contentDescription = null) },
                 onClick = { selected = name },
                 selected = selected == name,
                 trailingContent = { TextButton(onClick = { items.remove(name) }) { Text("Remove") } },

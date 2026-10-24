@@ -121,7 +121,15 @@ public fun ChatComposer(
                         false
                     }
                 }
-                .semantics { if (labels.placeholder.isNotBlank()) contentDescription = labels.placeholder },
+                // The placeholder names the empty field; once it is hidden the name has to come
+                // from here, and setting it while empty would read it twice.
+                .semantics {
+                    if (value.isNotEmpty() &&
+                        labels.placeholder.isNotBlank()
+                    ) {
+                        contentDescription = labels.placeholder
+                    }
+                },
             readOnly = !action.allowsEditing,
             placeholder = labels.placeholder.takeIf { it.isNotBlank() }?.let { text -> { Text(text) } },
             maxLines = maxLines.coerceAtLeast(1),

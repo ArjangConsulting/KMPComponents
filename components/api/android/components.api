@@ -88,7 +88,7 @@ public final class io/github/maniramezan/kmpcomponents/AssistantQuickActionState
 }
 
 public final class io/github/maniramezan/kmpcomponents/AvatarKt {
-	public static final fun Avatar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/AvatarSize;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Avatar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/AvatarSize;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/maniramezan/kmpcomponents/AvatarSize : java/lang/Enum {

@@ -13,12 +13,15 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -127,9 +130,13 @@ class AccessibilityAuditTest {
         setContent {
             KmpTheme { SearchField(query, { query = it }, labels = SearchFieldLabels("Find items", "Clear")) }
         }
-        onNodeWithContentDescription("Find items").performTextInput("example")
+        // While empty, the visible placeholder names the field; the description is added only once
+        // typing hides it, so the name is never read twice.
+        onNode(hasSetTextAction()).assert(hasText("Find items"))
+        onNode(hasSetTextAction()).performTextInput("example")
         onNodeWithContentDescription("Find items").assertExists()
         onNodeWithContentDescription("Clear").performClick()
         assertEquals("", query)
+        onNode(hasSetTextAction()).assert(hasText("Find items"))
     }
 }

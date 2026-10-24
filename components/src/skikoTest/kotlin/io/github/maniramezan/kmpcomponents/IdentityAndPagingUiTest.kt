@@ -66,6 +66,15 @@ class IdentityAndPagingUiTest {
     }
 
     @Test
+    fun `a decorative avatar keeps its initials but has no spoken name`() = runComposeUiTest {
+        setContent {
+            KmpTheme { Avatar(name = "Ada Lovelace", modifier = Modifier.testTag("avatar"), contentDescription = null) }
+        }
+        onNodeWithTag("avatar").assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
+        onNodeWithText("AL", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
     fun `avatar grows with the font scale so initials fit`() = runComposeUiTest {
         setContent {
             CompositionLocalProvider(LocalDensity provides Density(1f, fontScale = 2f)) {
@@ -90,7 +99,8 @@ class IdentityAndPagingUiTest {
                 )
             }
         }
-        onNodeWithContentDescription("Page 2 of 3").assert(politeLiveRegion)
+        // A spoken indicator is its own accessibility element, so it gets a full-size hit region.
+        onNodeWithContentDescription("Page 2 of 3").assert(politeLiveRegion).assertHeightIsAtLeast(48.dp)
         page = 9
         onNodeWithContentDescription("Page 3 of 3").assert(politeLiveRegion)
     }
