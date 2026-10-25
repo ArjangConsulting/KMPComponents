@@ -1,6 +1,7 @@
 package io.github.maniramezan.kmpcomponents
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -40,27 +41,31 @@ internal fun TooltipIconButton(
     val tooltipState = rememberTooltipState()
     val interactionSource = remember { MutableInteractionSource() }
     TooltipFocusTrigger(tooltipState, interactionSource)
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-        tooltip = { PlainTooltip { Text(label) } },
-        state = tooltipState,
-        // See TooltipTriggers.kt: Material's own input handling adds an unnamed node on iOS.
-        modifier = modifier.tooltipPointerTriggers(tooltipState),
-        enableUserInput = false,
-    ) {
-        IconButton(
-            onClick = onClick,
-            enabled = enabled,
-            interactionSource = interactionSource,
-            modifier = Modifier
-                .keyboardFocusOutline(IconButtonDefaults.standardShape)
-                .sizeIn(minWidth = buttonSize, minHeight = buttonSize)
-                .semantics {
-                    contentDescription = label
-                    extraSemantics()
-                },
-            content = icon,
-        )
+    // The caller's modifier goes on an outer Box: TooltipBox wraps it in an inner container, which
+    // would hide a parent's align/weight from the parent.
+    Box(modifier = modifier) {
+        TooltipBox(
+            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+            tooltip = { PlainTooltip { Text(label) } },
+            state = tooltipState,
+            // See TooltipTriggers.kt: Material's own input handling adds an unnamed node on iOS.
+            modifier = Modifier.tooltipPointerTriggers(tooltipState),
+            enableUserInput = false,
+        ) {
+            IconButton(
+                onClick = onClick,
+                enabled = enabled,
+                interactionSource = interactionSource,
+                modifier = Modifier
+                    .keyboardFocusOutline(IconButtonDefaults.standardShape)
+                    .sizeIn(minWidth = buttonSize, minHeight = buttonSize)
+                    .semantics {
+                        contentDescription = label
+                        extraSemantics()
+                    },
+                content = icon,
+            )
+        }
     }
 }
 
