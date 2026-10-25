@@ -74,6 +74,17 @@ jobs:
           :components-image:allTests :components-image:checkKotlinAbi :components-image:assemble
           :sample:compileKotlinJvm --no-configuration-cache
 
+      # Keeps the browser test exception, which the Gradle log does not print.
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: check-reports
+          path: |
+            components/build/reports/**
+            components-image/build/reports/**
+            components/build/test-results/**
+            components-image/build/test-results/**
+
       - name: Publish to Maven Central
         env:
           ORG_GRADLE_PROJECT_VERSION_NAME: ${{ inputs.tag }}
