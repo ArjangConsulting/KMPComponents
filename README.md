@@ -29,7 +29,7 @@ Release Please updates the versions below when a release is cut.
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("io.github.maniramezan.kmpcomponents:components:0.2.0")
+            implementation("io.github.maniramezan.kmpcomponents:components:0.2.1")
         }
     }
 }
@@ -52,7 +52,7 @@ brings each platform's Ktor engine (Android, Darwin, Java, JS); no Coil types ap
 
 <!-- x-release-please-start-version -->
 ```kotlin
-implementation("io.github.maniramezan.kmpcomponents:components-image:0.2.0")
+implementation("io.github.maniramezan.kmpcomponents:components-image:0.2.1")
 ```
 <!-- x-release-please-end -->
 
