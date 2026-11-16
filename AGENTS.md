@@ -257,6 +257,9 @@ CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, Android lint, `allTests`, `chec
 `koverVerify` for both modules, `verifyRoborazziJvm`, `assemble`, the root `dokkaGenerate`, and builds the
 desktop, Android, and iOS samples. It also runs `:sample:jvmTest` and the `scripts/` tests. A screenshot failure uploads the diff images in the
 `reports` artifact. Review a changed golden before committing it; an API dump change means a public API change (see Releases).
+The Kotlin/Native cache is keyed on the Kotlin version alone, so other dependency bumps restore it.
+`dependabot-auto-merge.yml` merges with `GITHUB_TOKEN`, which does not trigger push workflows, so it
+dispatches `ci.yml` on `main` after a merge to verify `main` and rebuild the caches later PRs restore.
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin. Without it, report
 which checks did not run instead of claiming verification.
 

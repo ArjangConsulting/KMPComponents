@@ -4,8 +4,8 @@ on:
   pull_request:
   push:
     branches: [main]
-  # Release Please dispatches CI on its release branch when it pushes with GITHUB_TOKEN, whose pushes
-  # do not trigger workflows (see release-please.yml).
+  # Release Please dispatches CI on its release branch, and Dependabot auto-merge dispatches it on
+  # main, because pushes and merges made with GITHUB_TOKEN do not trigger workflows.
   workflow_dispatch:
 
 permissions:
@@ -29,13 +29,21 @@ jobs:
         with:
           cache-read-only: false
 
+      # The Kotlin/Native toolchain depends only on the Kotlin version, so other dependency bumps reuse
+      # the cache. A Kotlin bump restores the previous toolchain's shared downloads through restore-keys.
+      - name: Read the Kotlin version
+        id: kotlin
+        run: echo "version=$(sed -n 's/^kotlin = "\(.*\)"$/\1/p' gradle/libs.versions.toml)" >> "$GITHUB_OUTPUT"
+
       - name: Cache Kotlin Native toolchains and downloads
         uses: actions/cache@v6
         with:
           path: |
             ~/.konan/dependencies
             ~/.konan/kotlin-native-*
-          key: ${{ runner.os }}-${{ runner.arch }}-konan-v1-${{ hashFiles('gradle/libs.versions.toml') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-konan-v2-${{ steps.kotlin.outputs.version }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-konan-v2-
 
       - name: Check consumer agent catalog
         run: python3 scripts/update_agent_catalog.py --check
@@ -58,6 +66,12 @@ jobs:
         run: >-
           ./gradlew :components:assemble :components-image:assemble :dokkaGenerate :sample:compileKotlinJvm
           :sample-android:assembleDebug :sample:linkDebugFrameworkIosSimulatorArm64 :sample:wasmJsBrowserDistribution
+
+      # A restore-keys hit can bring back an older toolchain; drop it so the saved cache stays one version.
+      - name: Remove older Kotlin Native toolchains
+        env:
+          KOTLIN_VERSION: ${{ steps.kotlin.outputs.version }}
+        run: find ~/.konan -maxdepth 1 -name 'kotlin-native-*' ! -name "*-$KOTLIN_VERSION" -exec rm -rf {} +
 
       # Test, lint, and Kover reports, and Roborazzi diff images when a screenshot changes.
       - uses: actions/upload-artifact@v7
