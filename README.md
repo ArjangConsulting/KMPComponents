@@ -160,6 +160,7 @@ sized from the body text so they follow the user's font scale.
 | `Toast` / `ToastHost` / `ToastHostState` | Transient messages with optional icon and action, shown one at a time like snackbars. `showToast` suspends and returns a `ToastResult`. |
 | `ThemeSnackbar` | Snackbar with an optional action, announced when shown standalone. |
 | `LoadingState` / `ErrorState` | Pane placeholders for loading and failure, announced by screen readers; siblings of `EmptyState`. |
+| `AsyncContent` / `AsyncContentState` | Switches between loading, empty, error, and content for hoisted async state, with the stock placeholders or your own slots; cross-fades between kinds unless the system reduces motion. |
 | `Skeleton` / `SkeletonBlock` / `Modifier.skeletonShimmer` | Decorative loading placeholders and a sweep that stays still when the system reduces motion. |
 | `ThemeHorizontalDivider` / `ThemeVerticalDivider` | Rules in the outline variant color. |
 | `FlowLayout` | Wrapping row with the standard gaps, for chips and button groups. |

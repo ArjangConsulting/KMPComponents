@@ -87,6 +87,56 @@ public final class io/github/maniramezan/kmpcomponents/AssistantQuickActionState
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/maniramezan/kmpcomponents/AsyncContentKt {
+	public static final fun AsyncContent (Lio/github/maniramezan/kmpcomponents/AsyncContentState;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AsyncContent (Lio/github/maniramezan/kmpcomponents/AsyncContentState;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/ui/Alignment;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;III)V
+}
+
+public abstract interface class io/github/maniramezan/kmpcomponents/AsyncContentState {
+}
+
+public final class io/github/maniramezan/kmpcomponents/AsyncContentState$Content : io/github/maniramezan/kmpcomponents/AsyncContentState {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/github/maniramezan/kmpcomponents/AsyncContentState$Content;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/AsyncContentState$Content;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/AsyncContentState$Content;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/AsyncContentState$Empty : io/github/maniramezan/kmpcomponents/AsyncContentState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/AsyncContentState$Empty;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/AsyncContentState$Error : io/github/maniramezan/kmpcomponents/AsyncContentState {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/AsyncContentState$Error;
+	public static synthetic fun copy$default (Lio/github/maniramezan/kmpcomponents/AsyncContentState$Error;Ljava/lang/String;ILjava/lang/Object;)Lio/github/maniramezan/kmpcomponents/AsyncContentState$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/maniramezan/kmpcomponents/AsyncContentState$Loading : io/github/maniramezan/kmpcomponents/AsyncContentState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/maniramezan/kmpcomponents/AsyncContentState$Loading;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/maniramezan/kmpcomponents/AvatarKt {
 	public static final fun Avatar (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/AvatarSize;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
