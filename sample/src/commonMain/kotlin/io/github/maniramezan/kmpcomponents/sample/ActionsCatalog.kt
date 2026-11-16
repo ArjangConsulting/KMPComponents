@@ -1,5 +1,6 @@
 package io.github.maniramezan.kmpcomponents.sample
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.FlowRow
@@ -20,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import io.github.maniramezan.kmpcomponents.ActionPill
@@ -75,6 +77,7 @@ private fun ExpandableFABDemo() {
             options = FABExpansionDirection.entries.map { it.name.lowercase().replaceFirstChar(Char::uppercase) },
             selectedIndex = direction.ordinal,
             onOptionSelected = { direction = FABExpansionDirection.entries[it] },
+            widthMode = SegmentWidthMode.FIT,
         )
         ThemeSwitch(checked = showLabels, onCheckedChange = { showLabels = it }, label = "Show action labels")
         val alignment = when (direction) {
@@ -83,7 +86,16 @@ private fun ExpandableFABDemo() {
             FABExpansionDirection.START -> Alignment.CenterEnd
             FABExpansionDirection.END -> Alignment.CenterStart
         }
-        Box(Modifier.fillMaxWidth().height(FAB_DEMO_HEIGHT), contentAlignment = alignment) {
+        // A surface backdrop, like the screen a FAB floats over, so the action pills stand out from the card.
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(FAB_DEMO_HEIGHT)
+                .clip(MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(MaterialTheme.kmpSpacing.small),
+            contentAlignment = alignment,
+        ) {
             ExpandableFAB(
                 expanded = expanded,
                 onExpandedChange = { expanded = it },
