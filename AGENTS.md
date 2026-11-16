@@ -52,7 +52,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   - More feedback: `NoticeCard.kt`, `ProgressIndicator.kt` (`ProgressIndicator`,
     `InlineProgressIndicator`, internal `InlineSpinner`).
   - Actions: `Buttons.kt` (`PrimaryButton`, `SecondaryButton`, `ThemeTextButton`,
-    `ThemeIconButton`, `LoadingIconButton`, `FAB`, `ThemeExtendedFloatingActionButton`),
+    `ThemeIconButton`, `LoadingIconButton`, `FAB`, `ThemeExtendedFloatingActionButton`), `ExpandableFAB.kt`
+    (`ExpandableFAB`, `FABAction`, `FABExpansionDirection`; a custom measure policy keeps the trigger anchored),
     `SegmentedControl.kt` (`SegmentedControl`, `ThemeSingleChoiceSegmentedButtonRow`,
     `SegmentDensity`, `SegmentWidthMode`), `SegmentedContent.kt` (layout choice in
     `segmentLayout`), `PillChip.kt`, `ActionPill.kt`. Icons are
