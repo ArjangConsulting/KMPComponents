@@ -14,13 +14,14 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Dp
@@ -89,20 +90,24 @@ public fun Modifier.skeletonShimmer(highlight: Color = MaterialTheme.colorScheme
     if (!animate) return this
     return this
         .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
-        .drawWithContent {
-            drawContent()
+        .drawWithCache {
+            // The band's brush depends only on its width; each frame only translates it.
             val bandWidth = size.width * SHIMMER_BAND_WIDTH_FRACTION
-            val bandStart = -bandWidth + (size.width + 2f * bandWidth) * sweep
-            drawRect(
-                brush = Brush.linearGradient(
-                    0f to highlight.copy(alpha = 0f),
-                    HALF to highlight.copy(alpha = SHIMMER_PEAK_ALPHA),
-                    1f to highlight.copy(alpha = 0f),
-                    start = Offset(bandStart, 0f),
-                    end = Offset(bandStart + bandWidth, 0f),
-                ),
-                blendMode = BlendMode.SrcAtop,
+            val band = Size(bandWidth, size.height)
+            val brush = Brush.horizontalGradient(
+                0f to highlight.copy(alpha = 0f),
+                HALF to highlight.copy(alpha = SHIMMER_PEAK_ALPHA),
+                1f to highlight.copy(alpha = 0f),
+                startX = 0f,
+                endX = bandWidth,
             )
+            onDrawWithContent {
+                drawContent()
+                val bandStart = -bandWidth + (size.width + 2f * bandWidth) * sweep
+                translate(left = bandStart) {
+                    drawRect(brush = brush, size = band, blendMode = BlendMode.SrcAtop)
+                }
+            }
         }
 }
 

@@ -8,8 +8,6 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,7 +27,6 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.progressBarRangeInfo
@@ -73,63 +70,65 @@ public fun VerticalSplitPane(
     val focused by interactionSource.collectIsFocusedAsState()
     val dividerColor = if (focused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
-    BoxWithConstraints(modifier) {
-        val handleHeight = MaterialTheme.kmpSpacing.small.coerceAtLeast(minimumTouchTargetSize())
-        val paneHeight = maxHeight - handleHeight
-        val paneHeightPx = with(LocalDensity.current) { paneHeight.toPx() }.coerceAtLeast(1f)
-        // Track the drag locally so a parent that applies changes late cannot make the divider jump.
-        var dragSplit by remember { mutableFloatStateOf(shown) }
-        val dragState = rememberDraggableState { delta ->
-            val next = coerceSplit(dragSplit + delta / paneHeightPx, minSplit, maxSplit)
-            if (next != dragSplit) {
-                dragSplit = next
-                currentOnSplitChange(next)
-            }
+    val handleHeight = MaterialTheme.kmpSpacing.small.coerceAtLeast(minimumTouchTargetSize())
+    val paneExtent = remember { SplitPaneExtent() }
+    // Track the drag locally so a parent that applies changes late cannot make the divider jump.
+    var dragSplit by remember { mutableFloatStateOf(shown) }
+    val dragState = rememberDraggableState { delta ->
+        val next = coerceSplit(dragSplit + delta / paneExtent.px, minSplit, maxSplit)
+        if (next != dragSplit) {
+            dragSplit = next
+            currentOnSplitChange(next)
         }
-        Column {
-            Box(Modifier.height(paneHeight * shown).fillMaxWidth()) { top() }
-            Box(
-                modifier = Modifier
-                    .height(handleHeight)
-                    .fillMaxWidth()
-                    .pointerHoverIcon(resizeVerticalPointerIcon)
-                    .draggable(
-                        state = dragState,
-                        orientation = Orientation.Vertical,
-                        interactionSource = interactionSource,
-                        onDragStarted = { dragSplit = currentSplit },
-                    )
-                    .onKeyEvent { event ->
-                        val direction = when (event.key) {
-                            Key.DirectionUp -> -1
-                            Key.DirectionDown -> 1
-                            else -> 0
-                        }
-                        if (event.type != KeyEventType.KeyDown || direction == 0) return@onKeyEvent false
-                        change(currentSplit + direction * keyboardStep)
+    }
+    SplitPaneLayout(
+        orientation = Orientation.Vertical,
+        split = shown,
+        handleThickness = handleHeight,
+        paneExtent = paneExtent,
+        modifier = modifier,
+        first = top,
+        second = bottom,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .pointerHoverIcon(resizeVerticalPointerIcon)
+                .draggable(
+                    state = dragState,
+                    orientation = Orientation.Vertical,
+                    interactionSource = interactionSource,
+                    onDragStarted = { dragSplit = currentSplit },
+                )
+                .onKeyEvent { event ->
+                    val direction = when (event.key) {
+                        Key.DirectionUp -> -1
+                        Key.DirectionDown -> 1
+                        else -> 0
+                    }
+                    if (event.type != KeyEventType.KeyDown || direction == 0) return@onKeyEvent false
+                    change(currentSplit + direction * keyboardStep)
+                    true
+                }
+                .semantics {
+                    contentDescription = labels.handleDescription
+                    stateDescription = labels.splitDescription(shown)
+                    progressBarRangeInfo = ProgressBarRangeInfo(shown, minSplit..maxSplit)
+                    setProgress { target ->
+                        change(target)
                         true
                     }
-                    .semantics {
-                        contentDescription = labels.handleDescription
-                        stateDescription = labels.splitDescription(shown)
-                        progressBarRangeInfo = ProgressBarRangeInfo(shown, minSplit..maxSplit)
-                        setProgress { target ->
-                            change(target)
-                            true
-                        }
-                    }
-                    .focusable(interactionSource = interactionSource),
-                contentAlignment = Alignment.Center,
-            ) {
-                Box(
-                    Modifier
-                        .height(if (focused) DIVIDER_FOCUSED_THICKNESS else DIVIDER_THICKNESS)
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.kmpSpacing.small)
-                        .background(dividerColor),
-                )
-            }
-            Box(Modifier.weight(1f).fillMaxWidth()) { bottom() }
+                }
+                .focusable(interactionSource = interactionSource),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(
+                Modifier
+                    .height(if (focused) DIVIDER_FOCUSED_THICKNESS else DIVIDER_THICKNESS)
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.kmpSpacing.small)
+                    .background(dividerColor),
+            )
         }
     }
 }

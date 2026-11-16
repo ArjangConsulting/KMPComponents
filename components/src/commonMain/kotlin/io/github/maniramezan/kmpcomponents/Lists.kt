@@ -17,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -79,10 +81,12 @@ public fun LazyList(
 }
 
 /**
- * The last item of an infinite-scrolling lazy list. Each time it enters composition (scrolls into
- * view) it calls [onLoadMore]; while [isLoadingMore] it shows a spinner named [loadingLabel] and
- * announced politely. Guard against duplicate requests in [onLoadMore], and stop emitting the
- * footer when there is nothing left to load.
+ * The last item of an infinite-scrolling lazy list. It calls [onLoadMore] when it enters composition
+ * (scrolls into view) while not [isLoadingMore], and again each time [isLoadingMore] turns `false`
+ * while it is still composed, so a page too short to push the footer off screen still asks for the
+ * next one. While [isLoadingMore] it shows a spinner named [loadingLabel] and announced politely.
+ * Guard against duplicate requests in [onLoadMore], and stop emitting the footer when there is
+ * nothing left to load.
  */
 @Composable
 public fun LoadMoreFooter(
@@ -91,7 +95,10 @@ public fun LoadMoreFooter(
     modifier: Modifier = Modifier,
     loadingLabel: String = "Loading more",
 ) {
-    LaunchedEffect(Unit) { onLoadMore() }
+    val currentOnLoadMore by rememberUpdatedState(onLoadMore)
+    LaunchedEffect(isLoadingMore) {
+        if (!isLoadingMore) currentOnLoadMore()
+    }
     if (isLoadingMore) {
         Box(
             modifier = modifier
