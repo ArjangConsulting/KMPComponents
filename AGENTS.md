@@ -44,7 +44,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `CountBadge`), `EmptyState.kt`, `ConfirmDialog.kt`, `InfoTooltip.kt`.
   - Navigation and layout: `SidebarNavigation.kt` (`SidebarNavigation`, `SidebarItem`),
     `TabChip.kt` (`TabChipRow`, `TabChip`), `SelectableCard.kt`, `SplitPane.kt`
-    (`HorizontalSplitPane`), `SectionHeader.kt`, `ContentRow.kt`, `KeyValueRow.kt`.
+    (`HorizontalSplitPane`; both split panes share the internal `SplitPaneLayout`, which sizes the
+    panes in the measure pass so a drag does not recompose them), `SectionHeader.kt`, `ContentRow.kt`, `KeyValueRow.kt`.
   - Inputs: `MenuPicker.kt`, `SearchField.kt`, `ToggleRows.kt` (`ThemeSwitch`, `ThemeCheckbox`,
     `ThemeTriStateCheckbox`), `InputControls.kt` (`RadioGroup`, `ThemeSlider`),
     `SelectionList.kt` (`SelectionList`, `SelectionListContent`, `SelectionListLabels`) with its
@@ -62,7 +63,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `StateViews.kt` (`LoadingState`, `ErrorState`), `Skeleton.kt` (`Skeleton`, `SkeletonBlock`,
     `Modifier.skeletonShimmer`), `Layout.kt` (`AdaptiveContentContainer`, `OverlayCard`,
     `DisclosureCard`, dividers, `FlowLayout`). `ConfirmDialog` delegates to `ThemeDialog`.
-  - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`),
+  - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`, which asks
+    again each time loading finishes while it is still on screen),
     `Navigation.kt` (top app bars, `TabBar`, `TabBarItem`, `ThemeTabRow`, `NavRail`,
     `AdaptiveNavScaffold`, `TabBarDefaults`), `TabBarScrollBehavior.kt`, `PaginatedContent.kt`
     (title layout math in `titleProgress` / `titleOffset`; its dots footer is `PageIndicator.kt`),
@@ -70,8 +72,9 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `ShowcaseFeed`), `FlipCard.kt`, `AppText.kt`.
   - Chat and assistant: `ChatLog.kt`, `ChatComposer.kt` (`ChatComposer`, voice input types; the
     button choice is the pure `resolveChatComposerAction`), `AssistantComponents.kt`, `TypingIndicator.kt`
-    (`typingDotAlpha` is the pure wave function), `TypewriterReveal.kt` (`rememberTypewriterReveal`;
-    `nextRevealLength` keeps surrogate pairs whole), `LoadingOverlay.kt`.
+    (`typingDotAlpha` is the pure wave function), `TypewriterReveal.kt` (`rememberTypewriterReveal`
+    reveals by elapsed frame time and is not restarted by text growth; `nextRevealLength` keeps
+    surrogate pairs whole), `LoadingOverlay.kt`.
   - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
     `CopyButton.kt`, `FocusTraversal.kt` (`Modifier.focusNextOnTab`, a `Modifier.Node`).
   - Accessibility: `KeyboardFocus.kt` adds token-derived focus outlines; `ReduceMotion.kt` exposes

@@ -47,7 +47,7 @@ class NavigationUiTest {
     private val destinations = listOf("Home", "Search", "Settings")
 
     @Test
-    fun `list item reads as one node and load more footer fires and is named`() = runComposeUiTest {
+    fun `list item reads as one node and load more footer is named and waits while loading`() = runComposeUiTest {
         var loads = 0
         setContent {
             KmpTheme {
@@ -59,7 +59,7 @@ class NavigationUiTest {
         }
         onNodeWithText("Device").assertTextEquals("Device", "iPhone 16")
         onNodeWithContentDescription("Loading more").assertExists()
-        assertEquals(1, loads)
+        assertEquals(0, loads)
     }
 
     @Test

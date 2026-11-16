@@ -8,8 +8,6 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -30,7 +28,8 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.contentDescription
@@ -38,6 +37,8 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
@@ -92,65 +93,131 @@ public fun HorizontalSplitPane(
     val focused by interactionSource.collectIsFocusedAsState()
     val dividerColor = if (focused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
 
-    BoxWithConstraints(modifier) {
-        val totalWidth = maxWidth
-        val handleWidth = MaterialTheme.kmpSpacing.small.coerceAtLeast(minimumTouchTargetSize())
-        val paneWidth = totalWidth - handleWidth
-        val paneWidthPx = with(LocalDensity.current) { paneWidth.toPx() }.coerceAtLeast(1f)
-        var dragSplit by remember { mutableFloatStateOf(shown) }
-        val dragState = rememberDraggableState { delta ->
-            val next = coerceSplit(dragSplit + delta / paneWidthPx, minSplit, maxSplit)
-            if (next != dragSplit) {
-                dragSplit = next
-                currentOnSplitChange(next)
-            }
+    val handleWidth = MaterialTheme.kmpSpacing.small.coerceAtLeast(minimumTouchTargetSize())
+    val paneExtent = remember { SplitPaneExtent() }
+    var dragSplit by remember { mutableFloatStateOf(shown) }
+    val dragState = rememberDraggableState { delta ->
+        val next = coerceSplit(dragSplit + delta / paneExtent.px, minSplit, maxSplit)
+        if (next != dragSplit) {
+            dragSplit = next
+            currentOnSplitChange(next)
         }
-        Row {
-            Box(Modifier.width(paneWidth * shown).fillMaxHeight()) { leading() }
-            Box(
-                modifier = Modifier
-                    .width(handleWidth)
-                    .fillMaxHeight()
-                    .pointerHoverIcon(resizeHorizontalPointerIcon)
-                    .draggable(
-                        state = dragState,
-                        orientation = Orientation.Horizontal,
-                        interactionSource = interactionSource,
-                        reverseDirection = reverseDirection,
-                        onDragStarted = { dragSplit = currentSplit },
-                    )
-                    .onKeyEvent { event ->
-                        val direction = when (event.key) {
-                            Key.DirectionLeft -> -1
-                            Key.DirectionRight -> 1
-                            else -> 0
-                        }
-                        if (event.type != KeyEventType.KeyDown || direction == 0) return@onKeyEvent false
-                        val layoutDirectionMultiplier = if (reverseDirection) -1 else 1
-                        change(currentSplit + direction * layoutDirectionMultiplier * keyboardStep)
+    }
+    SplitPaneLayout(
+        orientation = Orientation.Horizontal,
+        split = shown,
+        handleThickness = handleWidth,
+        paneExtent = paneExtent,
+        modifier = modifier,
+        first = leading,
+        second = trailing,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .pointerHoverIcon(resizeHorizontalPointerIcon)
+                .draggable(
+                    state = dragState,
+                    orientation = Orientation.Horizontal,
+                    interactionSource = interactionSource,
+                    reverseDirection = reverseDirection,
+                    onDragStarted = { dragSplit = currentSplit },
+                )
+                .onKeyEvent { event ->
+                    val direction = when (event.key) {
+                        Key.DirectionLeft -> -1
+                        Key.DirectionRight -> 1
+                        else -> 0
+                    }
+                    if (event.type != KeyEventType.KeyDown || direction == 0) return@onKeyEvent false
+                    val layoutDirectionMultiplier = if (reverseDirection) -1 else 1
+                    change(currentSplit + direction * layoutDirectionMultiplier * keyboardStep)
+                    true
+                }
+                .semantics {
+                    contentDescription = labels.handleDescription
+                    stateDescription = labels.splitDescription(shown)
+                    progressBarRangeInfo = ProgressBarRangeInfo(shown, minSplit..maxSplit)
+                    setProgress { target ->
+                        change(target)
                         true
                     }
-                    .semantics {
-                        contentDescription = labels.handleDescription
-                        stateDescription = labels.splitDescription(shown)
-                        progressBarRangeInfo = ProgressBarRangeInfo(shown, minSplit..maxSplit)
-                        setProgress { target ->
-                            change(target)
-                            true
-                        }
-                    }
-                    .focusable(interactionSource = interactionSource),
-                contentAlignment = Alignment.Center,
-            ) {
-                Box(
-                    Modifier
-                        .width(if (focused) DIVIDER_FOCUSED_WIDTH else DIVIDER_WIDTH)
-                        .fillMaxHeight()
-                        .padding(vertical = MaterialTheme.kmpSpacing.small)
-                        .background(dividerColor),
-                )
+                }
+                .focusable(interactionSource = interactionSource),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(
+                Modifier
+                    .width(if (focused) DIVIDER_FOCUSED_WIDTH else DIVIDER_WIDTH)
+                    .fillMaxHeight()
+                    .padding(vertical = MaterialTheme.kmpSpacing.small)
+                    .background(dividerColor),
+            )
+        }
+    }
+}
+
+/** The pane space along the split axis, in pixels, written by the measure pass and read by drags. */
+internal class SplitPaneExtent {
+    var px: Float = 1f
+}
+
+/**
+ * Lays out [first], [handle], and [second] along [orientation]. The panes are sized in the measure
+ * pass, so moving the divider re-measures them instead of recomposing them.
+ */
+@Composable
+internal fun SplitPaneLayout(
+    orientation: Orientation,
+    split: Float,
+    handleThickness: Dp,
+    paneExtent: SplitPaneExtent,
+    modifier: Modifier,
+    first: @Composable () -> Unit,
+    second: @Composable () -> Unit,
+    handle: @Composable () -> Unit,
+) {
+    val horizontal = orientation == Orientation.Horizontal
+    Layout(
+        contents = listOf({ Box { first() } }, handle, { Box { second() } }),
+        modifier = modifier,
+    ) { (firstMeasurables, handleMeasurables, secondMeasurables), constraints ->
+        val mainMax = if (horizontal) constraints.maxWidth else constraints.maxHeight
+        val crossMax = if (horizontal) constraints.maxHeight else constraints.maxWidth
+        val crossBounded = if (horizontal) constraints.hasBoundedHeight else constraints.hasBoundedWidth
+        val handlePx = handleThickness.roundToPx()
+        val paneSpace = mainMax - handleThickness.toPx()
+        paneExtent.px = paneSpace.coerceAtLeast(1f)
+        val firstMain = (paneSpace * split).roundToInt().coerceIn(0, mainMax)
+        val secondMain = (mainMax - firstMain - handlePx).coerceAtLeast(0)
+        fun measure(measurables: List<Measurable>, main: Int) = measurables.map { measurable ->
+            val crossMin = if (crossBounded) crossMax else 0
+            measurable.measure(
+                if (horizontal) {
+                    Constraints(minWidth = main, maxWidth = main, minHeight = crossMin, maxHeight = crossMax)
+                } else {
+                    Constraints(minWidth = crossMin, maxWidth = crossMax, minHeight = main, maxHeight = main)
+                },
+            )
+        }
+        val firstPlaceables = measure(firstMeasurables, firstMain)
+        val handlePlaceables = measure(handleMeasurables, handlePx)
+        val secondPlaceables = measure(secondMeasurables, secondMain)
+        val all = firstPlaceables + handlePlaceables + secondPlaceables
+        val crossSize = all.maxOfOrNull { if (horizontal) it.height else it.width } ?: 0
+        val width = (if (horizontal) mainMax else crossSize).coerceIn(constraints.minWidth, constraints.maxWidth)
+        val height = (if (horizontal) crossSize else mainMax).coerceIn(constraints.minHeight, constraints.maxHeight)
+        layout(width, height) {
+            var offset = 0
+            val slots = listOf(
+                firstPlaceables to firstMain,
+                handlePlaceables to handlePx,
+                secondPlaceables to secondMain,
+            )
+            for ((placeables, main) in slots) {
+                placeables.forEach { if (horizontal) it.placeRelative(offset, 0) else it.placeRelative(0, offset) }
+                offset += main
             }
-            Box(Modifier.weight(1f).fillMaxHeight()) { trailing() }
         }
     }
 }

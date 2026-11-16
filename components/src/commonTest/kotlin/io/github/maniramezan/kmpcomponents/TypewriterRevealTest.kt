@@ -23,4 +23,15 @@ class TypewriterRevealTest {
         assertEquals(3, nextRevealLength("abc", 3))
         assertEquals(3, nextRevealLength("abc", 7))
     }
+
+    @Test
+    fun `reveals several characters in one step without splitting a pair`() {
+        assertEquals("a😀", revealedPrefix("a😀b", "", 2))
+        assertEquals("a😀b", revealedPrefix("a😀b", "a", 5))
+    }
+
+    @Test
+    fun `restarts when the shown text is not a prefix`() {
+        assertEquals("B", revealedPrefix("Bye", "Hel", 1))
+    }
 }
