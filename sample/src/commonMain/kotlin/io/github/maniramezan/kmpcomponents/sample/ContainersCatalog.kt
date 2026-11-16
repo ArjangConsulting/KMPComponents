@@ -32,6 +32,7 @@ import io.github.maniramezan.kmpcomponents.OverlayCard
 import io.github.maniramezan.kmpcomponents.PrimaryButton
 import io.github.maniramezan.kmpcomponents.SecondaryButton
 import io.github.maniramezan.kmpcomponents.SectionCard
+import io.github.maniramezan.kmpcomponents.SegmentWidthMode
 import io.github.maniramezan.kmpcomponents.SegmentedControl
 import io.github.maniramezan.kmpcomponents.Skeleton
 import io.github.maniramezan.kmpcomponents.SkeletonBlock
@@ -187,11 +188,12 @@ private fun PlaceholdersDemo() {
     }
 }
 
+// Content first: it is the default, and the scrolling segment row starts at the first segment.
 private enum class AsyncDemoState(val label: String) {
+    CONTENT("Content"),
     LOADING("Loading"),
     EMPTY("Empty"),
     ERROR("Error"),
-    CONTENT("Content"),
 }
 
 @Composable
@@ -208,6 +210,7 @@ private fun AsyncContentDemo() {
             options = AsyncDemoState.entries.map { it.label },
             selectedIndex = shown.ordinal,
             onOptionSelected = { shown = AsyncDemoState.entries[it] },
+            widthMode = SegmentWidthMode.FIT,
         )
         AsyncContent(
             state = state,
