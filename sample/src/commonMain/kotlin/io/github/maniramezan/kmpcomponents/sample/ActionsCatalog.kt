@@ -1,8 +1,10 @@
 package io.github.maniramezan.kmpcomponents.sample
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -19,8 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.unit.dp
 import io.github.maniramezan.kmpcomponents.ActionPill
+import io.github.maniramezan.kmpcomponents.ExpandableFAB
 import io.github.maniramezan.kmpcomponents.FAB
+import io.github.maniramezan.kmpcomponents.FABAction
+import io.github.maniramezan.kmpcomponents.FABExpansionDirection
 import io.github.maniramezan.kmpcomponents.LoadingIconButton
 import io.github.maniramezan.kmpcomponents.PillChip
 import io.github.maniramezan.kmpcomponents.PrimaryButton
@@ -35,6 +41,7 @@ import io.github.maniramezan.kmpcomponents.SegmentedItem
 import io.github.maniramezan.kmpcomponents.ThemeExtendedFloatingActionButton
 import io.github.maniramezan.kmpcomponents.ThemeIconButton
 import io.github.maniramezan.kmpcomponents.ThemeSingleChoiceSegmentedButtonRow
+import io.github.maniramezan.kmpcomponents.ThemeSwitch
 import io.github.maniramezan.kmpcomponents.ThemeTextButton
 import io.github.maniramezan.kmpcomponents.kmpSpacing
 import kotlinx.coroutines.delay
@@ -46,7 +53,53 @@ fun ActionsSection() {
     ButtonsDemo()
     SegmentsDemo()
     PillsDemo()
+    ExpandableFABDemo()
 }
+
+@Composable
+private fun ExpandableFABDemo() {
+    var expanded by remember { mutableStateOf(false) }
+    var direction by remember { mutableStateOf(FABExpansionDirection.UP) }
+    var showLabels by remember { mutableStateOf(true) }
+    var lastAction by remember { mutableStateOf("None yet") }
+    val plus = rememberVectorPainter(PlusIcon)
+    val refresh = rememberVectorPainter(RefreshIcon)
+    val actions = remember(plus, refresh) {
+        listOf(
+            FABAction(id = "new", label = "New item", icon = plus, onClick = { lastAction = "New item" }),
+            FABAction(id = "refresh", label = "Refresh", icon = refresh, onClick = { lastAction = "Refresh" }),
+        )
+    }
+    SectionCard(title = "ExpandableFAB", description = "Last action: $lastAction") {
+        SegmentedControl(
+            options = FABExpansionDirection.entries.map { it.name.lowercase().replaceFirstChar(Char::uppercase) },
+            selectedIndex = direction.ordinal,
+            onOptionSelected = { direction = FABExpansionDirection.entries[it] },
+        )
+        ThemeSwitch(checked = showLabels, onCheckedChange = { showLabels = it }, label = "Show action labels")
+        val alignment = when (direction) {
+            FABExpansionDirection.UP -> Alignment.BottomEnd
+            FABExpansionDirection.DOWN -> Alignment.TopEnd
+            FABExpansionDirection.START -> Alignment.CenterEnd
+            FABExpansionDirection.END -> Alignment.CenterStart
+        }
+        Box(Modifier.fillMaxWidth().height(FAB_DEMO_HEIGHT), contentAlignment = alignment) {
+            ExpandableFAB(
+                expanded = expanded,
+                onExpandedChange = { expanded = it },
+                actions = actions,
+                icon = plus,
+                contentDescription = "More actions",
+                expandedStateDescription = "Expanded",
+                collapsedStateDescription = "Collapsed",
+                direction = direction,
+                showActionLabels = showLabels,
+            )
+        }
+    }
+}
+
+private val FAB_DEMO_HEIGHT = 220.dp
 
 @Composable
 private fun ButtonsDemo() {
