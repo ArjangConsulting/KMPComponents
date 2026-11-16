@@ -41,6 +41,8 @@ import io.github.maniramezan.kmpcomponents.SearchFieldLabels
 import io.github.maniramezan.kmpcomponents.SectionCard
 import io.github.maniramezan.kmpcomponents.ThemeCard
 import io.github.maniramezan.kmpcomponents.ThemeSwitch
+import io.github.maniramezan.kmpcomponents.ThumbsFeedbackRow
+import io.github.maniramezan.kmpcomponents.ThumbsRating
 import io.github.maniramezan.kmpcomponents.TypingIndicator
 import io.github.maniramezan.kmpcomponents.kmpSpacing
 import io.github.maniramezan.kmpcomponents.rememberTypewriterReveal
@@ -54,7 +56,37 @@ fun AssistantSection() {
     ChatDemo()
     AssistantCardsDemo()
     StreamingDemo()
+    FeedbackDemo()
     OverlayDemo()
+}
+
+@Composable
+private fun FeedbackDemo() {
+    var rating by remember { mutableStateOf(ThumbsRating.NONE) }
+    var allowClearing by remember { mutableStateOf(true) }
+    SectionCard(title = "Response feedback") {
+        Text("Rate this example answer.", style = MaterialTheme.typography.bodyMedium)
+        ThumbsFeedbackRow(
+            rating = rating,
+            onRatingChange = { rating = it },
+            positiveContentDescription = "Good response",
+            negativeContentDescription = "Bad response",
+            allowClearing = allowClearing,
+        )
+        Text(
+            when (rating) {
+                ThumbsRating.NONE -> "Not rated"
+                ThumbsRating.POSITIVE -> "Rated helpful"
+                ThumbsRating.NEGATIVE -> "Rated not helpful"
+            },
+            style = MaterialTheme.typography.bodySmall,
+        )
+        ThemeSwitch(
+            label = "Tap again to clear",
+            checked = allowClearing,
+            onCheckedChange = { allowClearing = it },
+        )
+    }
 }
 
 private enum class QuickAction(val label: String) { SUMMARIZE("Summarize"), EXPLAIN("Explain"), REPHRASE("Rephrase") }

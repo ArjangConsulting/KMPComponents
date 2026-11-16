@@ -180,6 +180,7 @@ sized from the body text so they follow the user's font scale.
 | `AssistantStatusBanner` | Announced error banner for an unavailable provider or blocking failure. |
 | `AssistantLimitPromptCard` | Quota or upgrade prompt with primary and secondary actions. |
 | `AssistantDisclaimerFooter` | Low-emphasis disclaimer line. |
+| `ThumbsFeedbackRow` / `ThumbsRating` | Thumbs up and down for rating a response: a single-choice pair that reports changes, optionally clears on a second tap, and marks the selection with a filled container. |
 
 ### Images (`components-image`)
 

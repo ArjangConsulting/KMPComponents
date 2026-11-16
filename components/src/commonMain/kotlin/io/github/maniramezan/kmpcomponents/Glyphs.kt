@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -24,7 +26,21 @@ import androidx.compose.ui.unit.isSpecified
 // Small line glyphs drawn on a Canvas so components need no icon-font dependency. They are
 // decorative: callers put the accessible label on the interactive parent.
 
-internal enum class Glyph { EYE, EYE_OFF, CLOSE, INFO, SEARCH, CHECK, CHEVRON_DOWN, COPY, SEND, MIC, STOP }
+internal enum class Glyph {
+    EYE,
+    EYE_OFF,
+    CLOSE,
+    INFO,
+    SEARCH,
+    CHECK,
+    CHEVRON_DOWN,
+    COPY,
+    SEND,
+    MIC,
+    STOP,
+    THUMB_UP,
+    THUMB_DOWN,
+}
 
 /** A glyph sized to [style]'s line height, so it scales with the user's font size. */
 @Composable
@@ -70,6 +86,24 @@ private const val MIC_CUP_TOP = 0.36f
 private const val MIC_CUP_BOTTOM = 0.72f
 private const val MIC_BASE = 0.88f
 private const val STOP_INSET = 0.28f
+
+// The thumbs are Material's filled thumb_up / thumb_down outlines on a 24-unit viewport, the same
+// shapes ComposeUIComponents draws, scaled to the canvas.
+private const val THUMB_VIEWPORT = 24f
+private val THUMB_UP_PATH: Path by lazy {
+    PathParser().parsePathString(
+        "M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1" +
+            " 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05" +
+            "c.09-.23.14-.47.14-.73v-2z",
+    ).toPath()
+}
+private val THUMB_DOWN_PATH: Path by lazy {
+    PathParser().parsePathString(
+        "M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31" +
+            "l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5" +
+            "c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z",
+    ).toPath()
+}
 
 @Composable
 internal fun GlyphIcon(
@@ -221,6 +255,12 @@ internal fun GlyphIcon(
                     size = Size(side, side),
                     cornerRadius = CornerRadius(stroke, stroke),
                 )
+            }
+
+            Glyph.THUMB_UP, Glyph.THUMB_DOWN -> {
+                scale(w / THUMB_VIEWPORT, h / THUMB_VIEWPORT, pivot = Offset.Zero) {
+                    drawPath(if (glyph == Glyph.THUMB_UP) THUMB_UP_PATH else THUMB_DOWN_PATH, color)
+                }
             }
 
             Glyph.CHEVRON_DOWN -> {

@@ -94,6 +94,7 @@ uses `io.github.maniramezan.kmpcomponents.image` and has the same targets.
 | `AssistantStatusBanner` | Announced error banner for an unavailable provider or blocking failure. | [AssistantComponents.kt](https://github.com/ArjangConsulting/KMPComponents/blob/main/components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/AssistantComponents.kt) |
 | `AssistantLimitPromptCard` | Quota or upgrade prompt with primary and secondary actions. | [AssistantComponents.kt](https://github.com/ArjangConsulting/KMPComponents/blob/main/components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/AssistantComponents.kt) |
 | `AssistantDisclaimerFooter` | Low-emphasis disclaimer line. | [AssistantComponents.kt](https://github.com/ArjangConsulting/KMPComponents/blob/main/components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/AssistantComponents.kt) |
+| `ThumbsFeedbackRow` / `ThumbsRating` | Thumbs up and down for rating a response: a single-choice pair that reports changes, optionally clears on a second tap, and marks the selection with a filled container. | [ThumbsFeedbackRow.kt](https://github.com/ArjangConsulting/KMPComponents/blob/main/components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/ThumbsFeedbackRow.kt) |
 
 ## Images (`components-image`)
 

@@ -1156,6 +1156,19 @@ public final class io/github/maniramezan/kmpcomponents/ThemeModeSelectorKt {
 	public static final fun ThemeModeSelector (Lio/github/maniramezan/kmpcomponents/ThemeMode;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/ThemeModeLabels;Landroidx/compose/runtime/Composer;II)V
 }
 
+public final class io/github/maniramezan/kmpcomponents/ThumbsFeedbackRowKt {
+	public static final fun ThumbsFeedbackRow (Lio/github/maniramezan/kmpcomponents/ThumbsRating;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZZLjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ThumbsRating : java/lang/Enum {
+	public static final field NEGATIVE Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static final field NONE Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static final field POSITIVE Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+}
+
 public abstract interface class io/github/maniramezan/kmpcomponents/ToastData {
 	public abstract fun dismiss ()V
 	public abstract fun getActionLabel ()Ljava/lang/String;

@@ -70,7 +70,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `Avatar.kt` (`Avatar`, `AvatarSize`, initials in `avatarInitials`), `Showcase.kt` (`ShowcaseRow`,
     `ShowcaseFeed`), `FlipCard.kt`, `AppText.kt`.
   - Chat and assistant: `ChatLog.kt`, `ChatComposer.kt` (`ChatComposer`, voice input types; the
-    button choice is the pure `resolveChatComposerAction`), `AssistantComponents.kt`, `TypingIndicator.kt`
+    button choice is the pure `resolveChatComposerAction`), `AssistantComponents.kt`, `ThumbsFeedbackRow.kt`
+    (`ThumbsFeedbackRow`, `ThumbsRating`; tap rules in `resolveThumbsRatingTap`), `TypingIndicator.kt`
     (`typingDotAlpha` is the pure wave function), `TypewriterReveal.kt` (`rememberTypewriterReveal`;
     `nextRevealLength` keeps surrogate pairs whole), `LoadingOverlay.kt`.
   - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
@@ -85,7 +86,7 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     anchors pass `enableUserInput = false` because Material's own handling adds an unnamed merging
     node that iOS exposes as an element without a description. `skikoTest/.../AnonymousNodeTest.kt`
     guards against unnamed merging, actionable, or progress nodes.
-  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy, send, mic, stop) so the library needs no icon font.
+  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy, send, mic, stop, thumbs up and down) so the library needs no icon font.
   - `jvmMain`/`androidMain`/`iosMain`/`wasmJsMain` — only `resizeHorizontalPointerIcon` and
     `isReduceMotionEnabled` (`ReduceMotion.kt`; desktop always returns `false`). Decorative,
     looping animations check `decorativeAnimationsEnabled()`, which also turns them off in previews.
