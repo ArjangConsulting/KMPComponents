@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.maniramezan.kmpcomponents.AdaptiveContentContainer
+import io.github.maniramezan.kmpcomponents.AsyncContent
+import io.github.maniramezan.kmpcomponents.AsyncContentState
 import io.github.maniramezan.kmpcomponents.BottomSheet
 import io.github.maniramezan.kmpcomponents.DisclosureCard
 import io.github.maniramezan.kmpcomponents.ErrorState
@@ -36,6 +38,7 @@ import io.github.maniramezan.kmpcomponents.SkeletonBlock
 import io.github.maniramezan.kmpcomponents.ThemeCard
 import io.github.maniramezan.kmpcomponents.ThemeDialog
 import io.github.maniramezan.kmpcomponents.ThemeHorizontalDivider
+import io.github.maniramezan.kmpcomponents.ThemeListItem
 import io.github.maniramezan.kmpcomponents.ThemeSnackbar
 import io.github.maniramezan.kmpcomponents.ThemeSurface
 import io.github.maniramezan.kmpcomponents.ThemeTextButton
@@ -54,6 +57,7 @@ fun ContainersSection() {
     CardsDemo()
     OverlaysDemo()
     PlaceholdersDemo()
+    AsyncContentDemo()
 }
 
 @Composable
@@ -179,6 +183,45 @@ private fun PlaceholdersDemo() {
                 message = "The server did not respond.",
                 action = { ThemeTextButton(text = "Retry", onClick = { state = PaneState.LOADING }) },
             )
+        }
+    }
+}
+
+private enum class AsyncDemoState(val label: String) {
+    LOADING("Loading"),
+    EMPTY("Empty"),
+    ERROR("Error"),
+    CONTENT("Content"),
+}
+
+@Composable
+private fun AsyncContentDemo() {
+    var shown by remember { mutableStateOf(AsyncDemoState.CONTENT) }
+    val state: AsyncContentState<List<String>> = when (shown) {
+        AsyncDemoState.LOADING -> AsyncContentState.Loading
+        AsyncDemoState.EMPTY -> AsyncContentState.Empty
+        AsyncDemoState.ERROR -> AsyncContentState.Error()
+        AsyncDemoState.CONTENT -> AsyncContentState.Content(listOf("First report", "Second report"))
+    }
+    SectionCard(title = "AsyncContent") {
+        SegmentedControl(
+            options = AsyncDemoState.entries.map { it.label },
+            selectedIndex = shown.ordinal,
+            onOptionSelected = { shown = AsyncDemoState.entries[it] },
+        )
+        AsyncContent(
+            state = state,
+            loadingLabel = "Loading reports",
+            emptyTitle = "No reports yet",
+            errorTitle = "Could not load reports",
+            errorMessage = "The server did not respond.",
+            emptyMessage = "Reports you create appear here.",
+            emptyAction = { ThemeTextButton(text = "Create report", onClick = { shown = AsyncDemoState.CONTENT }) },
+            errorAction = { ThemeTextButton(text = "Retry", onClick = { shown = AsyncDemoState.LOADING }) },
+        ) { reports ->
+            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small)) {
+                reports.forEach { ThemeListItem(headline = it) }
+            }
         }
     }
 }

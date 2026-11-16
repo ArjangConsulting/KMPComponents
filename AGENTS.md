@@ -59,7 +59,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     caller-supplied `Painter`s sized with `glyphSize()`.
   - Containers and feedback: `Containers.kt` (`ThemeCard`, `ThemeSurface`, `BottomSheet`,
     `ThemeDialog`, `ThemeSnackbar`), `Toast.kt` (`Toast`, `ToastHost`, `ToastHostState`),
-    `StateViews.kt` (`LoadingState`, `ErrorState`), `Skeleton.kt` (`Skeleton`, `SkeletonBlock`,
+    `StateViews.kt` (`LoadingState`, `ErrorState`), `AsyncContent.kt` (`AsyncContent`,
+    `AsyncContentState`; picks among the state views), `Skeleton.kt` (`Skeleton`, `SkeletonBlock`,
     `Modifier.skeletonShimmer`), `Layout.kt` (`AdaptiveContentContainer`, `OverlayCard`,
     `DisclosureCard`, dividers, `FlowLayout`). `ConfirmDialog` delegates to `ThemeDialog`.
   - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`),
