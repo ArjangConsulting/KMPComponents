@@ -85,30 +85,50 @@ public data class KmpMotion(
     public val deliberateMillis: Int,
 )
 
+/**
+ * The spacing scale [KmpTheme] provides. Read it with [MaterialTheme.kmpSpacing]; provide it directly
+ * only to override spacing for a subtree. Outside [KmpTheme] it holds kommon's default scale.
+ */
 public val LocalKmpSpacing: ProvidableCompositionLocal<ComposeSpacing> =
     staticCompositionLocalOf { KommonDesignTokens.default.spacing.toComposeSpacing() }
 
+/**
+ * The semantic colors [KmpTheme] provides for the current light or dark mode. Read them with
+ * [MaterialTheme.kmpColors]. Outside [KmpTheme] they are kommon's default light colors.
+ */
 public val LocalKmpColors: ProvidableCompositionLocal<KmpColors> =
     staticCompositionLocalOf { KommonDesignTokens.default.lightColors.toKmpColors() }
 
+/**
+ * The extra text styles [KmpTheme] provides. Read them with [MaterialTheme.kmpTypography]. Outside
+ * [KmpTheme] they are kommon's defaults.
+ */
 public val LocalKmpTypography: ProvidableCompositionLocal<KmpTypography> =
     staticCompositionLocalOf { KommonDesignTokens.default.typography.toKmpTypography() }
 
+/**
+ * The animation durations [KmpTheme] provides. Read them with [MaterialTheme.kmpMotion]. Outside
+ * [KmpTheme] they are kommon's defaults.
+ */
 public val LocalKmpMotion: ProvidableCompositionLocal<KmpMotion> =
     staticCompositionLocalOf { KommonDesignTokens.default.motion.toKmpMotion() }
 
+/** The current spacing scale, from [LocalKmpSpacing]. Use it for padding and gaps instead of literal `dp`. */
 public val MaterialTheme.kmpSpacing: ComposeSpacing
     @Composable @ReadOnlyComposable
     get() = LocalKmpSpacing.current
 
+/** The current semantic colors that Material 3 lacks, such as success and warning, from [LocalKmpColors]. */
 public val MaterialTheme.kmpColors: KmpColors
     @Composable @ReadOnlyComposable
     get() = LocalKmpColors.current
 
+/** The current extra text styles, such as [KmpTypography.code], from [LocalKmpTypography]. */
 public val MaterialTheme.kmpTypography: KmpTypography
     @Composable @ReadOnlyComposable
     get() = LocalKmpTypography.current
 
+/** The current animation durations, from [LocalKmpMotion]. */
 public val MaterialTheme.kmpMotion: KmpMotion
     @Composable @ReadOnlyComposable
     get() = LocalKmpMotion.current
