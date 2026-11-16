@@ -42,6 +42,25 @@ dokka {
     moduleName = "KMPComponents"
 }
 
+// Each module's reference opens with its Module.md overview and links declarations to their source
+// on GitHub, at the release tag when docs.yml passes VERSION_NAME and at main otherwise.
+val sourceRef: Provider<String> = providers.gradleProperty("VERSION_NAME").orElse("main")
+subprojects {
+    val moduleDir = name
+    plugins.withId("org.jetbrains.dokka") {
+        extensions.configure<org.jetbrains.dokka.gradle.DokkaExtension> {
+            dokkaSourceSets.configureEach {
+                includes.from(layout.projectDirectory.file("Module.md"))
+                sourceLink {
+                    localDirectory.set(layout.projectDirectory.dir("src"))
+                    remoteUrl(sourceRef.map { "https://github.com/ArjangConsulting/KMPComponents/tree/$it/$moduleDir/src" })
+                    remoteLineSuffix.set("#L")
+                }
+            }
+        }
+    }
+}
+
 val ktlintVersion = libs.versions.ktlint.get()
 
 // House style lives in .editorconfig; `./gradlew ktlintCheck` enforces it and `ktlintFormat` fixes it.

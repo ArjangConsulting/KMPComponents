@@ -127,7 +127,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   network tests that need the JDK HTTP server. Coil has no disk cache on the web.
 - Root `build.gradle.kts` aggregates Dokka for both modules: `./gradlew :dokkaGenerate` writes
   `build/dokka/html`. CI builds it to catch KDoc errors; `docs.yml` publishes it for each release tag,
-  with the web catalog under `catalog/`.
+  with the web catalog under `catalog/`. Each module's `Module.md` is its overview page (keep it in
+  step with the module's purpose), and source links point at the release tag (`VERSION_NAME`) or `main`.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
