@@ -490,6 +490,31 @@ public final class io/github/maniramezan/kmpcomponents/EmptyStateKt {
 	public static final fun EmptyState (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
+public final class io/github/maniramezan/kmpcomponents/ExpandableFABKt {
+	public static final fun ExpandableFAB (ZLkotlin/jvm/functions/Function1;Ljava/util/List;Landroidx/compose/ui/graphics/painter/Painter;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Lio/github/maniramezan/kmpcomponents/FABExpansionDirection;ZZLjava/lang/String;Landroidx/compose/runtime/Composer;III)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/FABAction {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/painter/Painter;Lkotlin/jvm/functions/Function0;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/painter/Painter;Lkotlin/jvm/functions/Function0;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getEnabled ()Z
+	public final fun getIcon ()Landroidx/compose/ui/graphics/painter/Painter;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
+}
+
+public final class io/github/maniramezan/kmpcomponents/FABExpansionDirection : java/lang/Enum {
+	public static final field DOWN Lio/github/maniramezan/kmpcomponents/FABExpansionDirection;
+	public static final field END Lio/github/maniramezan/kmpcomponents/FABExpansionDirection;
+	public static final field START Lio/github/maniramezan/kmpcomponents/FABExpansionDirection;
+	public static final field UP Lio/github/maniramezan/kmpcomponents/FABExpansionDirection;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/FABExpansionDirection;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/FABExpansionDirection;
+}
+
 public final class io/github/maniramezan/kmpcomponents/FlipAxis : java/lang/Enum {
 	public static final field HORIZONTAL Lio/github/maniramezan/kmpcomponents/FlipAxis;
 	public static final field VERTICAL Lio/github/maniramezan/kmpcomponents/FlipAxis;
@@ -1154,6 +1179,19 @@ public final class io/github/maniramezan/kmpcomponents/ThemeModeLabels {
 public final class io/github/maniramezan/kmpcomponents/ThemeModeSelectorKt {
 	public static final fun ThemeModeDropdown (Lio/github/maniramezan/kmpcomponents/ThemeMode;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/ThemeModeLabels;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ThemeModeSelector (Lio/github/maniramezan/kmpcomponents/ThemeMode;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLio/github/maniramezan/kmpcomponents/ThemeModeLabels;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ThumbsFeedbackRowKt {
+	public static final fun ThumbsFeedbackRow (Lio/github/maniramezan/kmpcomponents/ThumbsRating;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZZLjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/maniramezan/kmpcomponents/ThumbsRating : java/lang/Enum {
+	public static final field NEGATIVE Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static final field NONE Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static final field POSITIVE Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/maniramezan/kmpcomponents/ThumbsRating;
+	public static fun values ()[Lio/github/maniramezan/kmpcomponents/ThumbsRating;
 }
 
 public abstract interface class io/github/maniramezan/kmpcomponents/ToastData {

@@ -142,6 +142,7 @@ sized from the body text so they follow the user's font scale.
 | `ThemeIconButton` | Icon-only button; its description is also shown as a tooltip. |
 | `LoadingIconButton` | Icon button that shows a spinner and ignores clicks while loading. |
 | `FAB` / `ThemeExtendedFloatingActionButton` | Floating action buttons; the extended one is named by its visible label. |
+| `ExpandableFAB` / `FABAction` / `FABExpansionDirection` | FAB that reveals labeled or icon-only actions up, down, start, or end; the trigger stays anchored, actions scroll when space is short, and the trigger announces expanded or collapsed. |
 | `SegmentedControl` | Pill-shaped segments for one choice, with `SegmentDensity` and `SegmentWidthMode`. |
 | `ThemeSingleChoiceSegmentedButtonRow` | Material's connected, outlined segmented buttons with a check mark; scrolls to preserve full labels in tight layouts. |
 | `SegmentedContent` | Segment bar (pill, underline, or bare) above content that crossfades; scrolls with edge fades instead of truncating titles. |
@@ -180,6 +181,7 @@ sized from the body text so they follow the user's font scale.
 | `AssistantStatusBanner` | Announced error banner for an unavailable provider or blocking failure. |
 | `AssistantLimitPromptCard` | Quota or upgrade prompt with primary and secondary actions. |
 | `AssistantDisclaimerFooter` | Low-emphasis disclaimer line. |
+| `ThumbsFeedbackRow` / `ThumbsRating` | Thumbs up and down for rating a response: a single-choice pair that reports changes, optionally clears on a second tap, and marks the selection with a filled container. |
 
 ### Images (`components-image`)
 
