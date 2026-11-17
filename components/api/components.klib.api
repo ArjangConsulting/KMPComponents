@@ -134,6 +134,19 @@ final enum class io.github.maniramezan.kmpcomponents/ProviderConfigurationField 
     final fun values(): kotlin/Array<io.github.maniramezan.kmpcomponents/ProviderConfigurationField> // io.github.maniramezan.kmpcomponents/ProviderConfigurationField.values|values#static(){}[0]
 }
 
+final enum class io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle : kotlin/Enum<io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle> { // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle|null[0]
+    enum entry AUTOMATIC // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.AUTOMATIC|null[0]
+    enum entry BULLETS // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.BULLETS|null[0]
+    enum entry CHECKMARKS // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.CHECKMARKS|null[0]
+    enum entry CHIPS // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.CHIPS|null[0]
+
+    final val entries // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle> // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle> // io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle.values|values#static(){}[0]
+}
+
 final enum class io.github.maniramezan.kmpcomponents/SecretRevealToggle : kotlin/Enum<io.github.maniramezan.kmpcomponents/SecretRevealToggle> { // io.github.maniramezan.kmpcomponents/SecretRevealToggle|null[0]
     enum entry ICON // io.github.maniramezan.kmpcomponents/SecretRevealToggle.ICON|null[0]
     enum entry TEXT // io.github.maniramezan.kmpcomponents/SecretRevealToggle.TEXT|null[0]
@@ -444,6 +457,168 @@ sealed interface io.github.maniramezan.kmpcomponents/CheckStatus { // io.github.
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/CheckStatus.Idle.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/CheckStatus.Idle.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/CheckStatus.Idle.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.maniramezan.kmpcomponents/QuestionnaireAnswer { // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer|null[0]
+    final class Boolean : io.github.maniramezan.kmpcomponents/QuestionnaireAnswer { // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean|null[0]
+        constructor <init>(kotlin/Boolean) // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.<init>|<init>(kotlin.Boolean){}[0]
+
+        final val value // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.value|{}value[0]
+            final fun <get-value>(): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.component1|component1(){}[0]
+        final fun copy(kotlin/Boolean = ...): io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.copy|copy(kotlin.Boolean){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Boolean.toString|toString(){}[0]
+    }
+
+    final class Choices : io.github.maniramezan.kmpcomponents/QuestionnaireAnswer { // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices|null[0]
+        constructor <init>(kotlin.collections/List<kotlin/String>) // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.<init>|<init>(kotlin.collections.List<kotlin.String>){}[0]
+
+        final val ids // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.ids|{}ids[0]
+            final fun <get-ids>(): kotlin.collections/List<kotlin/String> // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.ids.<get-ids>|<get-ids>(){}[0]
+
+        final fun component1(): kotlin.collections/List<kotlin/String> // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<kotlin/String> = ...): io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.copy|copy(kotlin.collections.List<kotlin.String>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Choices.toString|toString(){}[0]
+    }
+
+    final class Date : io.github.maniramezan.kmpcomponents/QuestionnaireAnswer { // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date|null[0]
+        constructor <init>(kotlinx.datetime/LocalDate) // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.<init>|<init>(kotlinx.datetime.LocalDate){}[0]
+
+        final val value // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.value|{}value[0]
+            final fun <get-value>(): kotlinx.datetime/LocalDate // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlinx.datetime/LocalDate // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.component1|component1(){}[0]
+        final fun copy(kotlinx.datetime/LocalDate = ...): io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.copy|copy(kotlinx.datetime.LocalDate){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Date.toString|toString(){}[0]
+    }
+
+    final class Number : io.github.maniramezan.kmpcomponents/QuestionnaireAnswer { // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number|null[0]
+        constructor <init>(kotlin/Double) // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.<init>|<init>(kotlin.Double){}[0]
+
+        final val value // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.value|{}value[0]
+            final fun <get-value>(): kotlin/Double // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Double // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.component1|component1(){}[0]
+        final fun copy(kotlin/Double = ...): io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.copy|copy(kotlin.Double){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Number.toString|toString(){}[0]
+    }
+
+    final class Text : io.github.maniramezan.kmpcomponents/QuestionnaireAnswer { // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text|null[0]
+        constructor <init>(kotlin/String) // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.<init>|<init>(kotlin.String){}[0]
+
+        final val value // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.value|{}value[0]
+            final fun <get-value>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireAnswer.Text.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind|null[0]
+    final class Boolean : io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean|null[0]
+        constructor <init>(kotlin/String, kotlin/String) // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+        final val falseTitle // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.falseTitle|{}falseTitle[0]
+            final fun <get-falseTitle>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.falseTitle.<get-falseTitle>|<get-falseTitle>(){}[0]
+        final val trueTitle // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.trueTitle|{}trueTitle[0]
+            final fun <get-trueTitle>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.trueTitle.<get-trueTitle>|<get-trueTitle>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.component1|component1(){}[0]
+        final fun component2(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.component2|component2(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String = ...): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.copy|copy(kotlin.String;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Boolean.toString|toString(){}[0]
+    }
+
+    final class Date : io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date|null[0]
+        constructor <init>(kotlin.ranges/ClosedRange<kotlinx.datetime/LocalDate>) // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.<init>|<init>(kotlin.ranges.ClosedRange<kotlinx.datetime.LocalDate>){}[0]
+
+        final val range // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.range|{}range[0]
+            final fun <get-range>(): kotlin.ranges/ClosedRange<kotlinx.datetime/LocalDate> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.range.<get-range>|<get-range>(){}[0]
+
+        final fun component1(): kotlin.ranges/ClosedRange<kotlinx.datetime/LocalDate> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.component1|component1(){}[0]
+        final fun copy(kotlin.ranges/ClosedRange<kotlinx.datetime/LocalDate> = ...): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.copy|copy(kotlin.ranges.ClosedRange<kotlinx.datetime.LocalDate>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Date.toString|toString(){}[0]
+    }
+
+    final class MultipleChoice : io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice|null[0]
+        constructor <init>(kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption>) // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.<init>|<init>(kotlin.collections.List<io.github.maniramezan.kmpcomponents.QuestionnaireOption>){}[0]
+
+        final val options // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.options|{}options[0]
+            final fun <get-options>(): kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.options.<get-options>|<get-options>(){}[0]
+
+        final fun component1(): kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption> = ...): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.copy|copy(kotlin.collections.List<io.github.maniramezan.kmpcomponents.QuestionnaireOption>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.MultipleChoice.toString|toString(){}[0]
+    }
+
+    final class Number : io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number|null[0]
+        constructor <init>(kotlin.ranges/ClosedFloatingPointRange<kotlin/Double>, kotlin/Double = ..., kotlin/String? = ...) // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.<init>|<init>(kotlin.ranges.ClosedFloatingPointRange<kotlin.Double>;kotlin.Double;kotlin.String?){}[0]
+
+        final val range // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.range|{}range[0]
+            final fun <get-range>(): kotlin.ranges/ClosedFloatingPointRange<kotlin/Double> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.range.<get-range>|<get-range>(){}[0]
+        final val step // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.step|{}step[0]
+            final fun <get-step>(): kotlin/Double // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.step.<get-step>|<get-step>(){}[0]
+        final val unitLabel // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.unitLabel|{}unitLabel[0]
+            final fun <get-unitLabel>(): kotlin/String? // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.unitLabel.<get-unitLabel>|<get-unitLabel>(){}[0]
+
+        final fun component1(): kotlin.ranges/ClosedFloatingPointRange<kotlin/Double> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.component1|component1(){}[0]
+        final fun component2(): kotlin/Double // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.component2|component2(){}[0]
+        final fun component3(): kotlin/String? // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.component3|component3(){}[0]
+        final fun copy(kotlin.ranges/ClosedFloatingPointRange<kotlin/Double> = ..., kotlin/Double = ..., kotlin/String? = ...): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.copy|copy(kotlin.ranges.ClosedFloatingPointRange<kotlin.Double>;kotlin.Double;kotlin.String?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Number.toString|toString(){}[0]
+    }
+
+    final class SingleChoice : io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice|null[0]
+        constructor <init>(kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption>) // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.<init>|<init>(kotlin.collections.List<io.github.maniramezan.kmpcomponents.QuestionnaireOption>){}[0]
+
+        final val options // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.options|{}options[0]
+            final fun <get-options>(): kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.options.<get-options>|<get-options>(){}[0]
+
+        final fun component1(): kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption> // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireOption> = ...): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.copy|copy(kotlin.collections.List<io.github.maniramezan.kmpcomponents.QuestionnaireOption>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.SingleChoice.toString|toString(){}[0]
+    }
+
+    final class Text : io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text|null[0]
+        constructor <init>(kotlin/String? = ...) // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.<init>|<init>(kotlin.String?){}[0]
+
+        final val placeholder // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.placeholder|{}placeholder[0]
+            final fun <get-placeholder>(): kotlin/String? // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.placeholder.<get-placeholder>|<get-placeholder>(){}[0]
+
+        final fun component1(): kotlin/String? // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.component1|component1(){}[0]
+        final fun copy(kotlin/String? = ...): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.copy|copy(kotlin.String?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Text.toString|toString(){}[0]
+    }
+
+    final object Custom : io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Custom|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Custom.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Custom.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind.Custom.toString|toString(){}[0]
     }
 }
 
@@ -871,6 +1046,94 @@ final class io.github.maniramezan.kmpcomponents/ProviderConfigurationState { // 
     final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/ProviderConfigurationState.toString|toString(){}[0]
 }
 
+final class io.github.maniramezan.kmpcomponents/QuestionnaireLabels { // io.github.maniramezan.kmpcomponents/QuestionnaireLabels|null[0]
+    constructor <init>(kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/String> = ...) // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.String>){}[0]
+
+    final val back // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.back|{}back[0]
+        final fun <get-back>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.back.<get-back>|<get-back>(){}[0]
+    final val cancelDate // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.cancelDate|{}cancelDate[0]
+        final fun <get-cancelDate>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.cancelDate.<get-cancelDate>|<get-cancelDate>(){}[0]
+    final val chooseDate // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.chooseDate|{}chooseDate[0]
+        final fun <get-chooseDate>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.chooseDate.<get-chooseDate>|<get-chooseDate>(){}[0]
+    final val confirmDate // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.confirmDate|{}confirmDate[0]
+        final fun <get-confirmDate>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.confirmDate.<get-confirmDate>|<get-confirmDate>(){}[0]
+    final val decrement // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.decrement|{}decrement[0]
+        final fun <get-decrement>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.decrement.<get-decrement>|<get-decrement>(){}[0]
+    final val done // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.done|{}done[0]
+        final fun <get-done>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.done.<get-done>|<get-done>(){}[0]
+    final val increment // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.increment|{}increment[0]
+        final fun <get-increment>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.increment.<get-increment>|<get-increment>(){}[0]
+    final val next // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.next|{}next[0]
+        final fun <get-next>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.next.<get-next>|<get-next>(){}[0]
+    final val optional // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.optional|{}optional[0]
+        final fun <get-optional>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.optional.<get-optional>|<get-optional>(){}[0]
+    final val progress // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.progress|{}progress[0]
+        final fun <get-progress>(): kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/String> // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.progress.<get-progress>|<get-progress>(){}[0]
+    final val skip // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.skip|{}skip[0]
+        final fun <get-skip>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.skip.<get-skip>|<get-skip>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component1|component1(){}[0]
+    final fun component10(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component10|component10(){}[0]
+    final fun component11(): kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/String> // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component11|component11(){}[0]
+    final fun component2(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component4|component4(){}[0]
+    final fun component5(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component5|component5(){}[0]
+    final fun component6(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component6|component6(){}[0]
+    final fun component7(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component7|component7(){}[0]
+    final fun component8(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component8|component8(){}[0]
+    final fun component9(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.component9|component9(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/String> = ...): io.github.maniramezan.kmpcomponents/QuestionnaireLabels // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.copy|copy(kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireLabels.toString|toString(){}[0]
+}
+
+final class io.github.maniramezan.kmpcomponents/QuestionnaireOption { // io.github.maniramezan.kmpcomponents/QuestionnaireOption|null[0]
+    constructor <init>(kotlin/String) // io.github.maniramezan.kmpcomponents/QuestionnaireOption.<init>|<init>(kotlin.String){}[0]
+    constructor <init>(kotlin/String, kotlin/String) // io.github.maniramezan.kmpcomponents/QuestionnaireOption.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val id // io.github.maniramezan.kmpcomponents/QuestionnaireOption.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireOption.id.<get-id>|<get-id>(){}[0]
+    final val title // io.github.maniramezan.kmpcomponents/QuestionnaireOption.title|{}title[0]
+        final fun <get-title>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireOption.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireOption.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireOption.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): io.github.maniramezan.kmpcomponents/QuestionnaireOption // io.github.maniramezan.kmpcomponents/QuestionnaireOption.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireOption.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireOption.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireOption.toString|toString(){}[0]
+}
+
+final class io.github.maniramezan.kmpcomponents/QuestionnaireQuestion { // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion|null[0]
+    constructor <init>(kotlin/String, kotlin/String, io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind, kotlin/String? = ..., kotlin/Boolean = ..., io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle = ...) // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.<init>|<init>(kotlin.String;kotlin.String;io.github.maniramezan.kmpcomponents.QuestionnaireQuestionKind;kotlin.String?;kotlin.Boolean;io.github.maniramezan.kmpcomponents.QuestionnaireChoiceStyle){}[0]
+
+    final val choiceStyle // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.choiceStyle|{}choiceStyle[0]
+        final fun <get-choiceStyle>(): io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.choiceStyle.<get-choiceStyle>|<get-choiceStyle>(){}[0]
+    final val detail // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.detail|{}detail[0]
+        final fun <get-detail>(): kotlin/String? // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.detail.<get-detail>|<get-detail>(){}[0]
+    final val id // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.id.<get-id>|<get-id>(){}[0]
+    final val isRequired // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.isRequired|{}isRequired[0]
+        final fun <get-isRequired>(): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.isRequired.<get-isRequired>|<get-isRequired>(){}[0]
+    final val kind // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.kind|{}kind[0]
+        final fun <get-kind>(): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.kind.<get-kind>|<get-kind>(){}[0]
+    final val prompt // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.prompt|{}prompt[0]
+        final fun <get-prompt>(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.prompt.<get-prompt>|<get-prompt>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.component2|component2(){}[0]
+    final fun component3(): io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.component3|component3(){}[0]
+    final fun component4(): kotlin/String? // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.component4|component4(){}[0]
+    final fun component5(): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.component5|component5(){}[0]
+    final fun component6(): io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., io.github.maniramezan.kmpcomponents/QuestionnaireQuestionKind = ..., kotlin/String? = ..., kotlin/Boolean = ..., io.github.maniramezan.kmpcomponents/QuestionnaireChoiceStyle = ...): io.github.maniramezan.kmpcomponents/QuestionnaireQuestion // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.copy|copy(kotlin.String;kotlin.String;io.github.maniramezan.kmpcomponents.QuestionnaireQuestionKind;kotlin.String?;kotlin.Boolean;io.github.maniramezan.kmpcomponents.QuestionnaireChoiceStyle){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.maniramezan.kmpcomponents/QuestionnaireQuestion.toString|toString(){}[0]
+}
+
 final class io.github.maniramezan.kmpcomponents/SearchFieldLabels { // io.github.maniramezan.kmpcomponents/SearchFieldLabels|null[0]
     constructor <init>(kotlin/String = ..., kotlin/String = ...) // io.github.maniramezan.kmpcomponents/SearchFieldLabels.<init>|<init>(kotlin.String;kotlin.String){}[0]
 
@@ -1106,6 +1369,21 @@ final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponent
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_PaginationPage$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_PaginationPage$stableprop|#static{}io_github_maniramezan_kmpcomponents_PaginationPage$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationLabels$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationLabels$stableprop|#static{}io_github_maniramezan_kmpcomponents_ProviderConfigurationLabels$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationState$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationState$stableprop|#static{}io_github_maniramezan_kmpcomponents_ProviderConfigurationState$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Boolean$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Boolean$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Boolean$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Choices$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Choices$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Choices$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Date$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Date$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Date$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Number$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Number$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Number$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Text$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Text$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Text$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireLabels$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireLabels$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireLabels$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireOption$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireOption$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireOption$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestion$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestion$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestion$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Boolean$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Boolean$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Boolean$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Custom$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Custom$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Custom$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Date$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Date$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Date$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_MultipleChoice$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_MultipleChoice$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_MultipleChoice$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Number$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Number$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Number$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_SingleChoice$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_SingleChoice$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_SingleChoice$stableprop[0]
+final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Text$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Text$stableprop|#static{}io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Text$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SearchFieldLabels$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SearchFieldLabels$stableprop|#static{}io_github_maniramezan_kmpcomponents_SearchFieldLabels$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SegmentedItem$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SegmentedItem$stableprop|#static{}io_github_maniramezan_kmpcomponents_SegmentedItem$stableprop[0]
 final val io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SelectionListLabels$stableprop // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SelectionListLabels$stableprop|#static{}io_github_maniramezan_kmpcomponents_SelectionListLabels$stableprop[0]
@@ -1198,6 +1476,7 @@ final fun io.github.maniramezan.kmpcomponents/PillChip(kotlin/String, kotlin/Boo
 final fun io.github.maniramezan.kmpcomponents/PrimaryButton(kotlin/String, kotlin/Function0<kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Boolean, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/PrimaryButton|PrimaryButton(kotlin.String;kotlin.Function0<kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Boolean;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/ProgressIndicator(kotlin/String, androidx.compose.ui/Modifier?, kotlin/Float?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/ProgressIndicator|ProgressIndicator(kotlin.String;androidx.compose.ui.Modifier?;kotlin.Float?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/ProviderConfigurationForm(io.github.maniramezan.kmpcomponents/ProviderConfigurationState, kotlin/Function1<io.github.maniramezan.kmpcomponents/ProviderConfigurationState, kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Boolean, kotlin/Boolean, kotlin/Boolean, io.github.maniramezan.kmpcomponents/ProviderConfigurationLabels?, kotlin/Function0<kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/ProviderConfigurationForm|ProviderConfigurationForm(io.github.maniramezan.kmpcomponents.ProviderConfigurationState;kotlin.Function1<io.github.maniramezan.kmpcomponents.ProviderConfigurationState,kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;io.github.maniramezan.kmpcomponents.ProviderConfigurationLabels?;kotlin.Function0<kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun io.github.maniramezan.kmpcomponents/QuestionnaireView(kotlin.collections/List<io.github.maniramezan.kmpcomponents/QuestionnaireQuestion>, kotlin.collections/Map<kotlin/String, io.github.maniramezan.kmpcomponents/QuestionnaireAnswer>, kotlin/Function1<kotlin.collections/Map<kotlin/String, io.github.maniramezan.kmpcomponents/QuestionnaireAnswer>, kotlin/Unit>, kotlin/Function1<kotlin.collections/Map<kotlin/String, io.github.maniramezan.kmpcomponents/QuestionnaireAnswer>, kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Function0<kotlin/Unit>?, io.github.maniramezan.kmpcomponents/QuestionnaireLabels?, kotlinx.datetime/LocalDate?, kotlin/Function5<io.github.maniramezan.kmpcomponents/QuestionnaireQuestion, io.github.maniramezan.kmpcomponents/QuestionnaireAnswer?, kotlin/Function1<io.github.maniramezan.kmpcomponents/QuestionnaireAnswer?, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/QuestionnaireView|QuestionnaireView(kotlin.collections.List<io.github.maniramezan.kmpcomponents.QuestionnaireQuestion>;kotlin.collections.Map<kotlin.String,io.github.maniramezan.kmpcomponents.QuestionnaireAnswer>;kotlin.Function1<kotlin.collections.Map<kotlin.String,io.github.maniramezan.kmpcomponents.QuestionnaireAnswer>,kotlin.Unit>;kotlin.Function1<kotlin.collections.Map<kotlin.String,io.github.maniramezan.kmpcomponents.QuestionnaireAnswer>,kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Function0<kotlin.Unit>?;io.github.maniramezan.kmpcomponents.QuestionnaireLabels?;kotlinx.datetime.LocalDate?;kotlin.Function5<io.github.maniramezan.kmpcomponents.QuestionnaireQuestion,io.github.maniramezan.kmpcomponents.QuestionnaireAnswer?,kotlin.Function1<io.github.maniramezan.kmpcomponents.QuestionnaireAnswer?,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/RadioGroup(kotlin.collections/List<kotlin/String>, kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Boolean, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/RadioGroup|RadioGroup(kotlin.collections.List<kotlin.String>;kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Boolean;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/SearchField(kotlin/String, kotlin/Function1<kotlin/String, kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Boolean, kotlin/Function1<kotlin/String, kotlin/Unit>?, io.github.maniramezan.kmpcomponents/SearchFieldLabels?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/SearchField|SearchField(kotlin.String;kotlin.Function1<kotlin.String,kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Boolean;kotlin.Function1<kotlin.String,kotlin.Unit>?;io.github.maniramezan.kmpcomponents.SearchFieldLabels?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun io.github.maniramezan.kmpcomponents/SecondaryButton(kotlin/String, kotlin/Function0<kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Boolean, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.maniramezan.kmpcomponents/SecondaryButton|SecondaryButton(kotlin.String;kotlin.Function0<kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Boolean;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
@@ -1287,6 +1566,21 @@ final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponent
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_PaginationPage$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_PaginationPage$stableprop_getter|io_github_maniramezan_kmpcomponents_PaginationPage$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationLabels$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationLabels$stableprop_getter|io_github_maniramezan_kmpcomponents_ProviderConfigurationLabels$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationState$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_ProviderConfigurationState$stableprop_getter|io_github_maniramezan_kmpcomponents_ProviderConfigurationState$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Boolean$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Boolean$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Boolean$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Choices$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Choices$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Choices$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Date$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Date$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Date$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Number$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Number$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Number$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Text$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Text$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireAnswer_Text$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireLabels$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireLabels$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireLabels$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireOption$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireOption$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireOption$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestion$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestion$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestion$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Boolean$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Boolean$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Boolean$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Custom$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Custom$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Custom$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Date$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Date$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Date$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_MultipleChoice$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_MultipleChoice$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_MultipleChoice$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Number$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Number$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Number$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_SingleChoice$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_SingleChoice$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_SingleChoice$stableprop_getter(){}[0]
+final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Text$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Text$stableprop_getter|io_github_maniramezan_kmpcomponents_QuestionnaireQuestionKind_Text$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SearchFieldLabels$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SearchFieldLabels$stableprop_getter|io_github_maniramezan_kmpcomponents_SearchFieldLabels$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SegmentedItem$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SegmentedItem$stableprop_getter|io_github_maniramezan_kmpcomponents_SegmentedItem$stableprop_getter(){}[0]
 final fun io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SelectionListLabels$stableprop_getter(): kotlin/Int // io.github.maniramezan.kmpcomponents/io_github_maniramezan_kmpcomponents_SelectionListLabels$stableprop_getter|io_github_maniramezan_kmpcomponents_SelectionListLabels$stableprop_getter(){}[0]

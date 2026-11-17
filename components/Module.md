@@ -17,5 +17,5 @@ The README's component catalog lists every family, and the web catalog shows the
 # Package io.github.maniramezan.kmpcomponents
 
 The theme (`KmpTheme` and its token adapters) and every component family: forms and settings,
-feedback, navigation and layout, inputs, actions, containers, lists, chat and assistant views, and
+feedback, navigation and layout, inputs and questionnaires, actions, containers, lists, chat and assistant views, and
 desktop extras such as split panes and a status bar.

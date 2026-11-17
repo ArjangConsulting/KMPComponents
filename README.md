@@ -36,8 +36,9 @@ kotlin {
 ```
 <!-- x-release-please-end -->
 
-`kommon`'s `design-system`, Compose `runtime`, and `material3` are exposed as `api` dependencies,
-so token types and Material components are available without extra declarations.
+`kommon`'s `design-system`, Compose `runtime`, `material3`, and `kotlinx-datetime` (for
+`QuestionnaireView`'s calendar days) are exposed as `api` dependencies, so token types, Material
+components, and `LocalDate` are available without extra declarations.
 
 Targets: `android` (minSdk 26), `jvm`, `iosArm64`, `iosSimulatorArm64`, `wasmJs` (browser).
 
@@ -113,6 +114,7 @@ or browse the copy for the latest release on
 | `RadioGroup` | Vertical radio list; each full-width row is the tap target. |
 | `ThemeSlider` | Full-width slider with an optional spoken label, value description, and steps. |
 | `SelectionList` / `SelectionListContent` / `SelectionListNode` | Searchable one- or two-level picker, single or multiple choice, in a bottom sheet or inline. Parents expand inline, scroll into view, and summarize their selected children when collapsed. |
+| `QuestionnaireView` / `QuestionnaireQuestion` / `QuestionnaireQuestionKind` / `QuestionnaireAnswer` / `QuestionnaireOption` / `QuestionnaireChoiceStyle` / `QuestionnaireLabels` | Paged, one-question-at-a-time questionnaire with a progress bar and Back, Next, and Skip buttons. Collects single or multiple choice (rows or chips), explicit yes/no, numbers with a stepper, calendar days, free text, or your own input; required questions block Next until answered, and Done hands back normalized answers. |
 
 ### Feedback
 
@@ -226,7 +228,7 @@ or [SwiftUIComponents](https://github.com/maniramezan/SwiftUIComponents) use the
 for example `SectionHeader`, `ContentRow`, `PrimaryButton`, `PillChip`, `SelectionList`,
 `BottomSheet`, `Toast`, `DisclosureCard`, `LoadingState`, `Skeleton`, `TabBar`, `NavRail`,
 `PaginatedContent`, `PageIndicator`, `SegmentedContent`, `ShowcaseFeed`, `FlipCard`, `Avatar`, `ChatLog`, `ChatComposer`,
-`TypingIndicator`, `rememberTypewriterReveal`, `LoadingOverlay`,
+`TypingIndicator`, `rememberTypewriterReveal`, `LoadingOverlay`, `QuestionnaireView`,
 and the `Assistant*` components. Where that name would
 collide with a Material 3 composable, the component gets a `Theme` prefix instead (`ThemeSwitch`,
 `ThemeCard`), like SwiftUIComponents' `ThemeButton`. Enum entries use SCREAMING_CASE
