@@ -229,9 +229,10 @@ explains the reasoning.
 
 Load `.claude/skills/add-component/SKILL.md`. In short: one file per component family in
 `components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/`, logic tests in
-`commonTest`, a UI test in `skikoTest`, a gallery entry in `ScreenshotTest.kt` (then re-record), an
-updated ABI dump, an entry in `sample/.../ComponentCatalog.kt`, and a row in the README catalog
-table.
+`commonTest`, a UI test in `skikoTest`, a gallery entry in the family's screenshot test
+(`ScreenshotTest.kt` or the family's own `*ScreenshotTest.kt`; then re-record), an updated ABI dump,
+an entry in the family's sample catalog file (`ComponentCatalog.kt` or its own `*Catalog.kt`), and a
+row in the README catalog table.
 
 Glyphs need no icon dependency: add a case to `Glyphs.kt`. Size anything that is not spacing from
 typography (`glyphSize(style)`) so it follows the user's font scale.

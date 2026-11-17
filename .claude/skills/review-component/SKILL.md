@@ -52,8 +52,9 @@ real failure.
 
 ## Coverage and docs
 
-- `commonTest` for logic, `jvmTest` UI test for interaction, a `ScreenshotTest` gallery entry with
-  reviewed goldens, sample catalog entry, README row, `AGENTS.md` repository map updated.
+- `commonTest` for logic, a `skikoTest` UI test for interaction (`nonWebTest` for hover or fling,
+  `jvmTest` only for desktop window sizes or APIs), a gallery entry in the family's screenshot test
+  with reviewed goldens, sample catalog entry, README row, `AGENTS.md` repository map updated.
 
 ## Platform contracts and evidence
 
