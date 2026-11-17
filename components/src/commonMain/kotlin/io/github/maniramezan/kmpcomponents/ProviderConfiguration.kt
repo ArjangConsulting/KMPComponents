@@ -34,8 +34,13 @@ public data class ProviderConfigurationState(
     }
 }
 
+/** A field of [ProviderConfigurationState]; the key of [validate]'s result. */
 public enum class ProviderConfigurationField { PROVIDER_NAME, BASE_URL, MODEL, API_KEY }
 
+/**
+ * Why a field failed [validate]: [REQUIRED] when it is blank, [INVALID_URL] when the base URL is not
+ * an absolute `http` or `https` URL. [ProviderConfigurationLabels.messageFor] turns it into text.
+ */
 public enum class ProviderConfigurationError { REQUIRED, INVALID_URL }
 
 private val HTTP_SCHEME = Regex("^https?://", RegexOption.IGNORE_CASE)
@@ -122,6 +127,7 @@ public fun ProviderConfigurationState.validate(
     }
 }
 
+/** Whether [validate] finds no problem, with the same [apiKeyRequired] rule. */
 public fun ProviderConfigurationState.isValid(apiKeyRequired: Boolean = true): Boolean =
     validate(apiKeyRequired).isEmpty()
 

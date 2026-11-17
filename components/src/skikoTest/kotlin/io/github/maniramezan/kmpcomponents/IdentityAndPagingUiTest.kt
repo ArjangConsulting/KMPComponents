@@ -3,6 +3,7 @@ package io.github.maniramezan.kmpcomponents
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
@@ -38,7 +39,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-// Avatar, PageIndicator, and rememberTypewriterReveal.
+// Avatar, PageIndicator, rememberTypewriterReveal, and LoadMoreFooter.
 @OptIn(ExperimentalTestApi::class)
 class IdentityAndPagingUiTest {
     private val politeLiveRegion = SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite)
@@ -150,16 +151,66 @@ class IdentityAndPagingUiTest {
                 }
             }
         }
+        // Steps land mid-character (100 ms each) so frame rounding cannot tip a boundary.
         mainClock.advanceTimeBy(250)
         onNodeWithTag("reveal").assertTextEquals("He")
         text = "Hello there"
-        mainClock.advanceTimeBy(550)
-        onNodeWithTag("reveal").assertTextEquals("Hello t")
+        mainClock.advanceTimeBy(400)
+        onNodeWithTag("reveal").assertTextEquals("Hello ")
         mainClock.advanceTimeBy(1_000)
         onNodeWithTag("reveal").assertTextEquals("Hello there")
         text = "Bye"
         mainClock.advanceTimeBy(150)
         onNodeWithTag("reveal").assertTextEquals("B")
+    }
+
+    @Test
+    fun `typewriter reveal keeps up with a stream that grows faster than one character`() = runComposeUiTest {
+        mainClock.autoAdvance = false
+        var text by mutableStateOf("")
+        setContent {
+            KmpTheme {
+                CompositionLocalProvider(LocalReduceMotionEnabled provides false) {
+                    val revealed by rememberTypewriterReveal(text)
+                    Text(revealed, Modifier.testTag("reveal"))
+                }
+            }
+        }
+        // 60 characters a second is one every ~16 ms; the stream appends one every 5 ms.
+        repeat(STREAM_STEPS) {
+            text += "a"
+            mainClock.advanceTimeBy(STREAM_STEP_MILLIS, ignoreFrameDuration = true)
+        }
+        val shown = onNodeWithTag("reveal").fetchSemanticsNode().config[SemanticsProperties.Text].joinToString("")
+        assertTrue(shown.length >= STREAM_EXPECTED_MIN_LENGTH, "Revealed only ${shown.length} characters")
+    }
+
+    @Test
+    fun `load more footer asks again when a page leaves it on screen`() = runComposeUiTest {
+        var loads = 0
+        var loading by mutableStateOf(false)
+        setContent {
+            KmpTheme {
+                LazyColumn {
+                    item { Text("Short page") }
+                    item {
+                        LoadMoreFooter(
+                            isLoadingMore = loading,
+                            onLoadMore = {
+                                loads++
+                                loading = true
+                            },
+                        )
+                    }
+                }
+            }
+        }
+        waitForIdle()
+        assertEquals(1, loads)
+        onNodeWithContentDescription("Loading more").assertExists()
+        loading = false
+        waitForIdle()
+        assertEquals(2, loads)
     }
 
     @Test
@@ -173,5 +224,13 @@ class IdentityAndPagingUiTest {
             }
         }
         onNodeWithTag("reveal").assertTextEquals("Already here")
+    }
+
+    private companion object {
+        const val STREAM_STEPS = 60
+        const val STREAM_STEP_MILLIS = 5L
+
+        // 300 ms at 60 characters a second is 18; allow for the first frame and frame rounding.
+        const val STREAM_EXPECTED_MIN_LENGTH = 12
     }
 }

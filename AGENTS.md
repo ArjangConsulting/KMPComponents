@@ -44,7 +44,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `CountBadge`), `EmptyState.kt`, `ConfirmDialog.kt`, `InfoTooltip.kt`.
   - Navigation and layout: `SidebarNavigation.kt` (`SidebarNavigation`, `SidebarItem`),
     `TabChip.kt` (`TabChipRow`, `TabChip`), `SelectableCard.kt`, `SplitPane.kt`
-    (`HorizontalSplitPane`), `SectionHeader.kt`, `ContentRow.kt`, `KeyValueRow.kt`.
+    (`HorizontalSplitPane`; both split panes share the internal `SplitPaneLayout`, which sizes the
+    panes in the measure pass so a drag does not recompose them), `SectionHeader.kt`, `ContentRow.kt`, `KeyValueRow.kt`.
   - Inputs: `MenuPicker.kt`, `SearchField.kt`, `ToggleRows.kt` (`ThemeSwitch`, `ThemeCheckbox`,
     `ThemeTriStateCheckbox`), `InputControls.kt` (`RadioGroup`, `ThemeSlider`),
     `SelectionList.kt` (`SelectionList`, `SelectionListContent`, `SelectionListLabels`) with its
@@ -64,7 +65,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     `AsyncContentState`; picks among the state views), `Skeleton.kt` (`Skeleton`, `SkeletonBlock`,
     `Modifier.skeletonShimmer`), `Layout.kt` (`AdaptiveContentContainer`, `OverlayCard`,
     `DisclosureCard`, dividers, `FlowLayout`). `ConfirmDialog` delegates to `ThemeDialog`.
-  - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`),
+  - Lists and navigation: `Lists.kt` (`ThemeListItem`, `LazyList`, `LoadMoreFooter`, which asks
+    again each time loading finishes while it is still on screen),
     `Navigation.kt` (top app bars, `TabBar`, `TabBarItem`, `ThemeTabRow`, `NavRail`,
     `AdaptiveNavScaffold`, `TabBarDefaults`), `TabBarScrollBehavior.kt`, `PaginatedContent.kt`
     (title layout math in `titleProgress` / `titleOffset`; its dots footer is `PageIndicator.kt`),
@@ -73,8 +75,9 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   - Chat and assistant: `ChatLog.kt`, `ChatComposer.kt` (`ChatComposer`, voice input types; the
     button choice is the pure `resolveChatComposerAction`), `AssistantComponents.kt`, `ThumbsFeedbackRow.kt`
     (`ThumbsFeedbackRow`, `ThumbsRating`; tap rules in `resolveThumbsRatingTap`), `TypingIndicator.kt`
-    (`typingDotAlpha` is the pure wave function), `TypewriterReveal.kt` (`rememberTypewriterReveal`;
-    `nextRevealLength` keeps surrogate pairs whole), `LoadingOverlay.kt`.
+    (`typingDotAlpha` is the pure wave function), `TypewriterReveal.kt` (`rememberTypewriterReveal`
+    reveals by elapsed frame time and is not restarted by text growth; `nextRevealLength` keeps
+    surrogate pairs whole), `LoadingOverlay.kt`.
   - Desktop extras: `VerticalSplitPane.kt`, `StatusBar.kt`, `ZoomableImage.kt` (`zoomForScroll`),
     `CopyButton.kt`, `FocusTraversal.kt` (`Modifier.focusNextOnTab`, a `Modifier.Node`).
   - Accessibility: `KeyboardFocus.kt` adds token-derived focus outlines; `ReduceMotion.kt` exposes
@@ -127,7 +130,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   network tests that need the JDK HTTP server. Coil has no disk cache on the web.
 - Root `build.gradle.kts` aggregates Dokka for both modules: `./gradlew :dokkaGenerate` writes
   `build/dokka/html`. CI builds it to catch KDoc errors; `docs.yml` publishes it for each release tag,
-  with the web catalog under `catalog/`.
+  with the web catalog under `catalog/`. Each module's `Module.md` is its overview page (keep it in
+  step with the module's purpose), and source links point at the release tag (`VERSION_NAME`) or `main`.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
   `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
@@ -260,6 +264,9 @@ CI (`ci.yml`, macOS, JDK 21) runs `ktlintCheck`, Android lint, `allTests`, `chec
 `koverVerify` for both modules, `verifyRoborazziJvm`, `assemble`, the root `dokkaGenerate`, and builds the
 desktop, Android, and iOS samples. It also runs `:sample:jvmTest` and the `scripts/` tests. A screenshot failure uploads the diff images in the
 `reports` artifact. Review a changed golden before committing it; an API dump change means a public API change (see Releases).
+The Kotlin/Native cache is keyed on the Kotlin version alone, so other dependency bumps restore it.
+`dependabot-auto-merge.yml` merges with `GITHUB_TOKEN`, which does not trigger push workflows, so it
+dispatches `ci.yml` on `main` after a merge to verify `main` and rebuild the caches later PRs restore.
 The build needs Google Maven (`dl.google.com`) for the Android Gradle plugin. Without it, report
 which checks did not run instead of claiming verification.
 

@@ -196,7 +196,7 @@ public fun <ID : Any> SelectionListContent(
                     )
                 }
             }
-            items(visibleNodes, key = { it.id }) { node ->
+            items(visibleNodes, key = { it.id }, contentType = { it.isLeaf }) { node ->
                 if (node.isLeaf) {
                     SelectionListRow(
                         node = node,

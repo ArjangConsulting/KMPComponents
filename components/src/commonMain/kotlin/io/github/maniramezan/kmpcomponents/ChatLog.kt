@@ -109,10 +109,18 @@ public fun ChatLog(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.kmpSpacing.small),
     ) {
-        items(messages, key = { it.id }) { message ->
+        // Bubbles of the same state share a content type, so a scrolled-off slot is reused only for
+        // a bubble with the same structure.
+        items(messages, key = { it.id }, contentType = { chatBubbleContentType(it) }) { message ->
             ChatBubble(message, errorAction, typingDescription, messageContent)
         }
     }
+}
+
+internal fun chatBubbleContentType(message: ChatMessage): Int = when (message.state) {
+    is ChatMessageState.Content -> 0
+    ChatMessageState.Typing -> 1
+    ChatMessageState.Error -> 2
 }
 
 @Composable

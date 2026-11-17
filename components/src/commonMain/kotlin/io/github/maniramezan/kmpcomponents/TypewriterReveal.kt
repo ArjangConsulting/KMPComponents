@@ -5,7 +5,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import kotlinx.coroutines.delay
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.withFrameMillis
+import kotlinx.coroutines.flow.first
 
 /**
  * Reveals [text] a character at a time, at [charsPerSecond], instead of showing it all at once.
@@ -21,25 +24,55 @@ import kotlinx.coroutines.delay
  * intermediate prefix, to any live region.
  *
  * @param text the full target text; it may grow between recompositions.
- * @param charsPerSecond reveal speed. Values below 1 are treated as 1.
+ * @param charsPerSecond reveal speed. Values below 1 are treated as 1. The reveal follows elapsed
+ *   frame time, so speeds above the display's frame rate reveal several characters per frame.
  */
 @Composable
 public fun rememberTypewriterReveal(text: String, charsPerSecond: Int = DEFAULT_CHARS_PER_SECOND): State<String> {
     val revealed = remember { mutableStateOf("") }
     val animate = !rememberReduceMotionEnabled()
-    LaunchedEffect(text, charsPerSecond, animate) {
+    val target = rememberUpdatedState(text)
+    // Keyed on the speed only: a stream that grows the text faster than one character's delay must
+    // not restart the timer, or nothing is revealed until the stream pauses.
+    LaunchedEffect(charsPerSecond, animate) {
         if (!animate) {
-            revealed.value = text
+            snapshotFlow { target.value }.collect { revealed.value = it }
             return@LaunchedEffect
         }
-        if (!text.startsWith(revealed.value)) revealed.value = ""
-        val delayMillis = MILLIS_PER_SECOND / charsPerSecond.coerceAtLeast(1)
-        while (revealed.value.length < text.length) {
-            delay(delayMillis)
-            revealed.value = text.substring(0, nextRevealLength(text, revealed.value.length))
+        val millisPerChar = MILLIS_PER_SECOND.toDouble() / charsPerSecond.coerceAtLeast(1)
+        var owedChars = 0.0
+        var lastFrame = withFrameMillis { it }
+        while (true) {
+            val full = target.value
+            if (!full.startsWith(revealed.value)) revealed.value = ""
+            if (revealed.value.length >= full.length) {
+                snapshotFlow { target.value }.first { it != full }
+                owedChars = 0.0
+                lastFrame = withFrameMillis { it }
+                continue
+            }
+            val frame = withFrameMillis { it }
+            owedChars += (frame - lastFrame) / millisPerChar
+            lastFrame = frame
+            val steps = owedChars.toInt()
+            if (steps > 0) {
+                owedChars -= steps
+                revealed.value = revealedPrefix(target.value, revealed.value, steps)
+            }
         }
     }
     return revealed
+}
+
+/**
+ * [current] extended by [steps] characters of [full], or restarted from the beginning of [full]
+ * when [current] is not a prefix of it. One allocation per frame, however many characters a frame
+ * reveals.
+ */
+internal fun revealedPrefix(full: String, current: String, steps: Int): String {
+    var length = if (full.startsWith(current)) current.length else 0
+    repeat(steps) { length = nextRevealLength(full, length) }
+    return full.substring(0, length)
 }
 
 /**
