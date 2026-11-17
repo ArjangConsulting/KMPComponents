@@ -53,6 +53,43 @@ class AnonymousNodeTest {
     }
 }
 
+@OptIn(ExperimentalTestApi::class)
+class QuestionnaireAnonymousNodeTest {
+    @Test
+    fun `questionnaire pages expose no unnamed elements`() {
+        val today = kotlinx.datetime.LocalDate(2026, 6, 15)
+        val options = listOf(QuestionnaireOption("A"), QuestionnaireOption("B"))
+        val kinds = listOf(
+            QuestionnaireQuestionKind.SingleChoice(options),
+            QuestionnaireQuestionKind.MultipleChoice(options),
+            QuestionnaireQuestionKind.Boolean("Yes", "No"),
+            QuestionnaireQuestionKind.Number(0.0..10.0, unitLabel = "km"),
+            QuestionnaireQuestionKind.Date(today..kotlinx.datetime.LocalDate(2026, 12, 31)),
+            QuestionnaireQuestionKind.Text("Placeholder"),
+        )
+        kinds.forEach { kind ->
+            runComposeUiTest {
+                setContent {
+                    KmpTheme {
+                        QuestionnaireView(
+                            questions = listOf(QuestionnaireQuestion("q", "Prompt", kind)),
+                            answers = emptyMap(),
+                            onAnswersChange = {},
+                            onSubmit = {},
+                            onSkip = {},
+                            today = today,
+                        )
+                    }
+                }
+                val unnamed = onRoot().fetchSemanticsNode().descendants().filter {
+                    it.isAccessibilityElement() && !it.hasName()
+                }
+                assertTrue(unnamed.isEmpty(), "Unnamed elements for $kind: ${unnamed.map { it.config }}")
+            }
+        }
+    }
+}
+
 private fun SemanticsNode.descendants(): List<SemanticsNode> = children.flatMap { listOf(it) + it.descendants() }
 
 // Platforms expose merging nodes, nodes with actions, and progress indicators as separate

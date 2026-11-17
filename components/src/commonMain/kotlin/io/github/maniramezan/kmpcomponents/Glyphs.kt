@@ -40,6 +40,8 @@ internal enum class Glyph {
     STOP,
     THUMB_UP,
     THUMB_DOWN,
+    PLUS,
+    MINUS,
 }
 
 /** A glyph sized to [style]'s line height, so it scales with the user's font size. */
@@ -86,6 +88,7 @@ private const val MIC_CUP_TOP = 0.36f
 private const val MIC_CUP_BOTTOM = 0.72f
 private const val MIC_BASE = 0.88f
 private const val STOP_INSET = 0.28f
+private const val PLUS_INSET = 0.22f
 
 // The thumbs are Material's filled thumb_up / thumb_down outlines on a 24-unit viewport, the same
 // shapes ComposeUIComponents draws, scaled to the canvas.
@@ -260,6 +263,14 @@ internal fun GlyphIcon(
             Glyph.THUMB_UP, Glyph.THUMB_DOWN -> {
                 scale(w / THUMB_VIEWPORT, h / THUMB_VIEWPORT, pivot = Offset.Zero) {
                     drawPath(if (glyph == Glyph.THUMB_UP) THUMB_UP_PATH else THUMB_DOWN_PATH, color)
+                }
+            }
+
+            Glyph.PLUS, Glyph.MINUS -> {
+                val inset = this.size.minDimension * PLUS_INSET
+                drawLine(color, Offset(inset, center.y), Offset(w - inset, center.y), stroke, StrokeCap.Round)
+                if (glyph == Glyph.PLUS) {
+                    drawLine(color, Offset(center.x, inset), Offset(center.x, h - inset), stroke, StrokeCap.Round)
                 }
             }
 

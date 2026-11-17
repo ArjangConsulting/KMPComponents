@@ -49,7 +49,13 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   - Inputs: `MenuPicker.kt`, `SearchField.kt`, `ToggleRows.kt` (`ThemeSwitch`, `ThemeCheckbox`,
     `ThemeTriStateCheckbox`), `InputControls.kt` (`RadioGroup`, `ThemeSlider`),
     `SelectionList.kt` (`SelectionList`, `SelectionListContent`, `SelectionListLabels`) with its
-    model and filtering logic in `SelectionListNode.kt`.
+    model and filtering logic in `SelectionListNode.kt`. `Questionnaire.kt` (`QuestionnaireView`)
+    with its public model in `QuestionnaireModels.kt`, the internal inputs in `QuestionnaireInputs.kt`,
+    paging/validation/normalization in the internal `QuestionnaireFlow` object, and locale-aware number
+    text in `QuestionnaireNumbers.kt`. Its `platformDecimalSeparator` and `formatQuestionnaireDate`
+    actuals live in each platform's `QuestionnairePlatform.*.kt`. Dates are kotlinx-datetime
+    `LocalDate`s; the calendar is Material's `DatePicker` in a `DatePickerDialog`, because its inline
+    form needs 360 dp and clips on phones.
   - More feedback: `NoticeCard.kt`, `ProgressIndicator.kt` (`ProgressIndicator`,
     `InlineProgressIndicator`, internal `InlineSpinner`).
   - Actions: `Buttons.kt` (`PrimaryButton`, `SecondaryButton`, `ThemeTextButton`,
@@ -90,8 +96,8 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
     anchors pass `enableUserInput = false` because Material's own handling adds an unnamed merging
     node that iOS exposes as an element without a description. `skikoTest/.../AnonymousNodeTest.kt`
     guards against unnamed merging, actionable, or progress nodes.
-  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy, send, mic, stop, thumbs up and down) so the library needs no icon font.
-  - `jvmMain`/`androidMain`/`iosMain`/`wasmJsMain` — only `resizeHorizontalPointerIcon` and
+  - `Glyphs.kt` — internal Canvas glyphs (eye, close, info, search, check, chevron, copy, send, mic, stop, thumbs up and down, plus and minus) so the library needs no icon font.
+  - `jvmMain`/`androidMain`/`iosMain`/`wasmJsMain` — only the questionnaire's locale helpers, `resizeHorizontalPointerIcon`, and
     `isReduceMotionEnabled` (`ReduceMotion.kt`; desktop always returns `false`). Decorative,
     looping animations check `decorativeAnimationsEnabled()`, which also turns them off in previews.
     Also `resizeVerticalPointerIcon` and `plainTextClipEntry` (`Clipboard.kt`), since each platform
@@ -134,7 +140,7 @@ CI runs `python3 scripts/update_agent_catalog.py --check`. Keep its usage exampl
   step with the module's purpose), and source links point at the release tag (`VERSION_NAME`) or `main`.
 - `sample/` — unpublished catalog showing every component. `commonMain` holds the catalog
   (`ComponentCatalog.kt`, with newer families in their own files such as `EssentialsCatalog.kt`,
-  `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
+  `ActionsCatalog.kt`, `ChoicesCatalog.kt`, `ContainersCatalog.kt`, `NavigationBarsCatalog.kt`, `AssistantCatalog.kt`, `QuestionnaireCatalog.kt`, `DesktopCatalog.kt`, and `ImageCatalog.kt`, plus the sample's own `SampleIcons.kt`);
   `jvmMain` the desktop window (`./gradlew :sample:run`) and its PNG app icon; `icons/` contains
   desktop packaging icons. `wasmJsMain` mounts the catalog with `ComposeViewport` on its
   `index.html` and reuses the desktop icon as the favicon (`./gradlew :sample:wasmJsBrowserDevelopmentRun`).
@@ -223,9 +229,10 @@ explains the reasoning.
 
 Load `.claude/skills/add-component/SKILL.md`. In short: one file per component family in
 `components/src/commonMain/kotlin/io/github/maniramezan/kmpcomponents/`, logic tests in
-`commonTest`, a UI test in `skikoTest`, a gallery entry in `ScreenshotTest.kt` (then re-record), an
-updated ABI dump, an entry in `sample/.../ComponentCatalog.kt`, and a row in the README catalog
-table.
+`commonTest`, a UI test in `skikoTest`, a gallery entry in the family's screenshot test
+(`ScreenshotTest.kt` or the family's own `*ScreenshotTest.kt`; then re-record), an updated ABI dump,
+an entry in the family's sample catalog file (`ComponentCatalog.kt` or its own `*Catalog.kt`), and a
+row in the README catalog table.
 
 Glyphs need no icon dependency: add a case to `Glyphs.kt`. Size anything that is not spacing from
 typography (`glyphSize(style)`) so it follows the user's font scale.

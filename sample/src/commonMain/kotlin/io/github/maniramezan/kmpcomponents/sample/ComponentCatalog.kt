@@ -156,6 +156,7 @@ internal enum class CatalogSection(val label: String) {
     CONTAINERS("Containers and overlays"),
     NAVIGATION_BARS("App bars, paging, and feeds"),
     ASSISTANT("Chat and assistant cards"),
+    QUESTIONNAIRE("Questionnaire"),
     DESKTOP("Copy, zoom, and status bar"),
     IMAGES("Image loading"),
     STATUS("Messages and badges"),
@@ -175,6 +176,7 @@ internal fun CatalogExamples(section: CatalogSection) {
         CatalogSection.CONTAINERS -> ContainersSection()
         CatalogSection.NAVIGATION_BARS -> NavigationBarsSection()
         CatalogSection.ASSISTANT -> AssistantSection()
+        CatalogSection.QUESTIONNAIRE -> QuestionnaireSection()
         CatalogSection.DESKTOP -> DesktopSection()
         CatalogSection.IMAGES -> ImageSection()
         CatalogSection.STATUS -> StatusSection()

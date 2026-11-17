@@ -74,6 +74,7 @@ kotlin {
             api(libs.kommon.design.system)
             api(libs.compose.runtime)
             api(libs.compose.material3)
+            api(libs.kotlinx.datetime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui)
         }
